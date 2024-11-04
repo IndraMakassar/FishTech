@@ -42,8 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
             label: "Home",
           ),
           NavigationDestination(
-            icon: Icon(Icons.bar_chart_outlined),
-            selectedIcon: Icon(Icons.bar_chart),
+            icon: Icon(Icons.insert_chart_outlined),
+            selectedIcon: Icon(Icons.insert_chart),
             label: "Statistic",
           ),
           NavigationDestination(
