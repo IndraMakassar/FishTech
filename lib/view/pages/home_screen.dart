@@ -32,6 +32,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: const Text("FishTech"),
+      ),
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (_onDestinationSelected),
         selectedIndex: _selectedIndex,
