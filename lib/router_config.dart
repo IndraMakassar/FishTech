@@ -1,6 +1,8 @@
 import 'package:fishtech/view/pages/home_screen.dart';
 import 'package:fishtech/view/pages/profile_screen.dart';
+import 'package:fishtech/view/pages/register_screen.dart';
 import 'package:fishtech/view/pages/statistic_screen.dart';
+import 'package:fishtech/view/pages/login_screen.dart';
 import 'package:fishtech/view/widgets/home_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -8,9 +10,17 @@ import 'package:go_router/go_router.dart';
 final _rootNavigationKey = GlobalKey<NavigatorState>();
 
 final GoRouter routerConfig = GoRouter(
-  initialLocation: '/home',
+  initialLocation: '/login',
   navigatorKey: _rootNavigationKey,
   routes: <RouteBase>[
+    GoRoute(
+      path: '/login',
+      builder: (context, state) => const LoginScreen(),
+    ),
+    GoRoute(
+      path: '/register',
+      builder: (context, state) => const RegisterScreen(),
+    ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, child) {
         return ScaffoldWithNavBar(
@@ -18,6 +28,22 @@ final GoRouter routerConfig = GoRouter(
         );
       },
       branches: [
+        StatefulShellBranch(
+          routes: <RouteBase>[
+            GoRoute(
+              path: '/register',
+              builder: (context, state) => const RegisterScreen(),
+            )
+          ],
+        ),
+        StatefulShellBranch(
+          routes: <RouteBase>[
+            GoRoute(
+              path: '/login',
+              builder: (context, state) => LoginScreen(),
+            )
+          ],
+        ),
         // Home Branch
         StatefulShellBranch(
           routes: <RouteBase>[
