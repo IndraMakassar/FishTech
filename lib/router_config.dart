@@ -28,22 +28,6 @@ final GoRouter routerConfig = GoRouter(
         );
       },
       branches: [
-        StatefulShellBranch(
-          routes: <RouteBase>[
-            GoRoute(
-              path: '/register',
-              builder: (context, state) => const RegisterScreen(),
-            )
-          ],
-        ),
-        StatefulShellBranch(
-          routes: <RouteBase>[
-            GoRoute(
-              path: '/login',
-              builder: (context, state) => LoginScreen(),
-            )
-          ],
-        ),
         // Home Branch
         StatefulShellBranch(
           routes: <RouteBase>[
