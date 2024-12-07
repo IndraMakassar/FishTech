@@ -33,7 +33,7 @@ class LoginScreen extends StatelessWidget {
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(vertical: 16.0),
-                    hintText: "email",
+                    hintText: "Email",
                     prefixIcon: const Icon(
                       Icons.person,
                     ),
