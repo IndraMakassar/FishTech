@@ -1,7 +1,6 @@
-import 'package:fishtech/view/pages/home_screen.dart';
-import 'package:fishtech/view/pages/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class RegisterScreen extends StatelessWidget {
@@ -19,65 +18,45 @@ class RegisterScreen extends StatelessWidget {
       body: Center(
           child: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(size.height * 0.030),
+          padding: EdgeInsets.all(size.width * 0.05),
           child: OverflowBar(
             overflowAlignment: OverflowBarAlignment.center,
-            overflowSpacing: size.height * 0.014,
+            overflowSpacing: size.height * 0.01,
             children: [
-              const Text(
+              Text(
                 "Get Started",
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 34,
-                  color: Colors.black,
-                ),
+                style: Theme.of(context).textTheme.displaySmall
               ),
-              const Text(
+              Text(
                 "Sign up to continue",
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 20,
-                  color: Colors.black,
-                ),
+                style: Theme.of(context).textTheme.headlineSmall
               ),
-              SizedBox(
-                height: size.height * 0.024,
-              ),
+              Gap(size.height * 0.01),
               TextField(
                 keyboardType: TextInputType.text,
-                style: const TextStyle(color: Colors.black),
                 decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(vertical: 25.0),
-                  filled: true,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 16.0),
                   hintText: "Name",
                   prefixIcon: const Icon(
                     Icons.person,
-                    color: Colors.black,
                   ),
-                  fillColor: Colors.white,
                   border: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.black),
-                    borderRadius: BorderRadius.circular(37),
+                    borderRadius: BorderRadius.circular(30),
                   ),
                 ),
               ),
               TextFormField(
                 keyboardType: TextInputType.emailAddress,
-                style: const TextStyle(color: Colors.black),
                 decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(vertical: 25.0),
-                  filled: true,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 16.0),
                   hintText: "Email Address",
                   prefixIcon: const Icon(
                     Icons.email,
-                    color: Colors.black,
                   ),
-                  fillColor: Colors.white,
                   border: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.black),
-                    borderRadius: BorderRadius.circular(37),
+                    borderRadius: BorderRadius.circular(30),
                   ),
                 ),
                 validator: (value) {
@@ -97,24 +76,20 @@ class RegisterScreen extends StatelessWidget {
                   return TextField(
                     obscureText: obscureText,
                     keyboardType: TextInputType.text,
-                    style: const TextStyle(color: Colors.black),
                     decoration: InputDecoration(
                       contentPadding:
-                          const EdgeInsets.symmetric(vertical: 25.0),
-                      filled: true,
+                          const EdgeInsets.symmetric(vertical: 16.0),
                       hintText: "Password",
                       prefixIcon: const Icon(
                         Icons.key,
-                        color: Colors.black,
                       ),
                       suffixIcon: Padding(
-                        padding: const EdgeInsets.only(right: 15.0),
+                        padding: const EdgeInsets.only(right: 8),
                         child: IconButton(
                           icon: Icon(
                             obscureText
                                 ? Icons.visibility
                                 : Icons.visibility_off,
-                            color: Colors.black,
                           ),
                           onPressed: () {
                             _obscureTextPassword.value =
@@ -122,10 +97,8 @@ class RegisterScreen extends StatelessWidget {
                           },
                         ),
                       ),
-                      fillColor: Colors.white,
                       border: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.black),
-                        borderRadius: BorderRadius.circular(37),
+                        borderRadius: BorderRadius.circular(30),
                       ),
                     ),
                   );
@@ -137,24 +110,20 @@ class RegisterScreen extends StatelessWidget {
                   return TextField(
                     obscureText: obscureText,
                     keyboardType: TextInputType.text,
-                    style: const TextStyle(color: Colors.black),
                     decoration: InputDecoration(
                       contentPadding:
-                          const EdgeInsets.symmetric(vertical: 25.0),
-                      filled: true,
+                          const EdgeInsets.symmetric(vertical: 16.0),
                       hintText: "Confirm Password",
                       prefixIcon: const Icon(
                         Icons.key,
-                        color: Colors.black,
                       ),
                       suffixIcon: Padding(
-                        padding: const EdgeInsets.only(right: 15.0),
+                        padding: const EdgeInsets.only(right: 8),
                         child: IconButton(
                           icon: Icon(
                             obscureText
                                 ? Icons.visibility
                                 : Icons.visibility_off,
-                            color: Colors.black,
                           ),
                           onPressed: () {
                             _obscureTextConfirmPassword.value =
@@ -162,31 +131,28 @@ class RegisterScreen extends StatelessWidget {
                           },
                         ),
                       ),
-                      fillColor: Colors.white,
                       border: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.black),
-                        borderRadius: BorderRadius.circular(37),
+                        borderRadius: BorderRadius.circular(30),
                       ),
                     ),
                   );
                 },
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              Gap(size.height * 0.0005),
               CupertinoButton(
                   padding: EdgeInsets.zero,
                   child: Container(
                       width: double.infinity,
-                      height: size.height * 0.080,
+                      height: 56,
                       decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(37)),
-                      child: const Center(
+                          color: Theme.of(context).colorScheme.primary,
+                          borderRadius: BorderRadius.circular(30)),
+                      child: Center(
                         child: Text(
                           "Register",
                           style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.w700),
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontWeight: FontWeight.bold),
                         ),
                       )),
                   onPressed: () {
@@ -201,10 +167,10 @@ class RegisterScreen extends StatelessWidget {
                     onTap: () {
                       GoRouter.of(context).go('/login');
                     },
-                    child: const Text(
+                    child: Text(
                       'Login',
                       style: TextStyle(
-                        color: Colors.blue,
+                        color: Theme.of(context).colorScheme.primary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

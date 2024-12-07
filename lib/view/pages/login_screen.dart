@@ -1,7 +1,6 @@
-import 'package:fishtech/view/pages/home_screen.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:fishtech/view/pages/register_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -14,82 +13,61 @@ class LoginScreen extends StatelessWidget {
       body: Center(
           child: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(size.height * 0.030),
+          padding: EdgeInsets.all(size.width * 0.05),
           child: OverflowBar(
             overflowAlignment: OverflowBarAlignment.center,
-            overflowSpacing: size.height * 0.014,
+            overflowSpacing: size.height * 0.01,
             children: [
-              const Text(
+              Text(
                 "Welcome Back!!",
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 34,
-                  color: Colors.black,
-                ),
+                style: Theme.of(context).textTheme.displaySmall,
               ),
-              const Text(
+              Text(
                 "Sign in to continue",
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 20,
-                  color: Colors.black,
-                ),
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
-              SizedBox(
-                height: size.height * 0.024,
-              ),
+              Gap(size.height * 0.01),
               TextField(
                 keyboardType: TextInputType.text,
-                style: const TextStyle(color: Colors.black),
                 decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(vertical: 25.0),
-                    filled: true,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 16.0),
                     hintText: "email",
                     prefixIcon: const Icon(
                       Icons.person,
-                      color: Colors.black,
                     ),
-                    fillColor: Colors.white,
                     border: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.black),
-                      borderRadius: BorderRadius.circular(37),
+                      borderRadius: BorderRadius.circular(30),
                     )),
               ),
               TextField(
                 keyboardType: TextInputType.text,
-                style: const TextStyle(color: Colors.black),
                 decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(vertical: 25.0),
-                    filled: true,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 16.0),
                     hintText: "Password",
                     prefixIcon: const Icon(
                       Icons.key,
-                      color: Colors.black,
                     ),
-                    fillColor: Colors.white,
                     border: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.black),
-                      borderRadius: BorderRadius.circular(37),
+                      borderRadius: BorderRadius.circular(30),
                     )),
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              Gap(size.height * 0.0005),
               CupertinoButton(
                   padding: EdgeInsets.zero,
                   child: Container(
                       width: double.infinity,
-                      height: size.height * 0.080,
+                      height: 56,
                       decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(37)),
-                      child: const Center(
+                          color: Theme.of(context).colorScheme.primary,
+                          borderRadius: BorderRadius.circular(30)),
+                      child: Center(
                         child: Text(
                           "Login",
                           style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.w700),
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontWeight: FontWeight.bold),
                         ),
                       )),
                   onPressed: () {
@@ -104,10 +82,10 @@ class LoginScreen extends StatelessWidget {
                     onTap: () {
                       GoRouter.of(context).go('/register');
                     },
-                    child: const Text(
+                    child: Text(
                       'Sign Up',
                       style: TextStyle(
-                        color: Colors.blue,
+                        color: Theme.of(context).colorScheme.primary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
