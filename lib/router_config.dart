@@ -1,3 +1,4 @@
+import 'package:fishtech/view/pages/history_screen.dart';
 import 'package:fishtech/view/pages/home_screen.dart';
 import 'package:fishtech/view/pages/profile_screen.dart';
 import 'package:fishtech/view/pages/register_screen.dart';
@@ -10,7 +11,7 @@ import 'package:go_router/go_router.dart';
 final _rootNavigationKey = GlobalKey<NavigatorState>();
 
 final GoRouter routerConfig = GoRouter(
-  initialLocation: '/login',
+  initialLocation: '/home',
   navigatorKey: _rootNavigationKey,
   routes: <RouteBase>[
     GoRoute(
@@ -28,29 +29,13 @@ final GoRouter routerConfig = GoRouter(
         );
       },
       branches: [
-        StatefulShellBranch(
-          routes: <RouteBase>[
-            GoRoute(
-              path: '/register',
-              builder: (context, state) => const RegisterScreen(),
-            )
-          ],
-        ),
-        StatefulShellBranch(
-          routes: <RouteBase>[
-            GoRoute(
-              path: '/login',
-              builder: (context, state) => LoginScreen(),
-            )
-          ],
-        ),
         // Home Branch
         StatefulShellBranch(
           routes: <RouteBase>[
             GoRoute(
               path: '/home',
               builder: (context, state) => const HomeScreen(),
-            )
+            ),
           ],
         ),
         // Statistic Branch
@@ -62,13 +47,12 @@ final GoRouter routerConfig = GoRouter(
             ),
           ],
         ),
-        // Profile Branch
         StatefulShellBranch(
           routes: <RouteBase>[
             GoRoute(
-              path: '/profile',
-              builder: (context, state) => const ProfileScreen(),
-            ),
+              path: '/history',
+              builder: (context, state) => HistoryScreen(),
+            )
           ],
         ),
       ],
