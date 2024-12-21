@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Notifikasi extends StatelessWidget {
-  const Notifikasi({Key? key}) : super(key: key);
+class NotificationScreen extends StatelessWidget {
+  const NotificationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -48,18 +48,18 @@ class CustomNotifWidget extends StatelessWidget {
               color: Colors.grey.withOpacity(0.2),
               spreadRadius: 2,
               blurRadius: 5,
-              offset: Offset(0, 3),
+              offset: const Offset(0, 3),
             ),
           ],
         ),
-        child: Row(
+        child: const Row(
           children: [
             Icon(Icons.notifications_none_outlined, color: Colors.blue),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Text("Kolam Nila 1", style: TextStyle(fontWeight: FontWeight.bold)),
                   Text("Kondisi Kolam Nila 1, Baik", style: TextStyle(color: Colors.grey)),
                 ],
@@ -67,7 +67,7 @@ class CustomNotifWidget extends StatelessWidget {
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
-              children: const [
+              children: [
                 Text("2:30 pm", style: TextStyle(fontSize: 12, color: Colors.grey)),
                 SizedBox(height: 4),
                 Text(".", style: TextStyle(fontSize: 16, color: Colors.grey)),
