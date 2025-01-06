@@ -1,4 +1,5 @@
 import 'package:fishtech/router_config.dart';
+import 'package:fishtech/theme.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,12 +11,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const materialTheme = MaterialTheme(TextTheme());
+
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-      ),
+      theme: materialTheme.light(),
+      // darkTheme: materialTheme.dark(),
+      // themeMode: ThemeMode.system,
       routerConfig: routerConfig,
     );
   }
