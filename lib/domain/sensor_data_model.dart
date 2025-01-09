@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 
-class SensorReading extends Equatable {
+class SensorDataModel extends Equatable {
   final String id;
   final double ph;
   final double temperature;
   final DateTime timestamp;
 
-  const SensorReading({
+  const SensorDataModel({
     required this.id,
     required this.ph,
     required this.temperature,
