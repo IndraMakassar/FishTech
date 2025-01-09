@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class DetailKolam extends StatelessWidget {
   @override
@@ -21,7 +22,6 @@ class DetailKolam extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Container for "Kolam Nila 4" and its description
             Container(
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -30,7 +30,6 @@ class DetailKolam extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Title with blue background
                   Container(
                     width: double.infinity,
                     padding: EdgeInsets.all(16),
@@ -52,7 +51,6 @@ class DetailKolam extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // Row for details
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Row(
@@ -95,54 +93,6 @@ class DetailKolam extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16),
-            // Warning Section
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(12),
-                        topRight: Radius.circular(12),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Peringatan",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Icon(
-                          Icons.warning_amber_rounded,
-                          color: Colors.white,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      "Suhu kolam dan pH air terlalu rendah. Segera lakukan tindakan untuk mengembalikan kondisi kolam ke tingkat yang sesuai demi kesehatan ikan!",
-                      style: TextStyle(color: Colors.black, fontSize: 14),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 16),
-            // Information Cards
             GridView(
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -159,19 +109,134 @@ class DetailKolam extends StatelessWidget {
               ],
             ),
             SizedBox(height: 16),
-            // Add Button
-            Align(
-              alignment: Alignment.bottomRight,
-              child: FloatingActionButton(
-                backgroundColor: Color(0xFF5CB1F5),
-                onPressed: () {
-                  // Add button action
-                },
-                child: Icon(Icons.add, color: Colors.white),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              padding: EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Statistik Penggunaan Pakan",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF5CB1F5)),
+                  ),
+                  SizedBox(height: 16),
+                  Container(
+                    height: 200,
+                    child: BarChart(
+                      BarChartData(
+                        barGroups: _buildBarGroups(),
+                        titlesData: FlTitlesData(
+                          show: true,
+                          topTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                          rightTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget: (double value, TitleMeta meta) {
+                                const style = TextStyle(
+                                  color: Color(0xFF75729E),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 10, 
+                                );
+                                Widget text;
+                                switch (value.toInt()) {
+                                  case 0:
+                                    text = Text('Mon', style: style);
+                                    break;
+                                  case 1:
+                                    text = Text('Tue', style: style);
+                                    break;
+                                  case 2:
+                                    text = Text('Wed', style: style);
+                                    break;
+                                  case 3:
+                                    text = Text('Thu', style: style);
+                                    break;
+                                  case 4:
+                                    text = Text('Fri', style: style);
+                                    break;
+                                  case 5:
+                                    text = Text('Sat', style: style);
+                                    break;
+                                  case 6:
+                                    text = Text('Sun', style: style);
+                                    break;
+                                  default:
+                                    text = Text('', style: style);
+                                    break;
+                                }
+                                return SideTitleWidget(
+                                  axisSide: meta.axisSide,
+                                  child: text,
+                                );
+                              },
+                            ),
+                          ),
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              interval: 5,
+                              getTitlesWidget: (double value, TitleMeta meta) {
+                                const style = TextStyle(
+                                  color: Color(0xFF75729E),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 8, 
+                                );
+                                return SideTitleWidget(
+                                  axisSide: meta.axisSide,
+                                  space: 0,
+                                  child: Text('${value.toInt()}kg', style: style),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        borderData: FlBorderData(show: false),
+                        gridData: FlGridData(show: false),
+                        barTouchData: BarTouchData(enabled: false),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
         ),
+      ),
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: Color(0xFF5CB1F5),
+      //   onPressed: () {
+      //   },
+      //   child: Icon(Icons.add, color: Colors.white),
+      // ),
+    );
+  }
+
+  List<BarChartGroupData> _buildBarGroups() {
+    final data = [10.0, 12.5, 8.0, 15.0, 18.0, 14.0, 10.0];
+    return List.generate(
+      data.length,
+      (index) => BarChartGroupData(
+        x: index,
+        barRods: [
+          BarChartRodData(
+            fromY: 0,
+            toY: data[index],
+            width: 20,
+            color: Color(0xFF5CB1F5),
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ],
       ),
     );
   }
