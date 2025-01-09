@@ -1,7 +1,7 @@
+import 'package:fishtech/view/pages/detail_kolam_screen.dart';
 import 'package:fishtech/view/pages/home_screen.dart';
 import 'package:fishtech/view/pages/profile_screen.dart';
 import 'package:fishtech/view/pages/register_screen.dart';
-import 'package:fishtech/view/pages/statistic_screen.dart';
 import 'package:fishtech/view/pages/login_screen.dart';
 import 'package:fishtech/view/widgets/home_shell.dart';
 import 'package:flutter/material.dart';
@@ -41,8 +41,8 @@ final GoRouter routerConfig = GoRouter(
         StatefulShellBranch(
           routes: <RouteBase>[
             GoRoute(
-              path: '/statistic',
-              builder: (context, state) => const StatisticScreen(),
+              path: '/detail_kolam',
+              builder: (context, state) => DetailKolam(),
             ),
           ],
         ),
