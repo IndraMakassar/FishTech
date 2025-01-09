@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 
-class SensorEntity extends Equatable {
+class SensorModel extends Equatable {
   final String id;
   final String name;
   final Status status;
 
-  const SensorEntity({
+  const SensorModel({
     required this.id,
     required this.name,
     required this.status,
