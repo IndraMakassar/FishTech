@@ -7,7 +7,7 @@ class AuthenticationRepository {
 
   AuthenticationRepository(this._supabase);
 
-  Future<AuthResponse> signUpNewUser(String email, String password) async {
+  Future<AuthResponse> signUpWithEmail(String email, String password) async {
     final AuthResponse res = await _supabase.auth.signUp(
       email: email,
       password: password,
