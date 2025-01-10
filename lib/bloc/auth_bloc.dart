@@ -8,10 +8,9 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final AuthenticationRepository repository =
-      AuthenticationRepository(Supabase.instance.client);
+  final AuthenticationRepository repository;
 
-  AuthBloc() : super(AuthInitial()) {
+  AuthBloc(this.repository) : super(AuthInitial()) {
     on<AuthEvent>((event, emit) {});
 
     on<UserSignUp>((event, emit) async {
