@@ -1,5 +1,5 @@
 import 'package:fishtech/app_bloc_observer.dart';
-import 'package:fishtech/bloc/auth_bloc.dart';
+import 'package:fishtech/bloc/auth/auth_bloc.dart';
 import 'package:fishtech/const.dart';
 import 'package:fishtech/injection_container.dart';
 import 'package:fishtech/router_config.dart';
