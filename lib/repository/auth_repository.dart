@@ -1,16 +1,20 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-
 // TODO: add exception handling
-class AuthenticationRepository {
+class AuthRepository {
   final SupabaseClient _supabase;
 
-  AuthenticationRepository(this._supabase);
+  AuthRepository(this._supabase);
 
-  Future<AuthResponse> signUpWithEmail(String email, String password) async {
+  Future<AuthResponse> signUpWithEmail(
+    String name,
+    String email,
+    String password,
+  ) async {
     final AuthResponse res = await _supabase.auth.signUp(
       email: email,
       password: password,
+      data: {'Display name': name},
     );
 
     return res;
@@ -26,7 +30,6 @@ class AuthenticationRepository {
   }
 
   Future<void> signOut() async {
-      await _supabase.auth.signOut();
-    }
-
+    await _supabase.auth.signOut();
+  }
 }
