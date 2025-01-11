@@ -13,12 +13,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc(this.repository) : super(AuthInitial()) {
     on<AuthEvent>((event, emit) {});
 
+    on<UserCheckedLogIn>((event, emit) {
+      emit(AuthSuccess(event.session));
+    });
+
     on<UserSignUp>((event, emit) async {
       emit(AuthLoading());
       try {
         final AuthResponse user =
             await repository.signUpWithEmail(event.name, event.email, event.password);
-        emit(AuthSuccess(user));
+        emit(AuthSuccess(user.session!));
       } catch (e) {
         emit(AuthFailure(e.toString()));
       }
@@ -31,7 +35,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           event.email,
           event.password,
         );
-        emit(AuthSuccess(user));
+        emit(AuthSuccess(user.session!));
       } catch (e) {
         emit(AuthFailure(e.toString()));
       }

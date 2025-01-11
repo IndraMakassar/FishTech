@@ -16,12 +16,12 @@ final class AuthLoading extends AuthState {
 }
 
 final class AuthSuccess extends AuthState {
-  final AuthResponse res;
+  final Session session;
 
-  const AuthSuccess(this.res);
+  const AuthSuccess(this.session);
 
   @override
-  List<Object?> get props => [res];
+  List<Object?> get props => [session];
 
 }
 

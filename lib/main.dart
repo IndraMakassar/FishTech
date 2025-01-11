@@ -30,9 +30,14 @@ Future<void> main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     const materialTheme = MaterialTheme(TextTheme());
@@ -44,5 +49,18 @@ class MyApp extends StatelessWidget {
       // themeMode: ThemeMode.system,
       routerConfig: routerConfig,
     );
+  }
+
+  @override
+  void initState() {
+    Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+      final session = data.session;
+      if (session != null) {
+        context.read<AuthBloc>().add(UserCheckedLogIn(session));
+      } else {
+
+      }
+    });
+    super.initState();
   }
 }
