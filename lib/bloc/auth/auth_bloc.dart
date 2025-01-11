@@ -1,6 +1,6 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:fishtech/repository/authentication_repository.dart';
+import 'package:fishtech/repository/auth_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'auth_event.dart';
@@ -8,7 +8,7 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final AuthenticationRepository repository;
+  final AuthRepository repository;
 
   AuthBloc(this.repository) : super(AuthInitial()) {
     on<AuthEvent>((event, emit) {});
@@ -16,10 +16,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<UserSignUp>((event, emit) async {
       emit(AuthLoading());
       try {
-        final AuthResponse user = await repository.signUpWithEmail(
-          event.email,
-          event.password,
-        );
+        final AuthResponse user =
+            await repository.signUpWithEmail(event.name, event.email, event.password);
         emit(AuthSuccess(user));
       } catch (e) {
         emit(AuthFailure(e.toString()));
