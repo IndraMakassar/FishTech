@@ -29,3 +29,13 @@ class UserSignOut extends AuthEvent {
   @override
   List<Object?> get props => [];
 }
+
+class UserCheckedLogIn extends AuthEvent {
+  final Session session;
+
+  const UserCheckedLogIn(this.session);
+
+  @override
+  List<Object?> get props => [];
+
+}
