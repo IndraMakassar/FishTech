@@ -91,10 +91,10 @@ class DraggableDescriptionModal extends StatelessWidget {
     final colorScheme = MaterialTheme.lightScheme();
 
     return DraggableScrollableSheet(
-      initialChildSize: 0.4, // The initial size of the modal
-      minChildSize: 0.4, // The minimum size of the modal
-      maxChildSize: 0.9, // The maximum size of the modal
-      expand: false, // Prevents the modal from expanding to full screen
+      initialChildSize: 0.4, 
+      minChildSize: 0.4, 
+      maxChildSize: 0.9, 
+      expand: false, 
       builder: (context, scrollController) {
         return Container(
           decoration: BoxDecoration(
@@ -105,7 +105,6 @@ class DraggableDescriptionModal extends StatelessWidget {
           ),
           child: Column(
             children: [
-              // Draggable bar
               Container(
                 width: 40,
                 height: 5,
@@ -116,7 +115,6 @@ class DraggableDescriptionModal extends StatelessWidget {
                 ),
               ),
 
-              // Content
               Expanded(
                 child: SingleChildScrollView(
                   controller: scrollController,
