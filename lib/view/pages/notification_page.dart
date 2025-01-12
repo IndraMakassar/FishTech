@@ -1,80 +1,132 @@
 import 'package:flutter/material.dart';
-
-class NotificationScreen extends StatelessWidget {
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
+
+  @override
+  State<NotificationScreen> createState() => _NotificationScreenState();
+}
+
+class _NotificationScreenState extends State<NotificationScreen> {
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  List<Map<String, String>> notifications = [
+    {"title": "Kolam Nila 1", "subtitle": "Kondisi Kolam Nila 1, Baik", "time": "2:30 pm"},
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    initializeNotifications();
+  }
+
+  void initializeNotifications() {
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+    const AndroidInitializationSettings androidInitializationSettings =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    const InitializationSettings initializationSettings =
+        InitializationSettings(android: androidInitializationSettings);
+
+    flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) {
+        if (response.payload != null) {
+          print('Notification clicked with payload: ${response.payload}');
+          // Handle navigation or actions based on the payload
+        }
+      },
+    );
+  }
+
+  void showNotification(String title, String body) async {
+    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+      'your_channel_id', 
+      'Your Channel Name',
+      channelDescription: 'Your channel description',
+      importance: Importance.high,
+      priority: Priority.high,
+    );
+
+    const NotificationDetails notificationDetails =
+        NotificationDetails(android: androidDetails);
+
+    await flutterLocalNotificationsPlugin.show(
+      0, 
+      title, 
+      body, 
+      notificationDetails, 
+      payload: 'Custom Payload', 
+    );
+  }
+
+  void addNotification() {
+    final newNotification = {
+      "title": "Kolam Baru",
+      "subtitle": "Kondisi Kolam Baru, Sedang",
+      "time": TimeOfDay.now().format(context),
+    };
+
+    setState(() {
+      notifications.add(newNotification);
+    });
+
+    showNotification(newNotification["title"]!, newNotification["subtitle"]!);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: const Text('Notifikasi'),
+        title: const Text("Notifikasi"),
         backgroundColor: const Color(0xFF42A5F5),
       ),
-      body: ListView(
-        children: [
-          CustomNotifWidget(),
-          CustomNotifWidget(),
-          CustomNotifWidget(),
-          CustomNotifWidget(),
-          CustomNotifWidget(),
-        ],
-      ),
-    );
-  }
-}
-
-class CustomNotifWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // Get the width of the screen
-    double screenWidth = MediaQuery.of(context).size.width;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      child: Container(
-        width: screenWidth,  // Set the width to 100% of the screen width
-        padding: const EdgeInsets.all(12.0),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 2,
-              blurRadius: 5,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: const Row(
-          children: [
-            Icon(Icons.notifications_none_outlined, color: Colors.blue),
-            SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      body: ListView.builder(
+        itemCount: notifications.length,
+        itemBuilder: (context, index) {
+          final notification = notifications[index];
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            child: Container(
+              padding: const EdgeInsets.all(12.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Row(
                 children: [
-                  Text("Kolam Nila 1", style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text("Kondisi Kolam Nila 1, Baik", style: TextStyle(color: Colors.grey)),
+                  const Icon(Icons.notifications_none_outlined, color: Colors.blue),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(notification["title"]!,
+                            style: const TextStyle(fontWeight: FontWeight.bold)),
+                        Text(notification["subtitle"]!,
+                            style: const TextStyle(color: Colors.grey)),
+                      ],
+                    ),
+                  ),
+                  Text(notification["time"]!,
+                      style: const TextStyle(fontSize: 12, color: Colors.grey)),
                 ],
               ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text("2:30 pm", style: TextStyle(fontSize: 12, color: Colors.grey)),
-                SizedBox(height: 4),
-                Text(".", style: TextStyle(fontSize: 16, color: Colors.grey)),
-              ],
-            ),
-          ],
-        ),
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: addNotification,
+        child: const Icon(Icons.add),
       ),
     );
   }
