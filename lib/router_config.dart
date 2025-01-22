@@ -1,4 +1,5 @@
 import 'package:fishtech/view/pages/detail_kolam_screen.dart';
+import 'package:fishtech/view/pages/history_screen.dart';
 import 'package:fishtech/view/pages/home_screen.dart';
 import 'package:fishtech/view/pages/profile_screen.dart';
 import 'package:fishtech/view/pages/register_screen.dart';
@@ -34,7 +35,7 @@ final GoRouter routerConfig = GoRouter(
             GoRoute(
               path: '/home',
               builder: (context, state) => const HomeScreen(),
-            )
+            ),
           ],
         ),
         // Statistic Branch
@@ -46,13 +47,12 @@ final GoRouter routerConfig = GoRouter(
             ),
           ],
         ),
-        // Profile Branch
         StatefulShellBranch(
           routes: <RouteBase>[
             GoRoute(
-              path: '/profile',
-              builder: (context, state) => const ProfileScreen(),
-            ),
+              path: '/history',
+              builder: (context, state) => HistoryScreen(),
+            )
           ],
         ),
       ],
