@@ -18,7 +18,6 @@ class SharedPreferencesHelper {
 
   // Add a single pond ID to the list
   static Future<void> addPondId(String pondId) async {
-    final prefs = await SharedPreferences.getInstance();
     final List<String> pondIds = await getPondIds(); // Get existing pond IDs
     if (!pondIds.contains(pondId)) {
       pondIds.add(pondId); // Add the new pond ID if it doesn't already exist
@@ -28,7 +27,6 @@ class SharedPreferencesHelper {
 
   // Remove a single pond ID from the list
   static Future<void> removePondId(String pondId) async {
-    final prefs = await SharedPreferences.getInstance();
     final List<String> pondIds = await getPondIds(); // Get existing pond IDs
     pondIds.remove(pondId); // Remove the pond ID
     await savePondIds(pondIds); // Save the updated list
