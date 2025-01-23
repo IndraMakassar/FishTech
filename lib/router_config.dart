@@ -1,3 +1,4 @@
+import 'package:fishtech/view/pages/article_screen.dart';
 import 'package:fishtech/view/pages/history_screen.dart';
 import 'package:fishtech/view/pages/home_screen.dart';
 import 'package:fishtech/view/pages/profile_screen.dart';
@@ -51,7 +52,15 @@ final GoRouter routerConfig = GoRouter(
           routes: <RouteBase>[
             GoRoute(
               path: '/history',
-              builder: (context, state) => HistoryScreen(),
+              builder: (context, state) => ArticlePage(),
+            )
+          ],
+        ),
+        StatefulShellBranch(
+          routes: <RouteBase>[
+            GoRoute(
+              path: '/profile',
+              builder: (context, state) => ProfileScreen(),
             )
           ],
         ),

@@ -1,32 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fishtech/theme.dart';
-
-void main() => runApp(const MyApp());
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-
-    
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const ArticlePage(),
-    );
-  }
-}
 
 class ArticlePage extends StatelessWidget {
   const ArticlePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
-  final colorScheme = MaterialTheme.lightScheme();
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -37,12 +16,6 @@ class ArticlePage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: colorScheme.primary,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context); // Navigate back to the previous screen
-          },
-        ),
       ),
       body: const ArticleBody(),
     );
@@ -87,8 +60,7 @@ class DraggableDescriptionModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    final colorScheme = MaterialTheme.lightScheme();
+    final colorScheme = Theme.of(context).colorScheme;
 
     return DraggableScrollableSheet(
       initialChildSize: 0.4, // The initial size of the modal
@@ -98,7 +70,7 @@ class DraggableDescriptionModal extends StatelessWidget {
       builder: (context, scrollController) {
         return Container(
           decoration: BoxDecoration(
-            color: colorScheme.primaryContainer, 
+            color: colorScheme.primaryContainer,
             borderRadius: const BorderRadius.vertical(
               top: Radius.circular(20),
             ),
