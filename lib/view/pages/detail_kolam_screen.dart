@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:go_router/go_router.dart';
 
 class DetailKolam extends StatelessWidget {
   @override
@@ -12,7 +13,7 @@ class DetailKolam extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            Navigator.pop(context);
+            GoRouter.of(context).go("/home");
           },
         ),
         title: Text("Detail Kolam", style: TextStyle(color: Colors.white)),
