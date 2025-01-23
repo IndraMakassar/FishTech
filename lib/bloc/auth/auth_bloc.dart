@@ -23,8 +23,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final AuthResponse user =
             await repository.signUpWithEmail(event.name, event.email, event.password);
         emit(AuthSuccess(user.session!));
+      } on AuthException catch (e) {
+        emit(AuthFailure(e.message));
       } catch (e) {
-        emit(AuthFailure(e.toString()));
+        emit(AuthFailure("enexpected error occurred"));
       }
     });
 
@@ -36,8 +38,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           event.password,
         );
         emit(AuthSuccess(user.session!));
+      } on AuthException catch (e) {
+        emit(AuthFailure(e.message));
       } catch (e) {
-        emit(AuthFailure(e.toString()));
+        emit(AuthFailure("enexpected error occurred"));
       }
     });
 
@@ -46,8 +50,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       try {
         repository.signOut();
         emit(AuthInitial());
+      } on AuthException catch (e) {
+        emit(AuthFailure(e.message));
       } catch (e) {
-        emit(AuthFailure(e.toString()));
+        emit(AuthFailure("enexpected error occurred"));
       }
     });
   }
