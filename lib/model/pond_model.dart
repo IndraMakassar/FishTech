@@ -21,4 +21,11 @@ class PondModel extends Equatable {
       name: data["name"],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "name": name,
+    };
+  }
+
 }

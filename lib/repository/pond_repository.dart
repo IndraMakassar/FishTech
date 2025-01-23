@@ -1,4 +1,4 @@
-import 'package:fishtech/domain/pond_model.dart';
+import 'package:fishtech/model/pond_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class PondRepository {
@@ -20,5 +20,8 @@ class PondRepository {
     return (pond).map((data) => PondModel.fromJson(data)).first;
   }
 
+  addPond(PondModel pond) async {
+    pond = await _supabase.from("ponds").insert(pond.toJson());
+  }
 
 }

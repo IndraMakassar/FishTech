@@ -55,6 +55,14 @@ final GoRouter routerConfig = GoRouter(
             )
           ],
         ),
+        StatefulShellBranch(
+          routes: <RouteBase>[
+            GoRoute(
+              path: '/profile',
+              builder: (context, state) => ProfileScreen(),
+            )
+          ],
+        ),
       ],
     ),
   ],
