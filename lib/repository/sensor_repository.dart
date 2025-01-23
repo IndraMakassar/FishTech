@@ -14,4 +14,8 @@ class PondRepository {
 
     return (sensorList).map((data) => SensorModel.fromJson(data)).toList();
   }
+  
+  addSensor(SensorModel sensor) async {
+    await _supabase.from('sensor').insert(sensor.toJson());
+  }
 }

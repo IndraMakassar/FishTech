@@ -6,11 +6,13 @@ import 'package:fishtech/router_config.dart';
 import 'package:fishtech/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   await Supabase.initialize(
     url: SUPABASE_URL,
@@ -20,6 +22,8 @@ Future<void> main() async {
   await initializeDependencies();
 
   Bloc.observer = const AppBlocObserver();
+
+  FlutterNativeSplash.remove();
 
   runApp(
     MultiBlocProvider(

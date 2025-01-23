@@ -1,4 +1,5 @@
 import 'package:fishtech/model/pond_model.dart';
+import 'package:fishtech/shared_preferences_helper.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class PondRepository {
@@ -7,9 +8,11 @@ class PondRepository {
   PondRepository({required SupabaseClient supabase}) : _supabase = supabase;
 
   Future<List<PondModel>> getAllPonds() async {
+    final pondIds = await SharedPreferencesHelper.getPondIds();
     final pondList = await _supabase
     .from("ponds")
-    .select();
+    .select()
+    .inFilter('id', pondIds);
 
     return (pondList).map((data) => PondModel.fromJson(data)).toList();
   }

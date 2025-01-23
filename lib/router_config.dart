@@ -1,3 +1,4 @@
+import 'package:fishtech/view/pages/add_screen.dart';
 import 'package:fishtech/view/pages/detail_kolam_screen.dart';
 import 'package:fishtech/view/pages/history_screen.dart';
 import 'package:fishtech/view/pages/home_screen.dart';
@@ -35,6 +36,10 @@ final GoRouter routerConfig = GoRouter(
             GoRoute(
               path: '/home',
               builder: (context, state) => const HomeScreen(),
+            ),
+            GoRoute(
+              path: '/add',
+              builder: (context, state) => const AddScreen(),
             ),
           ],
         ),
