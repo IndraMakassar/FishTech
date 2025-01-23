@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:weather/weather.dart';
 import 'package:fishtech/const.dart';
@@ -40,6 +41,14 @@ class _HomeScreenState extends State<HomeScreen> {
         constraints: const BoxConstraints.expand(), 
         child: _buildUI(),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          GoRouter.of(context).go('/add');
+        },
+        backgroundColor: const Color(0xFF37AFE1), // Match the app's theme color
+        child: const Icon(Icons.add, color: Colors.white), // FAB icon
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat, // Position the FAB
     );
   }
 

@@ -36,6 +36,10 @@ final GoRouter routerConfig = GoRouter(
               path: '/home',
               builder: (context, state) => const HomeScreen(),
             ),
+            GoRoute(
+              path: '/add',
+              builder: (context, state) => const AddScreen(),
+            ),
           ],
         ),
         // Statistic Branch
