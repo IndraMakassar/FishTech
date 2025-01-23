@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:fishtech/model/pond_model.dart';
 import 'package:fishtech/model/sensor_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -13,5 +15,9 @@ class PondRepository {
         .select().eq('pond', pond.id);
 
     return (sensorList).map((data) => SensorModel.fromJson(data)).toList();
+  }
+  
+  addSensor(SensorModel sensor) async {
+    await _supabase.from('sensor').insert(sensor.toJson());
   }
 }
