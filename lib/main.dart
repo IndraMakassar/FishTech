@@ -6,6 +6,7 @@ import 'package:fishtech/router_config.dart';
 import 'package:fishtech/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
@@ -57,6 +58,7 @@ class _MyAppState extends State<MyApp> {
       final session = data.session;
       if (session != null) {
         context.read<AuthBloc>().add(UserCheckedLogIn(session));
+        GoRouter.of(context).go('/home');
       } else {
 
       }
