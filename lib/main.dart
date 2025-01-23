@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:fishtech/view/pages/splash_screen.dart';
+import 'dart:async';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +41,30 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  bool _showSplashScreen = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Timer to delay splash screen
+    Timer(const Duration(seconds: 3), () {
+      setState(() {
+        _showSplashScreen = false;
+      });
+    });
+
+    Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+      final session = data.session;
+      if (session != null) {
+        context.read<AuthBloc>().add(UserCheckedLogIn(session));
+        GoRouter.of(context).go('/home');
+      } else {
+        // Handle not logged in state
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     const materialTheme = MaterialTheme(TextTheme());
@@ -46,23 +72,11 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       theme: materialTheme.light(),
-      // darkTheme: materialTheme.dark(),
-      // themeMode: ThemeMode.system,
       routerConfig: routerConfig,
+      builder: (context, child) {
+        // Display splash screen or main app
+        return _showSplashScreen ? SplashScreen() : child!;
+      },
     );
-  }
-
-  @override
-  void initState() {
-    Supabase.instance.client.auth.onAuthStateChange.listen((data) {
-      final session = data.session;
-      if (session != null) {
-        context.read<AuthBloc>().add(UserCheckedLogIn(session));
-        GoRouter.of(context).go('/home');
-      } else {
-
-      }
-    });
-    super.initState();
   }
 }
