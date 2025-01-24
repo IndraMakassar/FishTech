@@ -1,46 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:fishtech/theme.dart';
 
-void main() => runApp(const MyApp());
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-
-    
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const ArticlePage(),
-    );
-  }
-}
-
 class ArticlePage extends StatelessWidget {
   const ArticlePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
-  final colorScheme = MaterialTheme.lightScheme();
-
+    final colorScheme = MaterialTheme.lightScheme();
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           'Artikel',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
-        backgroundColor: colorScheme.primary,
+        backgroundColor: colorScheme.surface,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context); // Navigate back to the previous screen
+            Navigator.pop(context);
           },
         ),
       ),
@@ -87,7 +66,6 @@ class DraggableDescriptionModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final colorScheme = MaterialTheme.lightScheme();
 
     return DraggableScrollableSheet(
@@ -98,7 +76,7 @@ class DraggableDescriptionModal extends StatelessWidget {
       builder: (context, scrollController) {
         return Container(
           decoration: BoxDecoration(
-            color: colorScheme.primaryContainer, 
+            color: colorScheme.primaryContainer,
             borderRadius: const BorderRadius.vertical(
               top: Radius.circular(20),
             ),
