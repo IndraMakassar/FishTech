@@ -2,6 +2,7 @@ import 'package:fishtech/bloc/auth/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fishtech/theme.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -28,10 +29,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = MaterialTheme.lightScheme();
     return Scaffold(
-      backgroundColor: Colors.blue[50],
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: Colors.blue[50],
+        backgroundColor: colorScheme.surface,
       ),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
@@ -104,10 +106,11 @@ class EditNamePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = MaterialTheme.lightScheme();
     _nameController.text = currentName;
 
     return Scaffold(
-      backgroundColor: Colors.blue[50],
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         title: const Text("Edit Name"),
         backgroundColor: Colors.blue,

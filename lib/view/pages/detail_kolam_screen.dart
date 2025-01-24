@@ -5,18 +5,20 @@ import 'package:go_router/go_router.dart';
 class DetailKolam extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme; 
     return Scaffold(
       backgroundColor: Color(0xFFEAF0FA),
       appBar: AppBar(
-        backgroundColor: Color(0xFF5CB1F5),
+        backgroundColor: colorScheme.surface,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
             GoRouter.of(context).go("/home");
           },
         ),
-        title: Text("Detail Kolam", style: TextStyle(color: Colors.white)),
+        title: Text("Detail Kolam", style: TextStyle(color: Colors.black)),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),

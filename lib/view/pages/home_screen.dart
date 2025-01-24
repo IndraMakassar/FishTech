@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:weather/weather.dart';
 import 'package:fishtech/const.dart';
+import 'package:fishtech/theme.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -28,15 +29,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = MaterialTheme.lightScheme();
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: const Color(0xFF37AFE1),
+        backgroundColor: colorScheme.surface,
         title: const Text("Home"),
+        centerTitle: true,
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          color: Color(0xFFF5F5F5), 
+        decoration: BoxDecoration(
+          color: colorScheme.surface,
         ),
         constraints: const BoxConstraints.expand(), 
         child: _buildUI(),
