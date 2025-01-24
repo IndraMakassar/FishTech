@@ -21,11 +21,6 @@ class ScaffoldWithNavBar extends StatelessWidget {
             label: "Home",
           ),
           NavigationDestination(
-            icon: Icon(Icons.insert_chart_outlined),
-            selectedIcon: Icon(Icons.insert_chart),
-            label: "Statistic",
-          ),
-          NavigationDestination(
             icon: Icon(Icons.article_outlined),
             selectedIcon: Icon(Icons.article),
             label: "Article",

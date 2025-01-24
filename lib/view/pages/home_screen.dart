@@ -154,40 +154,45 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildCard(String title, List<String> details) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      width: MediaQuery.of(context).size.width * 0.9,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF37AFE1),
+    return InkWell(
+      onTap: () {
+        GoRouter.of(context).go("/details");
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        width: MediaQuery.of(context).size.width * 0.9,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF37AFE1),
+              ),
             ),
-          ),
-          const SizedBox(height: 8),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: details
-                  .map((detail) => Padding(
-                        padding: const EdgeInsets.only(right: 20),
-                        child: Text(
-                          detail,
-                          style: const TextStyle(fontSize: 13),
-                        ),
-                      ))
-                  .toList(),
+            const SizedBox(height: 8),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: details
+                    .map((detail) => Padding(
+                          padding: const EdgeInsets.only(right: 20),
+                          child: Text(
+                            detail,
+                            style: const TextStyle(fontSize: 13),
+                          ),
+                        ))
+                    .toList(),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1,6 +1,6 @@
 import 'package:fishtech/view/pages/add_screen.dart';
+import 'package:fishtech/view/pages/article_screen.dart';
 import 'package:fishtech/view/pages/detail_kolam_screen.dart';
-import 'package:fishtech/view/pages/history_screen.dart';
 import 'package:fishtech/view/pages/home_screen.dart';
 import 'package:fishtech/view/pages/profile_screen.dart';
 import 'package:fishtech/view/pages/register_screen.dart';
@@ -41,22 +41,19 @@ final GoRouter routerConfig = GoRouter(
               path: '/add',
               builder: (context, state) => const AddScreen(),
             ),
-          ],
-        ),
-        // Statistic Branch
-        StatefulShellBranch(
-          routes: <RouteBase>[
             GoRoute(
-              path: '/detail_kolam',
-              builder: (context, state) => DetailKolam(),
+              path: '/details',
+              builder: (context, state) {
+                return DetailKolam();
+              },
             ),
           ],
         ),
         StatefulShellBranch(
           routes: <RouteBase>[
             GoRoute(
-              path: '/history',
-              builder: (context, state) => HistoryScreen(),
+              path: '/article',
+              builder: (context, state) => ArticlePage(),
             )
           ],
         ),
