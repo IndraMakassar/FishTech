@@ -23,49 +23,25 @@ final GoRouter routerConfig = GoRouter(
       path: '/register',
       builder: (context, state) => const RegisterScreen(),
     ),
-    StatefulShellRoute.indexedStack(
-      builder: (context, state, child) {
-        return ScaffoldWithNavBar(
-          navigationShell: child,
-        );
-      },
-      branches: [
-        // Home Branch
-        StatefulShellBranch(
-          routes: <RouteBase>[
-            GoRoute(
-              path: '/home',
-              builder: (context, state) => const HomeScreen(),
-            ),
-            GoRoute(
-              path: '/add',
-              builder: (context, state) => const AddScreen(),
-            ),
-            GoRoute(
-              path: '/details',
-              builder: (context, state) {
-                return DetailKolam();
-              },
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: <RouteBase>[
-            GoRoute(
-              path: '/article',
-              builder: (context, state) => ArticlePage(),
-            )
-          ],
-        ),
-        StatefulShellBranch(
-          routes: <RouteBase>[
-            GoRoute(
-              path: '/profile',
-              builder: (context, state) => ProfileScreen(),
-            )
-          ],
-        ),
-      ],
+    GoRoute(
+      path: '/home',
+      builder: (context, state) => const HomeScreen(),
+    ),
+    GoRoute(
+      path: '/add',
+      builder: (context, state) => const AddScreen(),
+    ),
+    GoRoute(
+      path: '/details',
+      builder: (context, state) => DetailKolam(),
+    ),
+    GoRoute(
+      path: '/article',
+      builder: (context, state) => const ArticlePage(),
+    ),
+    GoRoute(
+      path: '/profile',
+      builder: (context, state) => ProfileScreen(),
     ),
   ],
 );

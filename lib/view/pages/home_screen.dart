@@ -33,12 +33,17 @@ class _HomeScreenState extends State<HomeScreen> {
         automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFF37AFE1),
         title: const Text("Home"),
+        actions: [
+          IconButton(onPressed: () {
+            GoRouter.of(context).go('/profile');
+          }, icon: const Icon(Icons.person, color: Colors.black,))
+        ],
       ),
       body: Container(
         decoration: const BoxDecoration(
-          color: Color(0xFFF5F5F5), 
+          color: Color(0xFFF5F5F5),
         ),
-        constraints: const BoxConstraints.expand(), 
+        constraints: const BoxConstraints.expand(),
         child: _buildUI(),
       ),
       floatingActionButton: FloatingActionButton(
@@ -48,7 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: const Color(0xFF37AFE1), // Match the app's theme color
         child: const Icon(Icons.add, color: Colors.white), // FAB icon
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat, // Position the FAB
+      floatingActionButtonLocation: FloatingActionButtonLocation
+          .endFloat, // Position the FAB
     );
   }
 
@@ -64,20 +70,24 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           _buildWeatherCard(),
           const SizedBox(height: 10),
-          _buildCard("Kolam nila 1", ["1 autofeeder", "3kg", "pH = 7", "suhu = 27°C"]),
+          _buildCard(
+              "Kolam nila 1", ["1 autofeeder", "3kg", "pH = 7", "suhu = 27°C"]),
           const SizedBox(height: 15),
-          _buildCard("Kolam nila 2", ["2 autofeeder", "5kg", "pH = 6", "suhu = 26°C"]),
+          _buildCard(
+              "Kolam nila 2", ["2 autofeeder", "5kg", "pH = 6", "suhu = 26°C"]),
           const SizedBox(height: 15),
-          _buildCard("Kolam nila 3", ["3 autofeeder", "4kg", "pH = 7", "suhu = 28°C"]),
+          _buildCard(
+              "Kolam nila 3", ["3 autofeeder", "4kg", "pH = 7", "suhu = 28°C"]),
           const SizedBox(height: 20,),
-          const Text("Find more about your fish", style: TextStyle(fontSize: 12),),
+          const Text(
+            "Find more about your fish", style: TextStyle(fontSize: 12),),
           const SizedBox(height: 20),
           _buildActionCard("Check your fish condition", Icons.camera_alt),
           const SizedBox(height: 20),
           _buildTextCard("Find more information about your fish"),
           const SizedBox(height: 20),
 
-         
+
         ],
       ),
     );
@@ -94,8 +104,14 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         child: Container(
           padding: const EdgeInsets.all(16.0),
-          width: MediaQuery.of(context).size.width * 0.9,
-          height: MediaQuery.of(context).size.height * 0.2,
+          width: MediaQuery
+              .of(context)
+              .size
+              .width * 0.9,
+          height: MediaQuery
+              .of(context)
+              .size
+              .height * 0.2,
           child: Stack(
             children: [
               const Positioned(
@@ -150,7 +166,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
-
   }
 
   Widget _buildCard(String title, List<String> details) {
@@ -165,7 +180,10 @@ class _HomeScreenState extends State<HomeScreen> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
         ),
-        width: MediaQuery.of(context).size.width * 0.9,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width * 0.9,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -181,13 +199,14 @@ class _HomeScreenState extends State<HomeScreen> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: details
-                    .map((detail) => Padding(
-                          padding: const EdgeInsets.only(right: 20),
-                          child: Text(
-                            detail,
-                            style: const TextStyle(fontSize: 13),
-                          ),
-                        ))
+                    .map((detail) =>
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: Text(
+                        detail,
+                        style: const TextStyle(fontSize: 13),
+                      ),
+                    ))
                     .toList(),
               ),
             ),
@@ -205,7 +224,10 @@ class _HomeScreenState extends State<HomeScreen> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
       ),
-      width: MediaQuery.of(context).size.width * 0.9,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width * 0.9,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -230,7 +252,10 @@ class _HomeScreenState extends State<HomeScreen> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
       ),
-      width: MediaQuery.of(context).size.width * 0.9,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width * 0.9,
       child: Text(
         text,
         textAlign: TextAlign.start,
