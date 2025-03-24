@@ -1,5 +1,4 @@
-import 'package:'
-    'fishtech/bloc/auth/auth_bloc.dart';
+import 'package:fishtech/bloc/auth/auth_bloc.dart';
 import 'package:fishtech/view/widgets/FormFieldWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Gap(40),
+                  const Gap(40),
                   Image.asset(
                     "assets/Logo.png",
                     height: 250,
@@ -101,6 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                         ),
                         const Gap(0),
+                        //TODO: ganti pakai button custom
                         CupertinoButton(
                             padding: EdgeInsets.zero,
                             child: Container(
@@ -113,30 +113,34 @@ class _LoginScreenState extends State<LoginScreen> {
                                   child: Text(
                                     state is AuthLoading ? "......." : "Login",
                                     style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary,
-                                        fontWeight: FontWeight.bold),
+                                      color: Theme.of(context).colorScheme.onPrimary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                )),
+                                ),
+                            ),
                             onPressed: () {
                               _submitForm();
-                            }),
+                            },
+                        ),
                       ],
                     ),
                   ),
-                  Gap(8),
+                  const Gap(8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("I'm a new user, ",
-                          style: TextStyle(color: Colors.black)),
+                      Text(
+                        "Dont have an account?",
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface),
+                      ),
                       GestureDetector(
                         onTap: () {
                           GoRouter.of(context).go('/register');
                         },
                         child: Text(
-                          'Sign Up',
+                          ' Sign Up',
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.bold,
