@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class FormFieldWidget extends StatefulWidget {
   final TextEditingController controller;
   final String labelText;
+  final String? hintText;
   final IconData? prefixIcon;
   final TextInputType keyboardType;
   final TextInputAction textInputAction;
@@ -16,6 +17,7 @@ class FormFieldWidget extends StatefulWidget {
     super.key,
     required this.controller,
     required this.labelText,
+    this.hintText,
     this.prefixIcon,
     this.keyboardType = TextInputType.text,
     this.textInputAction = TextInputAction.next,
@@ -51,6 +53,7 @@ class _FormFieldWidgetState extends State<FormFieldWidget> {
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 16),
         labelText: widget.labelText,
+        hintText: widget.hintText != null ? widget.hintText : null,
         prefixIcon: widget.prefixIcon != null ? Icon(widget.prefixIcon) : null,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),

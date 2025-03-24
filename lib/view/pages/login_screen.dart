@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+// TODO: add more robust error notification
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -54,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const Gap(40),
                   Image.asset(
                     "assets/Logo.png",
-                    height: 250,
+                    height: 240,
                   ),
                   Form(
                     key: _formKey,
@@ -137,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          GoRouter.of(context).go('/register');
+                          GoRouter.of(context).go('/signin');
                         },
                         child: Text(
                           ' Sign Up',
