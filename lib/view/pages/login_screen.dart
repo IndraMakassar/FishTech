@@ -1,4 +1,6 @@
-import 'package:fishtech/bloc/auth/auth_bloc.dart';
+import 'package:'
+    'fishtech/bloc/auth/auth_bloc.dart';
+import 'package:fishtech/view/widgets/FormFieldWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,8 +15,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  late final _formKey;
-  bool _obscurePassword = true;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _passwordFocusNode = FocusNode();
@@ -22,9 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    _formKey = GlobalKey<FormState>();
   }
-
 
   @override
   void dispose() {
@@ -36,9 +35,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
-
     return Scaffold(
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
@@ -50,143 +46,109 @@ class _LoginScreenState extends State<LoginScreen> {
           }
         },
         builder: (context, state) {
-          return Center(
-              child: SingleChildScrollView(
+          return SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.all(size.width * 0.05),
-              child: Form(
-                key: _formKey,
-                child: OverflowBar(
-                  overflowAlignment: OverflowBarAlignment.center,
-                  overflowSpacing: size.height * 0.01,
-                  children: [
-                    Text(
-                      "Welcome Back!!",
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.displaySmall,
-                    ),
-                    Text(
-                      "Sign in to continue",
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                    Gap(size.height * 0.01),
-                    TextFormField(
-                      controller: _emailController,
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
-                      autofillHints: const [AutofillHints.email],
-                      decoration: InputDecoration(
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 16.0),
-                          hintText: "Email",
-                          prefixIcon: const Icon(
-                            Icons.person,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          )),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your email';
-                        }
-                        if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$')
-                            .hasMatch(value)) {
-                          return 'Your email format is not valid';
-                        }
-                        return null;
-                      },
-                      onFieldSubmitted: (_) {
-                        FocusScope.of(context).requestFocus(_passwordFocusNode);
-                      },
-                    ),
-                    TextFormField(
-                      controller: _passwordController,
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.done,
-                      autofillHints: const [AutofillHints.password],
-                      obscureText: _obscurePassword,
-                      focusNode: _passwordFocusNode,
-                      decoration: InputDecoration(
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 16.0),
-                          hintText: "Password",
-                          prefixIcon: const Icon(
-                            Icons.key,
-                          ),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _obscurePassword
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _obscurePassword = !_obscurePassword;
-                              });
-                            },
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          )),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
-                        }
-                        if (value.length < 6) {
-                          return 'Password must be at least 6 characters';
-                        }
-                        return null;
-                      },
-                      onFieldSubmitted: (_) {
-                        _submitForm();
-                      },
-                    ),
-                    Gap(size.height * 0.0005),
-                    CupertinoButton(
-                        padding: EdgeInsets.zero,
-                        child: Container(
-                            width: double.infinity,
-                            height: 56,
-                            decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.primary,
-                                borderRadius: BorderRadius.circular(30)),
-                            child: Center(
-                              child: Text(
-                                state is AuthLoading ? "......." : "Login",
-                                style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )),
-                        onPressed: () {
-                          _submitForm();
-                        }),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Gap(40),
+                  Image.asset(
+                    "assets/Logo.png",
+                    height: 250,
+                  ),
+                  Form(
+                    key: _formKey,
+                    child: OverflowBar(
+                      overflowAlignment: OverflowBarAlignment.center,
+                      alignment: MainAxisAlignment.start,
+                      overflowSpacing: 10,
                       children: [
-                        const Text("I'm a new user, ",
-                            style: TextStyle(color: Colors.black)),
-                        GestureDetector(
-                          onTap: () {
-                            GoRouter.of(context).go('/register');
+                        FormFieldWidget(
+                          controller: _emailController,
+                          labelText: "Email",
+                          prefixIcon: Icons.email,
+                          keyboardType: TextInputType.emailAddress,
+                          autofillHints: const [AutofillHints.email],
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your email';
+                            }
+                            if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$')
+                                .hasMatch(value)) {
+                              return 'Your email format is not valid';
+                            }
+                            return null;
                           },
-                          child: Text(
-                            'Sign Up',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
                         ),
+                        FormFieldWidget(
+                          controller: _passwordController,
+                          labelText: "Password",
+                          prefixIcon: Icons.key,
+                          isPassword: true,
+                          autofillHints: const [AutofillHints.password],
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your password';
+                            }
+                            if (value.length < 6) {
+                              return 'Password must be at least 6 characters';
+                            }
+                            return null;
+                          },
+                          onFieldSubmitted: (_) {
+                            _submitForm();
+                          },
+                        ),
+                        const Gap(0),
+                        CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            child: Container(
+                                width: double.infinity,
+                                height: 56,
+                                decoration: BoxDecoration(
+                                    color: Theme.of(context).colorScheme.primary,
+                                    borderRadius: BorderRadius.circular(30)),
+                                child: Center(
+                                  child: Text(
+                                    state is AuthLoading ? "......." : "Login",
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )),
+                            onPressed: () {
+                              _submitForm();
+                            }),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                  Gap(8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("I'm a new user, ",
+                          style: TextStyle(color: Colors.black)),
+                      GestureDetector(
+                        onTap: () {
+                          GoRouter.of(context).go('/register');
+                        },
+                        child: Text(
+                          'Sign Up',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-          ));
+          );
         },
       ),
     );
@@ -196,9 +158,9 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_formKey.currentState!.validate()) {
       String email = _emailController.text.trim();
       String password = _passwordController.text.trim();
-
-      context.read<AuthBloc>().add(
-          UserSignIn(email: email, password: password));
+      context
+          .read<AuthBloc>()
+          .add(UserSignIn(email: email, password: password));
     }
   }
 }
