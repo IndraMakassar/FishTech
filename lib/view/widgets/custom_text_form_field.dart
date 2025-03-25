@@ -12,6 +12,7 @@ class FormFieldWidget extends StatefulWidget {
   final String? Function(String?)? validator;
   final void Function(String)? onFieldSubmitted;
   final bool isPassword;
+  final double borderRadius;
 
   const FormFieldWidget({
     super.key,
@@ -26,6 +27,7 @@ class FormFieldWidget extends StatefulWidget {
     this.validator,
     this.onFieldSubmitted,
     this.isPassword = false,
+    this.borderRadius = 12,
   });
 
   @override
@@ -51,24 +53,25 @@ class _FormFieldWidgetState extends State<FormFieldWidget> {
       autofillHints: widget.autofillHints,
       obscureText: widget.isPassword ? _obscureText : false,
       decoration: InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 16),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 30.0, vertical: 16),
         labelText: widget.labelText,
-        hintText: widget.hintText != null ? widget.hintText : null,
+        hintText: widget.hintText,
         prefixIcon: widget.prefixIcon != null ? Icon(widget.prefixIcon) : null,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(widget.borderRadius),
         ),
         suffixIcon: widget.isPassword
             ? IconButton(
-          icon: Icon(
-            _obscureText ? Icons.visibility : Icons.visibility_off,
-          ),
-          onPressed: () {
-            setState(() {
-              _obscureText = !_obscureText;
-            });
-          },
-        )
+                icon: Icon(
+                  _obscureText ? Icons.visibility : Icons.visibility_off,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
+                },
+              )
             : null,
       ),
       validator: widget.validator,

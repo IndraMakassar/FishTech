@@ -1,6 +1,6 @@
 import 'package:fishtech/bloc/auth/auth_bloc.dart';
-import 'package:fishtech/view/widgets/FormFieldWidget.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:fishtech/view/widgets/custom_button.dart';
+import 'package:fishtech/view/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -101,33 +101,17 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                         ),
                         const Gap(0),
-                        //TODO: ganti pakai button custom
-                        CupertinoButton(
-                            padding: EdgeInsets.zero,
-                            child: Container(
-                                width: double.infinity,
-                                height: 56,
-                                decoration: BoxDecoration(
-                                    color: Theme.of(context).colorScheme.primary,
-                                    borderRadius: BorderRadius.circular(30)),
-                                child: Center(
-                                  child: Text(
-                                    state is AuthLoading ? "......." : "Login",
-                                    style: TextStyle(
-                                      color: Theme.of(context).colorScheme.onPrimary,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                            ),
-                            onPressed: () {
-                              _submitForm();
-                            },
+                        CustomButton(
+                          text: "Login",
+                          isLoading: state is AuthLoading,
+                          onPressed: () {
+                            _submitForm();
+                          },
                         ),
                       ],
                     ),
                   ),
-                  const Gap(8),
+                  const Gap(14),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
