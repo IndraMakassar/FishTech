@@ -5,6 +5,7 @@ import 'package:fishtech/view/pages/home_screen.dart';
 import 'package:fishtech/view/pages/profile_screen.dart';
 import 'package:fishtech/view/pages/register_screen.dart';
 import 'package:fishtech/view/pages/login_screen.dart';
+import 'package:fishtech/view/pages/scan_qr.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -41,6 +42,10 @@ final GoRouter routerConfig = GoRouter(
     GoRoute(
       path: '/profile',
       builder: (context, state) => ProfileScreen(),
+    ),
+    GoRoute(
+      path: '/scan',
+      builder: (context, state) => const ScanQr(),
     ),
   ],
 );

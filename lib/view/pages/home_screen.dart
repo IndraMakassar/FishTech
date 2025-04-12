@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          GoRouter.of(context).go('/add');
+          GoRouter.of(context).go('/scan');
         },
         backgroundColor: const Color(0xFF37AFE1), // Match the app's theme color
         child: const Icon(Icons.add, color: Colors.white), // FAB icon
