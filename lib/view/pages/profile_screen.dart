@@ -19,11 +19,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    final state = context.read<AuthBloc>().state;
+    final state = context
+        .read<AuthBloc>()
+        .state;
     if (state is AuthSuccess) {
       _nameController.text = state.session.user.userMetadata!['Display name'];
       _emailController.text = state.session.user.email!;
     }
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    super.dispose();
   }
 
   @override
@@ -49,6 +58,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           }
         },
         builder: (context, state) {
+          if (state is AuthLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
           return Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
@@ -70,7 +84,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: OverflowBar(
                           overflowAlignment: OverflowBarAlignment.center,
                           alignment: MainAxisAlignment.start,
-                          overflowSpacing: 10,
+                          overflowSpacing: 20,
                           children: [
                             FormFieldWidget(
                               controller: _emailController,
@@ -84,7 +98,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             CustomButton(
                               text: "Save",
                               onPressed: () {
-                                // TODO: add method to change username
+                                if (state is AuthSuccess) {
+                                  if (_nameController.text != state.session.user.userMetadata!['Display name']) {
+                                    context.read<AuthBloc>().add(UserChangeName(
+                                        newName: _nameController.text.trim()));
+                                  }
+                                }
                               },
                             ),
                           ],

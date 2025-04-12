@@ -32,4 +32,14 @@ class AuthRepository {
   Future<void> signOut() async {
     await _supabase.auth.signOut();
   }
+
+  Future<AuthResponse> changeName(String name) async {
+    await _supabase.auth.updateUser(
+      UserAttributes(
+        data: {'Display name': name},
+      ),
+    );
+    final AuthResponse res = await _supabase.auth.refreshSession();
+    return res;
+  }
 }
