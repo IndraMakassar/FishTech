@@ -4,7 +4,8 @@ class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
   final bool isLoading;
-  final Color? color;
+  final Color? backgroundColor;
+  final Color? fontColour;
   final double height;
   final double borderRadius;
 
@@ -13,7 +14,8 @@ class CustomButton extends StatelessWidget {
     required this.text,
     required this.onPressed,
     this.isLoading = false,
-    this.color,
+    this.backgroundColor,
+    this.fontColour,
     this.height = 56.0,
     this.borderRadius = double.infinity,
   });
@@ -24,10 +26,15 @@ class CustomButton extends StatelessWidget {
       onPressed: onPressed,
       style: FilledButton.styleFrom(
         minimumSize: const Size.fromHeight(56),
+        backgroundColor: backgroundColor,
       ),
       child: Text(
         text,
-        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: fontColour,
+        ),
       ),
     );
   }

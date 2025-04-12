@@ -13,6 +13,7 @@ class FormFieldWidget extends StatefulWidget {
   final void Function(String)? onFieldSubmitted;
   final bool isPassword;
   final double borderRadius;
+  final bool readOnly;
 
   const FormFieldWidget({
     super.key,
@@ -28,6 +29,7 @@ class FormFieldWidget extends StatefulWidget {
     this.onFieldSubmitted,
     this.isPassword = false,
     this.borderRadius = 12,
+    this.readOnly = false,
   });
 
   @override
@@ -76,6 +78,7 @@ class _FormFieldWidgetState extends State<FormFieldWidget> {
       ),
       validator: widget.validator,
       onFieldSubmitted: widget.onFieldSubmitted,
+      readOnly: widget.readOnly,
     );
   }
 }

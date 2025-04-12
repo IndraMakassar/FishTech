@@ -39,3 +39,13 @@ class UserCheckedLogIn extends AuthEvent {
   List<Object?> get props => [];
 
 }
+
+class UserChangeName extends AuthEvent {
+  final String newName;
+
+  const UserChangeName({required this.newName});
+
+  @override
+  List<Object?> get props => [newName];
+
+}
