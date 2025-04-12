@@ -1,6 +1,9 @@
 import 'package:fishtech/bloc/auth/auth_bloc.dart';
+import 'package:fishtech/view/widgets/custom_button.dart';
+import 'package:fishtech/view/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fishtech/theme.dart';
 
@@ -10,30 +13,31 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  String _name = "";
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
-  void _editName(BuildContext context) async {
-    final newName = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EditNamePage(currentName: _name),
-      ),
-    );
-
-    if (newName != null) {
-      setState(() {
-        _name = newName;
-      });
+  @override
+  void initState() {
+    super.initState();
+    final state = context.read<AuthBloc>().state;
+    if (state is AuthSuccess) {
+      _nameController.text = state.session.user.userMetadata!['Display name'];
+      _emailController.text = state.session.user.email!;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = MaterialTheme.lightScheme();
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: colorScheme.surface,
+        leading: IconButton(
+            onPressed: () {
+              GoRouter.of(context).go('/home');
+            },
+            icon: const Icon(Icons.arrow_back)),
+        automaticallyImplyLeading: false,
+        title: const Text("Profile"),
+        centerTitle: true,
       ),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
@@ -45,106 +49,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
           }
         },
         builder: (context, state) {
-          return Column(
-            children: [
-              const SizedBox(height: 40),
-              Center(
-                child: Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundColor: Colors.blue[100],
-                      child: const Icon(
-                        Icons.person,
-                        size: 80,
-                        color: Colors.blue,
+          return Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                Center(
+                  child: Column(
+                    children: [
+                      CircleAvatar(
+                        radius: 60,
+                        backgroundColor: Colors.blue[100],
+                        child: const Icon(
+                          Icons.person,
+                          size: 100,
+                          color: Colors.blue,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    Text(
-                      state is AuthSuccess ? state.session.user.userMetadata!['Display name'] as String : "halo",
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    Text(
-                      state is AuthSuccess ? state.session.user.email! : "halo",
-                      style: const TextStyle(fontSize: 16,),
-                    ),
-                  ],
-                ),
-              ),
-              const Spacer(),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      context.read<AuthBloc>().add(UserSignOut());
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                    ),
-                    child: const Text(
-                        "Logout", style: TextStyle(color: Colors.white)),
+                      const Gap(28),
+                      Form(
+                        child: OverflowBar(
+                          overflowAlignment: OverflowBarAlignment.center,
+                          alignment: MainAxisAlignment.start,
+                          overflowSpacing: 10,
+                          children: [
+                            FormFieldWidget(
+                              controller: _emailController,
+                              labelText: "Email",
+                              readOnly: true,
+                            ),
+                            FormFieldWidget(
+                              controller: _nameController,
+                              labelText: "Name",
+                            ),
+                            CustomButton(
+                              text: "Save",
+                              onPressed: () {
+                                // TODO: add method to change username
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 20),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           );
         },
-      ),
-    );
-  }
-}
-
-class EditNamePage extends StatelessWidget {
-  final String currentName;
-
-  EditNamePage({required this.currentName});
-
-  final TextEditingController _nameController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = MaterialTheme.lightScheme();
-    _nameController.text = currentName;
-
-    return Scaffold(
-      backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        title: const Text("Edit Name"),
-        backgroundColor: Colors.blue,
-        automaticallyImplyLeading: true,
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: "Nama",
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  if (_nameController.text.isNotEmpty) {
-                    Navigator.pop(context, _nameController.text);
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Name cannot be empty")),
-                    );
-                  }
-                },
-                child: const Text("Save"),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
