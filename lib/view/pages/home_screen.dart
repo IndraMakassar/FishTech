@@ -31,17 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final colorScheme = MaterialTheme.lightScheme();
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: colorScheme.surface,
-        title: const Text("Home"),
-        centerTitle: true,
-        actions: [
-          IconButton(onPressed: () {
-            GoRouter.of(context).go('/profile');
-          }, icon: const Icon(Icons.person, color: Colors.black,))
-        ],
-      ),
+      appBar: Header(title: "Dashboard"),
       body: Container(
         decoration: BoxDecoration(
           color: colorScheme.surface,
@@ -51,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          GoRouter.of(context).go('/scan');
+          GoRouter.of(context).push('/addPond');
         },
         backgroundColor: const Color(0xFF37AFE1), // Match the app's theme color
         child: const Icon(Icons.add, color: Colors.white), // FAB icon
