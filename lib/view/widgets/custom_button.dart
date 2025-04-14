@@ -16,7 +16,7 @@ class CustomButton extends StatelessWidget {
     this.isLoading = false,
     this.backgroundColor,
     this.fontColour,
-    this.height = 56.0,
+    this.height = 64.0,
     this.borderRadius = double.infinity,
   });
 
