@@ -1,4 +1,4 @@
-import 'package:fishtech/view/pages/add_screen.dart';
+import 'package:fishtech/view/pages/addPond_screen.dart';
 import 'package:fishtech/view/pages/article_screen.dart';
 import 'package:fishtech/view/pages/detail_kolam_screen.dart';
 import 'package:fishtech/view/pages/home_screen.dart';
@@ -19,7 +19,7 @@ final GoRouter routerConfig = GoRouter(
       builder: (context, state) => const LoginScreen(),
     ),
     GoRoute(
-      path: '/signin',
+      path: '/register',
       builder: (context, state) => const RegisterScreen(),
     ),
     GoRoute(
@@ -27,8 +27,8 @@ final GoRouter routerConfig = GoRouter(
       builder: (context, state) => const HomeScreen(),
     ),
     GoRoute(
-      path: '/add',
-      builder: (context, state) => const AddScreen(),
+      path: '/addPond',
+      builder: (context, state) => const AddPond(),
     ),
     GoRoute(
       path: '/details',
