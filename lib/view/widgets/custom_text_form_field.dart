@@ -55,6 +55,7 @@ class _FormFieldWidgetState extends State<FormFieldWidget> {
     _obscureText = widget.isPassword;
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Column(
