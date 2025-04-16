@@ -1,5 +1,12 @@
+import 'package:fishtech/bloc/auth/auth_bloc.dart';
+import 'package:fishtech/view/widgets/header.dart';
+import 'package:fishtech/view/widgets/notification_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../model/notification_model.dart';
+
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
 
@@ -8,126 +15,63 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
-  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-  List<Map<String, String>> notifications = [
-    {"title": "Kolam Nila 1", "subtitle": "Kondisi Kolam Nila 1, Baik", "time": "2:30 pm"},
+  List<Notifications> notifications = [
+    Notifications(
+      pondName: "Pond 1",
+      description: "Pond maintenance scheduled.",
+      dateTime: "2.30 pm",
+      status: 'unread',
+    ),
+    Notifications(
+      pondName: "Pond 2",
+      description: "Caution! Kolam Ikan Nila 1 pH is below the normal average for a long time",
+      dateTime: "2.30 pm",
+      status: 'unread',
+    ),
+    // Tambahkan lebih banyak data jika diperlukan
   ];
-
-  @override
-  void initState() {
-    super.initState();
-    initializeNotifications();
-  }
-
-  void initializeNotifications() {
-    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-    const AndroidInitializationSettings androidInitializationSettings =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-
-    const InitializationSettings initializationSettings =
-        InitializationSettings(android: androidInitializationSettings);
-
-    flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse: (NotificationResponse response) {
-        if (response.payload != null) {
-          print('Notification clicked with payload: ${response.payload}');
-          // Handle navigation or actions based on the payload
-        }
-      },
-    );
-  }
-
-  void showNotification(String title, String body) async {
-    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-      'your_channel_id', 
-      'Your Channel Name',
-      channelDescription: 'Your channel description',
-      importance: Importance.high,
-      priority: Priority.high,
-    );
-
-    const NotificationDetails notificationDetails =
-        NotificationDetails(android: androidDetails);
-
-    await flutterLocalNotificationsPlugin.show(
-      0, 
-      title, 
-      body, 
-      notificationDetails, 
-      payload: 'Custom Payload', 
-    );
-  }
-
-  void addNotification() {
-    final newNotification = {
-      "title": "Kolam Baru",
-      "subtitle": "Kondisi Kolam Baru, Sedang",
-      "time": TimeOfDay.now().format(context),
-    };
-
-    setState(() {
-      notifications.add(newNotification);
-    });
-
-    showNotification(newNotification["title"]!, newNotification["subtitle"]!);
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Notifikasi"),
-        backgroundColor: const Color(0xFF42A5F5),
-      ),
-      body: ListView.builder(
-        itemCount: notifications.length,
-        itemBuilder: (context, index) {
-          final notification = notifications[index];
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            child: Container(
-              padding: const EdgeInsets.all(12.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  const Icon(Icons.notifications_none_outlined, color: Colors.blue),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(notification["title"]!,
-                            style: const TextStyle(fontWeight: FontWeight.bold)),
-                        Text(notification["subtitle"]!,
-                            style: const TextStyle(color: Colors.grey)),
-                      ],
-                    ),
-                  ),
-                  Text(notification["time"]!,
-                      style: const TextStyle(fontSize: 12, color: Colors.grey)),
-                ],
-              ),
-            ),
+      appBar: const Header(title: 'Notifications', showBackButton: true),
+      body: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state){
+          if (state is AuthSuccess) {
+            GoRouter.of(context).go('/notification');
+          } else if (state is AuthFailure) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(state.message)));
+          }
+        },
+        builder: (context, state){
+          return ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: notifications.length,
+            itemBuilder: (context, index){
+              final notif = notifications[index];
+              return NotificationCard(
+                pondName: notif.pondName,
+                description: notif.description,
+                dateTime: notif.dateTime,
+                status: notif.status,
+                onTap: () async{
+                  setState(() {
+                    notifications[index] = Notifications(
+                        pondName: notif.pondName,
+                        description: notif.description,
+                        dateTime: notif.dateTime,
+                        status: 'read',
+                    );
+                  });
+                  GoRouter.of(context).push('/${notif.pondName}');
+                },
+              );
+            },
           );
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: addNotification,
-        child: const Icon(Icons.add),
-      ),
+      )
+
     );
   }
 }

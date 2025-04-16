@@ -2,6 +2,7 @@ import 'package:fishtech/view/pages/addPond_screen.dart';
 import 'package:fishtech/view/pages/article_screen.dart';
 import 'package:fishtech/view/pages/detail_kolam_screen.dart';
 import 'package:fishtech/view/pages/home_screen.dart';
+import 'package:fishtech/view/pages/notification_page.dart';
 import 'package:fishtech/view/pages/profile_screen.dart';
 import 'package:fishtech/view/pages/register_screen.dart';
 import 'package:fishtech/view/pages/login_screen.dart';
@@ -43,6 +44,10 @@ final GoRouter routerConfig = GoRouter(
       path: '/profile',
       builder: (context, state) => ProfileScreen(),
     ),
+    GoRoute(
+      path: '/notification',
+      builder: (context, state) => NotificationScreen(),
+    )
     GoRoute(
       path: '/scan',
       builder: (context, state) => const ScanQr(),
