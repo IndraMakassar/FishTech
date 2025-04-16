@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class Header extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool showBackButton;
+
 
   const Header({Key? key, required this.title, this.showBackButton = false}) : super(key: key);
 
@@ -31,25 +33,31 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           if (title == "Dashboard")
-          _iconButton(Icons.notifications, context)
+          _iconButton(Icons.notifications, context, path: '/notification')
           else
           const SizedBox(width: 44),
         ],
       ),
     );
   }
-  Widget _iconButton(IconData icon, BuildContext context) {
-    return Container(
-      width: 44,
-      height: 44,
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(16)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Icon(
-          icon,
-          color: Theme.of(context).colorScheme.onPrimary,
+  Widget _iconButton(IconData icon, BuildContext context, {String? path}) {
+    return InkWell(
+      onTap: (){
+        GoRouter.of(context).push(path!);
+      },
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        width: 44,
+        height: 44,
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Icon(
+            icon,
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
         ),
       ),
     );
