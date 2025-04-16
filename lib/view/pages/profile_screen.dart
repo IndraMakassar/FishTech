@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fishtech/theme.dart';
 
 class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
+
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
@@ -89,7 +90,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             FormFieldWidget(
                               controller: _emailController,
                               labelText: "Email",
-                              readOnly: true,
+                              isReadOnly: true,
                             ),
                             FormFieldWidget(
                               controller: _nameController,
