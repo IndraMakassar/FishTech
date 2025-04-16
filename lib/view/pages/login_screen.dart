@@ -122,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          GoRouter.of(context).go('/signin');
+                          GoRouter.of(context).go('/register');
                         },
                         child: Text(
                           ' Sign Up',

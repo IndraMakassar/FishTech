@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class FormFieldWidget extends StatefulWidget {
   final TextEditingController controller;
-  final String labelText;
+  final double? width;
+  final String? title;
+  final String? labelText;
   final String? hintText;
   final IconData? prefixIcon;
   final TextInputType keyboardType;
@@ -13,12 +16,16 @@ class FormFieldWidget extends StatefulWidget {
   final void Function(String)? onFieldSubmitted;
   final bool isPassword;
   final double borderRadius;
-  final bool readOnly;
+  final bool isDatePicker;
+  final bool isReadOnly;
+  final void Function(DateTime?)? onDateSelected;
 
   const FormFieldWidget({
     super.key,
     required this.controller,
-    required this.labelText,
+    this.width,
+    this.title,
+    this.labelText,
     this.hintText,
     this.prefixIcon,
     this.keyboardType = TextInputType.text,
@@ -29,7 +36,10 @@ class FormFieldWidget extends StatefulWidget {
     this.onFieldSubmitted,
     this.isPassword = false,
     this.borderRadius = 12,
-    this.readOnly = false,
+    this.isDatePicker = false,
+    this.isReadOnly =false,
+    this.onDateSelected,
+
   });
 
   @override
@@ -45,40 +55,88 @@ class _FormFieldWidgetState extends State<FormFieldWidget> {
     _obscureText = widget.isPassword;
   }
 
+
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: widget.controller,
-      keyboardType: widget.keyboardType,
-      textInputAction: widget.textInputAction,
-      focusNode: widget.focusNode,
-      autofillHints: widget.autofillHints,
-      obscureText: widget.isPassword ? _obscureText : false,
-      decoration: InputDecoration(
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 30.0, vertical: 16),
-        labelText: widget.labelText,
-        hintText: widget.hintText,
-        prefixIcon: widget.prefixIcon != null ? Icon(widget.prefixIcon) : null,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(widget.borderRadius),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (widget.title != null)
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+          child: Text(
+            widget.title!,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface
+            ),
         ),
-        suffixIcon: widget.isPassword
-            ? IconButton(
-                icon: Icon(
-                  _obscureText ? Icons.visibility : Icons.visibility_off,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _obscureText = !_obscureText;
-                  });
+          )
+        else
+          const Gap(0),
+        Container(
+          width: widget.width,
+          child: TextFormField(
+            controller: widget.controller,
+            keyboardType: widget.keyboardType,
+            textInputAction: widget.textInputAction,
+            focusNode: widget.focusNode,
+            autofillHints: widget.autofillHints,
+            obscureText: widget.isPassword ? _obscureText : false,
+            style: const TextStyle(fontSize: 16),
+            readOnly: widget.isReadOnly,
+            decoration: InputDecoration(
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+              labelText: widget.labelText,
+              labelStyle: const TextStyle(
+                  fontSize: 14,
+              ),
+              hintText: widget.hintText,
+              hintStyle:  TextStyle(
+                  fontSize: 13,
+                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6)
+              ),
+              prefixIcon: widget.prefixIcon != null ? Icon(widget.prefixIcon) : null,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(widget.borderRadius),
+              ),
+              suffixIcon: widget.isPassword
+                  ? IconButton(
+                      icon: Icon(
+                        _obscureText ? Icons.visibility : Icons.visibility_off,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscureText = !_obscureText;
+                        });
+                      },
+                    )
+                  : widget.isDatePicker
+                  ? IconButton(
+                icon: const Icon(Icons.calendar_month),
+                onPressed: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                  );
+                  if (pickedDate != null) {
+                    widget.controller.text =
+                    "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
+
+                    // callback ke parent jika dibutuhkan
+                    widget.onDateSelected?.call(pickedDate);
+                  }
                 },
               )
-            : null,
-      ),
-      validator: widget.validator,
-      onFieldSubmitted: widget.onFieldSubmitted,
-      readOnly: widget.readOnly,
+                  : null,
+            ),
+            validator: widget.validator,
+            onFieldSubmitted: widget.onFieldSubmitted,
+          ),
+        ),
+      ],
     );
   }
 }
