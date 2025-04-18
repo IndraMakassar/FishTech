@@ -1,7 +1,11 @@
-part of 'pages.dart';
+import 'package:fishtech/view/widgets/custom_button.dart';
+import 'package:fishtech/view/widgets/header.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter/services.dart';
 
 class SettingspondScreen extends StatefulWidget {
-  const SettingspondScreen({super.key});
+  const SettingspondScreen({Key? key}) : super(key: key);
 
   @override
   State<SettingspondScreen> createState() => _SettingspondScreenState();
@@ -10,7 +14,7 @@ class SettingspondScreen extends StatefulWidget {
 class _SettingspondScreenState extends State<SettingspondScreen> {
   final _formKey = GlobalKey<FormState>();
   final Color _softGrayBlue = const Color(0xFFE0E2EC);
-
+  
   // Constant styles
   static const _labelStyle = TextStyle(
     fontWeight: FontWeight.w600,
@@ -48,9 +52,7 @@ class _SettingspondScreenState extends State<SettingspondScreen> {
 
   @override
   void dispose() {
-    for (var controller in _controllers.values) {
-      controller.dispose();
-    }
+    _controllers.values.forEach((controller) => controller.dispose());
     super.dispose();
   }
 
@@ -61,7 +63,7 @@ class _SettingspondScreenState extends State<SettingspondScreen> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
-
+    
     if (picked != null) {
       setState(() {
         _controllers['startDate']!.text = DateFormat('dd MMM yyyy').format(picked);
@@ -74,7 +76,6 @@ class _SettingspondScreenState extends State<SettingspondScreen> {
       final formData = Map.fromEntries(
         _controllers.entries.map((e) => MapEntry(e.key, e.value.text.trim()))
       );
-      formData;
       // TODO: Process form data
     }
   }
@@ -100,7 +101,7 @@ class _SettingspondScreenState extends State<SettingspondScreen> {
               child: Text(label, style: _labelStyle),
             ),
           ),
-          const Gap(16),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -146,7 +147,7 @@ class _SettingspondScreenState extends State<SettingspondScreen> {
                       ),
                   ],
                 ),
-                const Gap(4),
+                const SizedBox(height: 4),
               ],
             ),
           ),
@@ -164,10 +165,10 @@ class _SettingspondScreenState extends State<SettingspondScreen> {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         color: _softGrayBlue,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
+            color: Colors.black.withOpacity(0.4),
             spreadRadius: 0,
             blurRadius: 6,
             offset: const Offset(0, 4),
@@ -180,7 +181,6 @@ class _SettingspondScreenState extends State<SettingspondScreen> {
             onTap: () => setState(() {
               _expansionStates[stateKey] = !_expansionStates[stateKey]!;
             }),
-            borderRadius: BorderRadius.circular(20),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
@@ -188,7 +188,7 @@ class _SettingspondScreenState extends State<SettingspondScreen> {
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.3),
+                    color: Colors.black.withOpacity(0.3),
                     spreadRadius: 0,
                     blurRadius: 6,
                     offset: const Offset(0, 6),
@@ -200,8 +200,8 @@ class _SettingspondScreenState extends State<SettingspondScreen> {
                 children: [
                   Text(title, style: _sectionTitleStyle),
                   Icon(
-                    _expansionStates[stateKey]!
-                        ? Icons.expand_less
+                    _expansionStates[stateKey]! 
+                        ? Icons.expand_less 
                         : Icons.expand_more,
                     color: Colors.black,
                   ),
@@ -237,8 +237,8 @@ class _SettingspondScreenState extends State<SettingspondScreen> {
           Expanded(
             flex: 5,
             child: DropdownButtonFormField<String>(
-              value: _controllers[controllerKey]!.text.isNotEmpty
-                  ? _controllers[controllerKey]!.text
+              value: _controllers[controllerKey]!.text.isNotEmpty 
+                  ? _controllers[controllerKey]!.text 
                   : null,
               decoration: const InputDecoration(
                 isDense: true,
@@ -265,12 +265,12 @@ class _SettingspondScreenState extends State<SettingspondScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const Header(title: "Fish Pond Setting", showBackButton: true),
+      appBar: Header(title: "Fish Pond Setting", showBackButton: true),
       body: Form(
         key: _formKey,
         child: ListView(
           children: [
-            const Gap(12),
+            const SizedBox(height: 12),
             _buildCustomExpansionTile(
               title: 'General Settings',
               stateKey: 'general',
@@ -280,16 +280,16 @@ class _SettingspondScreenState extends State<SettingspondScreen> {
                     label: 'Name',
                     hintText: 'Kolam ikan Nila 1',
                     controllerKey: 'namePond',
-                    validator: (value) => value?.isEmpty ?? true
-                        ? 'Nama kolam harus diisi'
+                    validator: (value) => value?.isEmpty ?? true 
+                        ? 'Nama kolam harus diisi' 
                         : null,
                   ),
                   _buildFormRow(
                     label: 'Fish Type',
                     hintText: 'Ikan Nila',
                     controllerKey: 'fishType',
-                    validator: (value) => value?.isEmpty ?? true
-                        ? 'Jenis ikan harus diisi'
+                    validator: (value) => value?.isEmpty ?? true 
+                        ? 'Jenis ikan harus diisi' 
                         : null,
                   ),
                   _buildFormRow(
@@ -297,8 +297,8 @@ class _SettingspondScreenState extends State<SettingspondScreen> {
                     hintText: '20 Des 2024',
                     controllerKey: 'startDate',
                     isDate: true,
-                    validator: (value) => value?.isEmpty ?? true
-                        ? 'Tanggal mulai harus diisi'
+                    validator: (value) => value?.isEmpty ?? true 
+                        ? 'Tanggal mulai harus diisi' 
                         : null,
                   ),
                   _buildFormRow(
@@ -320,7 +320,6 @@ class _SettingspondScreenState extends State<SettingspondScreen> {
                 ],
               ),
             ),
-            const Gap(4),
             _buildCustomExpansionTile(
               title: 'pH Sensors',
               stateKey: 'ph',
@@ -330,8 +329,8 @@ class _SettingspondScreenState extends State<SettingspondScreen> {
                     label: 'Sensor Name',
                     hintText: 'pH sensor 1',
                     controllerKey: 'sensorName',
-                    validator: (value) => value?.isEmpty ?? true
-                        ? 'Nama sensor harus diisi'
+                    validator: (value) => value?.isEmpty ?? true 
+                        ? 'Nama sensor harus diisi' 
                         : null,
                   ),
                   _buildFormRow(
@@ -376,7 +375,6 @@ class _SettingspondScreenState extends State<SettingspondScreen> {
                 ],
               ),
             ),
-            const Gap(4),
             _buildCustomExpansionTile(
               title: 'Autofeeder',
               stateKey: 'autofeeder',
@@ -386,8 +384,8 @@ class _SettingspondScreenState extends State<SettingspondScreen> {
                     label: 'Autofeeder Name',
                     hintText: 'Autofeeder 1',
                     controllerKey: 'autofeederName',
-                    validator: (value) => value?.isEmpty ?? true
-                        ? 'Nama autofeeder harus diisi'
+                    validator: (value) => value?.isEmpty ?? true 
+                        ? 'Nama autofeeder harus diisi' 
                         : null,
                   ),
                   _buildFormDropdownWithUnderline(
@@ -418,19 +416,16 @@ class _SettingspondScreenState extends State<SettingspondScreen> {
                 ],
               ),
             ),
-            const Gap(80)
+            const SizedBox(height: 80),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: CustomButton(
+                text: "Save",
+                onPressed: _submitForm,
+              ),
+            ),
+            const SizedBox(height: 20),
           ],
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: SizedBox(
-          width: double.infinity,
-          child: CustomButton(
-            text: "Save",
-            onPressed: _submitForm,
-          ),
         ),
       ),
     );
