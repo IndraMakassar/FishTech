@@ -9,11 +9,12 @@ import 'package:fishtech/view/pages/login_screen.dart';
 import 'package:fishtech/view/pages/scan_qr.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fishtech/view/pages/settingsPond_screen.dart';
 
 final _rootNavigationKey = GlobalKey<NavigatorState>();
 
 final GoRouter routerConfig = GoRouter(
-  initialLocation: '/login',
+  initialLocation: '/settings',
   navigatorKey: _rootNavigationKey,
   routes: <RouteBase>[
     GoRoute(
@@ -47,10 +48,15 @@ final GoRouter routerConfig = GoRouter(
     GoRoute(
       path: '/notification',
       builder: (context, state) => NotificationScreen(),
-    )
+    ),
     GoRoute(
       path: '/scan',
       builder: (context, state) => const ScanQr(),
     ),
+    GoRoute(
+      path: '/settings',
+      builder: (context, state) => const SettingspondScreen(),
+    ),
+  
   ],
 );
