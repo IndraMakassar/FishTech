@@ -1,10 +1,12 @@
 import 'package:fishtech/view/widgets/header.dart';
+import 'package:fishtech/view/widgets/welcome_card.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
-import 'package:weather/weather.dart';
-import 'package:fishtech/const.dart';
-import 'package:fishtech/theme.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import '../widgets/custom_drawer_tile.dart';
+import '../widgets/pond_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,285 +16,350 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final WeatherFactory _wf = WeatherFactory(OPENWEATHER_API_KEY);
+  int _selectedIndex = 0;
+  final List<Map<String, dynamic>> statisticData =[
 
-  Weather? _weather;
+  ];
+  final List<Map<String, dynamic>> fishPondData = [
+    {
+      'name': 'Kolam Ikan Nila 1',
+      'machineCount': 1,
+      'feedAmount': 3,
+      'pH': 7,
+      'temperature': 27.0,
+      'condition' : 'Good',
+    },
+    {
+      'name': 'Kolam Ikan Lele',
+      'machineCount': 2,
+      'feedAmount': 5,
+      'pH': 6.5,
+      'temperature': 28.0,
+      'condition' : 'Warning',
+    },
+    {
+      'name': 'Kolam Ikan Gurame',
+      'machineCount': 1,
+      'feedAmount': 4,
+      'pH': 7.2,
+      'temperature': 26.0,
+      'condition' : 'Danger',
+    },
+    {
+      'name': 'Kolam Ikan Patin',
+      'machineCount': 3,
+      'feedAmount': 6,
+      'pH': 6.8,
+      'temperature': 29.0,
+      'condition' : 'Warning',
+    },
+    {
+      'name': 'Kolam Ikan Patin',
+      'machineCount': 3,
+      'feedAmount': 6,
+      'pH': 6.8,
+      'temperature': 29.0,
+      'condition' : 'Good',
+    },
+    {
+      'name': 'Kolam Ikan Patin',
+      'machineCount': 3,
+      'feedAmount': 6,
+      'pH': 6.8,
+      'temperature': 29.0,
+      'condition' : 'Good',
+    },
+  ];
+  final PageController _pageController = PageController();
 
-  @override
-  void initState() {
-    super.initState();
-    _wf.currentWeatherByCityName("Makassar").then((w) {
-      setState(() {
-        _weather = w;
-      });
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
     });
   }
 
   @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final colorScheme = MaterialTheme.lightScheme();
     return Scaffold(
-      appBar: Header(title: "Dashboard"),
-      body: Container(
-        decoration: BoxDecoration(
-          color: colorScheme.surface,
+      appBar: const Header(title: "Dashboard"),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            WelcomeCard(
+              name: 'John Doe',
+              total: fishPondData.where((pond) => pond['condition'] == 'Warning' || pond['condition'] == 'Danger').length,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                   Text(
+                      'Fish Pond',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontWeight: FontWeight.bold
+                    ),
+                  ),
+                  const Gap(10),
+                  if(fishPondData.isEmpty)
+                    SizedBox(
+                      height: 200,
+                      width: double.infinity,
+                      child: Center(
+                          child: Text(
+                            'No Fish Pond data available. Click "+" to Add',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.7),
+                            ),
+                          )
+                      ),
+                    )
+                  else
+                    SizedBox(
+                    height: 400, // Atur tinggi card area
+                    child: PageView(
+                      controller: _pageController,
+                      children: _buildPages(),
+                    ),
+                  ),
+                  const Gap(10),
+                  if(fishPondData.isEmpty)
+                    const Gap(0)
+                  else
+                  Center(
+                    child: SmoothPageIndicator(
+                      controller: _pageController,
+                      count: (fishPondData.length / 4).ceil(),
+                      effect: WormEffect(
+                        dotHeight: 10,
+                        dotWidth: 10,
+                        activeDotColor: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                  const Gap(20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'All Statistics',
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Theme.of(context).colorScheme.onSurface,
+                            fontWeight: FontWeight.bold
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          GoRouter.of(context).push('/statistics');
+                        },
+                        child: Text(
+                          'see all',
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  //TODO: tambah widgetStatistik
+                  if(statisticData.isEmpty)
+                    SizedBox(
+                      height: 200,
+                      width: double.infinity,
+                      child: Center(
+                          child: Text(
+                            'No Statistics data available yet.',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.7),
+                            ),
+                          )
+                      ),
+                    )
+                  else
+                    const Gap(0),
+
+                ],
+              ),
+            )
+          ],
         ),
-        constraints: const BoxConstraints.expand(),
-        child: _buildUI(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           GoRouter.of(context).push('/addPond');
         },
-        backgroundColor: const Color(0xFF37AFE1), // Match the app's theme color
+        backgroundColor: Theme.of(context).colorScheme.primary, // Match the app's theme color
         child: const Icon(Icons.add, color: Colors.white), // FAB icon
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation
-          .endFloat, // Position the FAB
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      drawer: SafeArea(
+        child: Align(
+          alignment: Alignment.topLeft,
+          child: SizedBox(
+            width: 250,
+            height: 500,
+            child: Drawer(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  Container(
+                    height: 70,
+                    color: Theme.of(context).colorScheme.primary,
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 30),
+                    child: Text(
+                      'Menu',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.pop(context);
+                      GoRouter.of(context).push('/profile');
+                    },
+                    child: Material(
+                      elevation: 2,
+                      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              "assets/Logo.png",
+                              height: 90,
+                              width: 90,
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'John Doe',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w700
+                                    ),
+                                  ),
+                                  Text(
+                                    'johndoe@gmail.com',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                                  Text(
+                                    '0892-4252-2254',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  CustomDrawerTile(
+                    icon: Icons.home_rounded,
+                    title: 'Home',
+                    selected: _selectedIndex == 0,
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  CustomDrawerTile(
+                    icon: Icons.notifications, // Contoh ganti icon
+                    title: 'Notification',
+                    selected: _selectedIndex == 1,
+                    onTap: () {
+                      Navigator.pop(context);
+                      GoRouter.of(context).push('/notification');
+                    },
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                  CustomDrawerTile(
+                    icon: Icons.bar_chart, // Contoh ganti icon
+                    title: 'Statistics',
+                    selected: _selectedIndex == 2,
+                    onTap: () {
+                      Navigator.pop(context);
+                      GoRouter.of(context).push('/statistic');
+                    },
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                  CustomDrawerTile(
+                    icon: Icons.logout_rounded, // Contoh ganti icon
+                    title: 'Logout',
+                    selected: _selectedIndex == 2,
+                    onTap: () {
+                      _onItemTapped(2);
+                      Navigator.pop(context);
+                    },
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
+  List<Widget> _buildPages() {
+    List<Widget> pages = [];
+    int totalPages = (fishPondData.length / 4).ceil();
 
-  Widget _buildUI() {
-    if (_weather == null) {
-      return const Center(
-        child: CircularProgressIndicator(),
+    for (int i = 0; i < totalPages; i++) {
+      final start = i * 4;
+      final end = (start + 4) > fishPondData.length ? fishPondData.length : start + 4;
+      final ponds = fishPondData.sublist(start, end);
+
+      pages.add(
+        MasonryGridView.count(
+          crossAxisCount: 2,
+          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+          itemCount: ponds.length,
+          physics: const NeverScrollableScrollPhysics(), // Disable scroll di grid
+          shrinkWrap: true,
+          padding: EdgeInsets.zero,
+          itemBuilder: (context, index) {
+            final pond = ponds[index];
+            return FishPondCard(
+              name: pond['name'],
+              machineCount: pond['machineCount'],
+              feedAmount: pond['feedAmount'].toDouble(),
+              pH: pond['pH'].toDouble(),
+              temperature: pond['temperature'].toDouble(),
+              condition: pond['condition'],
+            );
+          },
+        ),
       );
     }
-
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          _buildWeatherCard(),
-          const SizedBox(height: 10),
-          _buildCard(
-              "Kolam nila 1", ["1 autofeeder", "3kg", "pH = 7", "suhu = 27°C"]),
-          const SizedBox(height: 15),
-          _buildCard(
-              "Kolam nila 2", ["2 autofeeder", "5kg", "pH = 6", "suhu = 26°C"]),
-          const SizedBox(height: 15),
-          _buildCard(
-              "Kolam nila 3", ["3 autofeeder", "4kg", "pH = 7", "suhu = 28°C"]),
-          const SizedBox(height: 20,),
-          const Text(
-            "Find more about your fish", style: TextStyle(fontSize: 12),),
-          const SizedBox(height: 20),
-          _buildActionCard("Check your fish condition", Icons.camera_alt),
-          const SizedBox(height: 20),
-          _buildTextCard("Find more information about your fish"),
-          const SizedBox(height: 20),
-
-
-        ],
-      ),
-    );
+    return pages;
   }
 
-  Widget _buildWeatherCard() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Card(
-        color: Colors.white,
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Container(
-          padding: const EdgeInsets.all(16.0),
-          width: MediaQuery
-              .of(context)
-              .size
-              .width * 0.9,
-          height: MediaQuery
-              .of(context)
-              .size
-              .height * 0.2,
-          child: Stack(
-            children: [
-              const Positioned(
-                top: 10,
-                left: 10,
-                child: Text(
-                  "TODAY",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF37AFE1),
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 35,
-                left: 10,
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.location_on,
-                      color: Color(0xFF37AFE1),
-                      size: 18,
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      _weather?.areaName ?? "Makassar",
-                      style: const TextStyle(
-                        fontSize: 15,
-                        color: Color(0xFF37AFE1),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                top: 10,
-                right: 10,
-                child: _dateInfo(),
-              ),
-              Positioned(
-                top: 55,
-                left: 50,
-                child: _currentTemp(),
-              ),
-              Positioned(
-                right: 20,
-                child: _weatherIcon(),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCard(String title, List<String> details) {
-    return InkWell(
-      onTap: () {
-        GoRouter.of(context).go("/details");
-      },
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        margin: const EdgeInsets.symmetric(horizontal: 16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-        ),
-        width: MediaQuery
-            .of(context)
-            .size
-            .width * 0.9,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF37AFE1),
-              ),
-            ),
-            const SizedBox(height: 8),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: details
-                    .map((detail) =>
-                    Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: Text(
-                        detail,
-                        style: const TextStyle(fontSize: 13),
-                      ),
-                    ))
-                    .toList(),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildActionCard(String text, IconData icon) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      width: MediaQuery
-          .of(context)
-          .size
-          .width * 0.9,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Text(
-              text,
-              textAlign: TextAlign.start,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-          Icon(icon, size: 24, color: Colors.black),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTextCard(String text) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      width: MediaQuery
-          .of(context)
-          .size
-          .width * 0.9,
-      child: Text(
-        text,
-        textAlign: TextAlign.start,
-        style: const TextStyle(fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-
-  Widget _dateInfo() {
-    DateTime now = _weather!.date!;
-    return Text(
-      "${DateFormat("EEEE").format(now)}, ${DateFormat("d MMM y").format(now)}",
-      style: const TextStyle(
-        fontSize: 14,
-        color: Color(0xFF37AFE1),
-      ),
-    );
-  }
-
-  Widget _weatherIcon() {
-    return Container(
-      height: 150,
-      width: 120,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: NetworkImage(
-            "http://openweathermap.org/img/wn/${_weather?.weatherIcon}@4x.png",
-          ),
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
-  }
-
-  Widget _currentTemp() {
-    return Text(
-      "${_weather?.temperature?.celsius?.toStringAsFixed(0)} °C",
-      style: const TextStyle(
-        color: Color(0xFF37AFE1),
-        fontSize: 32,
-        fontWeight: FontWeight.bold,
-      ),
-      textAlign: TextAlign.center,
-    );
-  }
 }
