@@ -1,3 +1,4 @@
+import 'package:fishtech/view/widgets/custom_iconButton.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -20,9 +21,9 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if (title == "Dashboard")
-          _iconButton(Icons.menu, context)
+            CustomIconbutton(icon: Icons.menu, onTap: (){Scaffold.of(context).openDrawer();})
           else if (showBackButton)
-            _backButton(context)
+            CustomIconbutton(icon: Icons.arrow_back, onTap: (){Navigator.of(context).pop();},)
           else
             const SizedBox(width: 44),
           Text(
@@ -33,57 +34,13 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           if (title == "Dashboard")
-          _iconButton(Icons.notifications, context, path: '/notification')
+          CustomIconbutton(icon: Icons.notifications, onTap: (){GoRouter.of(context).push('/notification');},)
           else
           const SizedBox(width: 44),
         ],
       ),
     );
   }
-  Widget _iconButton(IconData icon, BuildContext context, {String? path}) {
-    return InkWell(
-      onTap: (){
-        GoRouter.of(context).push(path!);
-      },
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        width: 44,
-        height: 44,
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(16)),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Icon(
-            icon,
-            color: Theme.of(context).colorScheme.onPrimary,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _backButton(BuildContext context) {
-    return InkWell(
-      onTap: () => Navigator.of(context).pop(),
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        width: 44,
-        height: 44,
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(16)),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Icon(
-            Icons.arrow_back,
-            color: Theme.of(context).colorScheme.onPrimary,
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Size get preferredSize => const Size.fromHeight(80.0);
 }
