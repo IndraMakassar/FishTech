@@ -1,12 +1,4 @@
-import 'package:fishtech/view/widgets/header.dart';
-import 'package:fishtech/view/widgets/welcome_card.dart';
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import '../widgets/custom_drawer_tile.dart';
-import '../widgets/pond_card.dart';
+part of 'pages.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

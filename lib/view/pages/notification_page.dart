@@ -1,12 +1,4 @@
-import 'package:fishtech/bloc/auth/auth_bloc.dart';
-import 'package:fishtech/view/widgets/header.dart';
-import 'package:fishtech/view/widgets/notification_card.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-
-import '../../model/notification_model.dart';
-
+part of 'pages.dart';
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
 

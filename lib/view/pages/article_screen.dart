@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:fishtech/theme.dart';
+part of 'pages.dart';
 
 class ArticlePage extends StatelessWidget {
   const ArticlePage({Key? key}) : super(key: key);

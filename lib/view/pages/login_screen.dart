@@ -1,10 +1,4 @@
-import 'package:fishtech/bloc/auth/auth_bloc.dart';
-import 'package:fishtech/view/widgets/custom_button.dart';
-import 'package:fishtech/view/widgets/custom_text_form_field.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
+part of 'pages.dart';
 
 // TODO: add more robust error notification
 class LoginScreen extends StatefulWidget {

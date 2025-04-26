@@ -1,6 +1,4 @@
-import 'package:fishtech/view/widgets/datapond_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+part of 'widgets.dart';
 
 class FishPondCard extends StatelessWidget {
   final String name;

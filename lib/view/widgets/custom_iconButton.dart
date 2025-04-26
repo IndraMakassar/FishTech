@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+part of 'widgets.dart';
 
 class CustomIconbutton extends StatelessWidget {
   final IconData icon;

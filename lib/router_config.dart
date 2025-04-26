@@ -1,12 +1,4 @@
-import 'package:fishtech/view/pages/addPond_screen.dart';
-import 'package:fishtech/view/pages/article_screen.dart';
-import 'package:fishtech/view/pages/detail_kolam_screen.dart';
-import 'package:fishtech/view/pages/home_screen.dart';
-import 'package:fishtech/view/pages/notification_page.dart';
-import 'package:fishtech/view/pages/profile_screen.dart';
-import 'package:fishtech/view/pages/register_screen.dart';
-import 'package:fishtech/view/pages/login_screen.dart';
-import 'package:fishtech/view/pages/scan_qr.dart';
+import 'package:fishtech/view/pages/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

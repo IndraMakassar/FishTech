@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+part of 'widgets.dart';
+
 class DataPondWidget extends StatelessWidget {
   final Widget icon;
   final String value;

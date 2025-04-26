@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
+part of 'pages.dart';
 
 /// Implementation of Mobile Scanner example with simple configuration
 class ScanQr extends StatefulWidget {
