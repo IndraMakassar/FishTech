@@ -1,6 +1,4 @@
-import 'package:fishtech/view/widgets/custom_iconButton.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+part of 'widgets.dart';
 
 class Header extends StatelessWidget implements PreferredSizeWidget {
   final String title;

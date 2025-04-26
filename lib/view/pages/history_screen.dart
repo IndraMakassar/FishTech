@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of 'pages.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
@@ -32,19 +32,19 @@ class _HistoryScreenState extends State<HistoryScreen> {
               HistoryCard(
                 title: "Kolam nila 2",
                 data: ["2 autofeeder", "3kg", "pH = 7", "suhu = 27°C"],
- 
+
               ),
               SizedBox(height: 10),
               HistoryCard(
                 title: "Kolam nila 3",
                 data: ["2 autofeeder", "3kg", "pH = 7", "suhu = 27°C"],
-   
+
               ),
               SizedBox(height: 10),
               HistoryCard(
                 title: "Kolam nila 4",
                 data: ["2 autofeeder", "3kg", "pH = 7", "suhu = 27°C"],
-   
+
               ),
             ],
           ),

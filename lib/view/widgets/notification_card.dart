@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+part of 'widgets.dart';
 
 class NotificationCard extends StatefulWidget {
   final String pondName;

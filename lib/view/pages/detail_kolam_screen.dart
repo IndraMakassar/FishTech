@@ -1,11 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:go_router/go_router.dart';
+part of 'pages.dart';
 
 class DetailKolam extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme; 
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: Color(0xFFEAF0FA),
       appBar: AppBar(
@@ -149,7 +147,7 @@ class DetailKolam extends StatelessWidget {
                                 const style = TextStyle(
                                   color: Color(0xFF75729E),
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 10, 
+                                  fontSize: 10,
                                 );
                                 Widget text;
                                 switch (value.toInt()) {
@@ -193,7 +191,7 @@ class DetailKolam extends StatelessWidget {
                                 const style = TextStyle(
                                   color: Color(0xFF75729E),
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 8, 
+                                  fontSize: 8,
                                 );
                                 return SideTitleWidget(
                                   axisSide: meta.axisSide,
