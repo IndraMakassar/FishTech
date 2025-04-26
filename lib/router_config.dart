@@ -47,7 +47,7 @@ final GoRouter routerConfig = GoRouter(
     GoRoute(
       path: '/notification',
       builder: (context, state) => NotificationScreen(),
-    )
+    ),
     GoRoute(
       path: '/scan',
       builder: (context, state) => const ScanQr(),

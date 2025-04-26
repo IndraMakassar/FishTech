@@ -1,6 +1,7 @@
 import 'package:fishtech/bloc/auth/auth_bloc.dart';
 import 'package:fishtech/view/widgets/custom_button.dart';
 import 'package:fishtech/view/widgets/custom_text_form_field.dart';
+import 'package:fishtech/view/widgets/header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -39,16 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            onPressed: () {
-              GoRouter.of(context).go('/home');
-            },
-            icon: const Icon(Icons.arrow_back)),
-        automaticallyImplyLeading: false,
-        title: const Text("Profile"),
-        centerTitle: true,
-      ),
+      appBar: const Header(title: 'Profile', showBackButton: true),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthInitial) {
