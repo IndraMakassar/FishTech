@@ -1,4 +1,5 @@
 import 'package:fishtech/view/pages/addPond_screen.dart';
+import 'package:fishtech/view/pages/add_machine_screen.dart';
 import 'package:fishtech/view/pages/article_screen.dart';
 import 'package:fishtech/view/pages/detail_kolam_screen.dart';
 import 'package:fishtech/view/pages/home_screen.dart';
@@ -56,6 +57,10 @@ final GoRouter routerConfig = GoRouter(
     GoRoute(
       path: '/settings',
       builder: (context, state) => const SettingspondScreen(),
+    ),
+    GoRoute(
+      path: '/addmachine',
+      builder: (context, state) => const AddMachineScreen(),
     ),
   
   ],
