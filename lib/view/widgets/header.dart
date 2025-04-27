@@ -24,13 +24,33 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
             CustomIconbutton(icon: Icons.arrow_back, onTap: (){Navigator.of(context).pop();},)
           else
             const SizedBox(width: 44),
-          Text(
-            title,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onPrimary,
-              fontSize: 20,
+          Stack(
+              clipBehavior: Clip.none, // penting! biar Positioned bebas keluar Container
+              children: [
+                Align(
+                  alignment: Alignment.center, // atau Alignment.centerLeft kalau mau rata kiri
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: -20,  // bebas geser
+                  right: -32,
+                  child: Image.asset(
+                    'assets/whiteLogo.png',
+                    width: 40,
+                    height: 40,
+                  ),
+                ),
+              ],
             ),
-          ),
+
+
+
           if (title == "Dashboard")
           CustomIconbutton(icon: Icons.notifications, onTap: (){GoRouter.of(context).push('/notification');},)
           else
