@@ -14,7 +14,7 @@ import 'package:fishtech/view/pages/settingsPond_screen.dart';
 final _rootNavigationKey = GlobalKey<NavigatorState>();
 
 final GoRouter routerConfig = GoRouter(
-  initialLocation: '/settings',
+  initialLocation: '/details',
   navigatorKey: _rootNavigationKey,
   routes: <RouteBase>[
     GoRoute(
