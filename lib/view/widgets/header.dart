@@ -19,7 +19,9 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if (title == "Dashboard")
-            CustomIconbutton(icon: Icons.menu, onTap: (){Scaffold.of(context).openDrawer();})
+            CustomIconbutton(icon: Icons.menu, onTap: (){Scaffold.of(context).openDrawer();}),
+          if (title == "Fish Pond Detail")
+          _backButton(context)
           else if (showBackButton)
             CustomIconbutton(icon: Icons.arrow_back, onTap: (){Navigator.of(context).pop();},)
           else
@@ -53,12 +55,58 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
 
           if (title == "Dashboard")
           CustomIconbutton(icon: Icons.notifications, onTap: (){GoRouter.of(context).push('/notification');},)
+          else if (title == "Fish Pond Detail")
+          _iconButton(Icons.settings, context, path: '/settings')
           else
           const SizedBox(width: 44),
         ],
       ),
     );
   }
+  Widget _iconButton(IconData icon, BuildContext context, {String? path}) {
+    return InkWell(
+      onTap: (){
+        GoRouter.of(context).push(path!);
+      },
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        width: 44,
+        height: 44,
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Icon(
+            icon,
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _backButton(BuildContext context) {
+    return InkWell(
+      onTap: () => Navigator.of(context).pop(),
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        width: 44,
+        height: 44,
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Icon(
+            Icons.arrow_back,
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Size get preferredSize => const Size.fromHeight(80.0);
 }
