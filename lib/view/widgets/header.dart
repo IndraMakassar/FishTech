@@ -20,7 +20,9 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if (title == "Dashboard")
-          _iconButton(Icons.menu, context)
+          _iconButton(Icons.menu, context),
+          if (title == "Fish Pond Detail")
+          _backButton(context)
           else if (showBackButton)
             _backButton(context)
           else
@@ -34,6 +36,8 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
           ),
           if (title == "Dashboard")
           _iconButton(Icons.notifications, context, path: '/notification')
+          else if (title == "Fish Pond Detail")
+          _iconButton(Icons.settings, context, path: '/settings')
           else
           const SizedBox(width: 44),
         ],
