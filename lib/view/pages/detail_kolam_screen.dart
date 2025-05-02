@@ -1,25 +1,27 @@
 part of 'pages.dart';
 
 class DetailKolam extends StatelessWidget {
+  const DetailKolam({super.key});
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Color(0xFFEAF0FA),
+      backgroundColor: const Color(0xFFEAF0FA),
       appBar: AppBar(
         backgroundColor: colorScheme.surface,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
             GoRouter.of(context).go("/home");
           },
         ),
-        title: Text("Detail Kolam", style: TextStyle(color: Colors.black)),
+        title: const Text("Detail Kolam", style: TextStyle(color: Colors.black)),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -33,15 +35,15 @@ class DetailKolam extends StatelessWidget {
                 children: [
                   Container(
                     width: double.infinity,
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
+                    padding: const EdgeInsets.all(16),
+                    decoration: const BoxDecoration(
                       color: Color(0xFF5CB1F5),
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(12),
                         topRight: Radius.circular(12),
                       ),
                     ),
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         "Kolam Nila 4",
                         style: TextStyle(
@@ -52,8 +54,8 @@ class DetailKolam extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
+                  const Padding(
+                    padding: EdgeInsets.all(16.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -93,11 +95,11 @@ class DetailKolam extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             GridView(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 12,
                 mainAxisSpacing: 12,
@@ -109,24 +111,24 @@ class DetailKolam extends StatelessWidget {
                 _buildInfoCard("Autofeeder 1", "15' 26\"", Icons.timer),
               ],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Container(
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
               ),
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     "Statistik Penggunaan Pakan",
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF5CB1F5)),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Container(
                     height: 200,
                     child: BarChart(
@@ -134,10 +136,10 @@ class DetailKolam extends StatelessWidget {
                         barGroups: _buildBarGroups(),
                         titlesData: FlTitlesData(
                           show: true,
-                          topTitles: AxisTitles(
+                          topTitles: const AxisTitles(
                             sideTitles: SideTitles(showTitles: false),
                           ),
-                          rightTitles: AxisTitles(
+                          rightTitles: const AxisTitles(
                             sideTitles: SideTitles(showTitles: false),
                           ),
                           bottomTitles: AxisTitles(
@@ -152,28 +154,28 @@ class DetailKolam extends StatelessWidget {
                                 Widget text;
                                 switch (value.toInt()) {
                                   case 0:
-                                    text = Text('Mon', style: style);
+                                    text = const Text('Mon', style: style);
                                     break;
                                   case 1:
-                                    text = Text('Tue', style: style);
+                                    text = const Text('Tue', style: style);
                                     break;
                                   case 2:
-                                    text = Text('Wed', style: style);
+                                    text = const Text('Wed', style: style);
                                     break;
                                   case 3:
-                                    text = Text('Thu', style: style);
+                                    text = const Text('Thu', style: style);
                                     break;
                                   case 4:
-                                    text = Text('Fri', style: style);
+                                    text = const Text('Fri', style: style);
                                     break;
                                   case 5:
-                                    text = Text('Sat', style: style);
+                                    text = const Text('Sat', style: style);
                                     break;
                                   case 6:
-                                    text = Text('Sun', style: style);
+                                    text = const Text('Sun', style: style);
                                     break;
                                   default:
-                                    text = Text('', style: style);
+                                    text = const Text('', style: style);
                                     break;
                                 }
                                 return SideTitleWidget(
@@ -203,7 +205,7 @@ class DetailKolam extends StatelessWidget {
                           ),
                         ),
                         borderData: FlBorderData(show: false),
-                        gridData: FlGridData(show: false),
+                        gridData: const FlGridData(show: false),
                         barTouchData: BarTouchData(enabled: false),
                       ),
                     ),
@@ -234,7 +236,7 @@ class DetailKolam extends StatelessWidget {
             fromY: 0,
             toY: data[index],
             width: 20,
-            color: Color(0xFF5CB1F5),
+            color: const Color(0xFF5CB1F5),
             borderRadius: BorderRadius.circular(4),
           ),
         ],
@@ -244,7 +246,7 @@ class DetailKolam extends StatelessWidget {
 
   Widget _buildInfoCard(String title, String value, IconData icon) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -252,13 +254,13 @@ class DetailKolam extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 40, color: Color(0xFF5CB1F5)),
-          SizedBox(height: 8),
+          Icon(icon, size: 40, color: const Color(0xFF5CB1F5)),
+          const SizedBox(height: 8),
           Text(title,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-          SizedBox(height: 4),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+          const SizedBox(height: 4),
           Text(value,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         ],
       ),
     );

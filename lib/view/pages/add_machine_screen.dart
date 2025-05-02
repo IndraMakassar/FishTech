@@ -1,7 +1,4 @@
-import 'package:fishtech/view/widgets/custom_button.dart';
-import 'package:fishtech/view/widgets/custom_text_form_field.dart';
-import 'package:fishtech/view/widgets/header.dart';
-import 'package:flutter/material.dart';
+part of 'pages.dart';
 
 class AddMachineScreen extends StatefulWidget {
   const AddMachineScreen({super.key});
