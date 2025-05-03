@@ -1,12 +1,12 @@
 import 'package:fishtech/view/pages/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fishtech/view/pages/settingsPond_screen.dart';
+import 'package:fishtech/view/pages/settings_pond_screen.dart';
 
 final _rootNavigationKey = GlobalKey<NavigatorState>();
 
 final GoRouter routerConfig = GoRouter(
-  initialLocation: '/settings',
+  initialLocation: '/details',
   navigatorKey: _rootNavigationKey,
   routes: <RouteBase>[
     GoRoute(
@@ -27,7 +27,7 @@ final GoRouter routerConfig = GoRouter(
     ),
     GoRoute(
       path: '/details',
-      builder: (context, state) => DetailKolam(),
+      builder: (context, state) => const DetailKolam(),
     ),
     GoRoute(
       path: '/article',
@@ -35,11 +35,11 @@ final GoRouter routerConfig = GoRouter(
     ),
     GoRoute(
       path: '/profile',
-      builder: (context, state) => ProfileScreen(),
+      builder: (context, state) => const ProfileScreen(),
     ),
     GoRoute(
       path: '/notification',
-      builder: (context, state) => NotificationScreen(),
+      builder: (context, state) => const NotificationScreen(),
     ),
     GoRoute(
       path: '/scan',

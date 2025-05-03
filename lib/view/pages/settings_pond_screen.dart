@@ -1,11 +1,11 @@
-import 'package:fishtech/view/widgets/custom_button.dart';
-import 'package:fishtech/view/widgets/header.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 
+import '../widgets/widgets.dart';
+
 class SettingspondScreen extends StatefulWidget {
-  const SettingspondScreen({Key? key}) : super(key: key);
+  const SettingspondScreen({super.key});
 
   @override
   State<SettingspondScreen> createState() => _SettingspondScreenState();
@@ -52,7 +52,9 @@ class _SettingspondScreenState extends State<SettingspondScreen> {
 
   @override
   void dispose() {
-    _controllers.values.forEach((controller) => controller.dispose());
+    for (var controller in _controllers.values) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
@@ -76,6 +78,7 @@ class _SettingspondScreenState extends State<SettingspondScreen> {
       final formData = Map.fromEntries(
         _controllers.entries.map((e) => MapEntry(e.key, e.value.text.trim()))
       );
+      formData;
       // TODO: Process form data
     }
   }
@@ -168,7 +171,7 @@ class _SettingspondScreenState extends State<SettingspondScreen> {
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.4),
+            color: Colors.black.withValues(alpha: 0.4),
             spreadRadius: 0,
             blurRadius: 6,
             offset: const Offset(0, 4),
@@ -188,7 +191,7 @@ class _SettingspondScreenState extends State<SettingspondScreen> {
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
+                    color: Colors.black.withValues(alpha: 0.3),
                     spreadRadius: 0,
                     blurRadius: 6,
                     offset: const Offset(0, 6),
@@ -265,7 +268,7 @@ class _SettingspondScreenState extends State<SettingspondScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(title: "Fish Pond Setting", showBackButton: true),
+      appBar: const Header(title: "Fish Pond Setting", showBackButton: true),
       body: Form(
         key: _formKey,
         child: ListView(
