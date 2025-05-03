@@ -1,7 +1,7 @@
 part of 'pages.dart';
 
 class ArticlePage extends StatelessWidget {
-  const ArticlePage({Key? key}) : super(key: key);
+  const ArticlePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class ArticlePage extends StatelessWidget {
 }
 
 class ArticleBody extends StatelessWidget {
-  const ArticleBody({Key? key}) : super(key: key);
+  const ArticleBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,7 @@ class ArticleBody extends StatelessWidget {
 }
 
 class DraggableDescriptionModal extends StatelessWidget {
-  const DraggableDescriptionModal({Key? key}) : super(key: key);
+  const DraggableDescriptionModal({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -98,9 +98,9 @@ class DraggableDescriptionModal extends StatelessWidget {
                 child: SingleChildScrollView(
                   controller: scrollController,
                   padding: const EdgeInsets.all(16.0),
-                  child: Column(
+                  child: const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
                         'Ikan Nila',
                         style: TextStyle(

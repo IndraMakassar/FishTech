@@ -21,3 +21,4 @@ part 'notification_page.dart';
 part 'profile_screen.dart';
 part 'register_screen.dart';
 part 'scan_qr.dart';
+part 'add_machine_screen.dart';

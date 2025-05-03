@@ -32,7 +32,6 @@ class _AddPondState extends State<AddPond> {
     super.dispose();
   }
 
-  @override
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _namePond = TextEditingController();
   final TextEditingController _fishType = TextEditingController();
@@ -41,10 +40,13 @@ class _AddPondState extends State<AddPond> {
   final TextEditingController _width = TextEditingController();
   final TextEditingController _height = TextEditingController();
   final TextEditingController _volume = TextEditingController();
+
   final _passwordFocusNode = FocusNode();
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(title: 'Add Fish Pond', showBackButton: true),
+      appBar: const Header(title: 'Add Fish Pond', showBackButton: true),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state){
           if (state is AuthSuccess) {
@@ -73,7 +75,7 @@ class _AddPondState extends State<AddPond> {
                           title: "Name",
                           controller: _namePond,
                           hintText: "Enter your Fish Pond Name",
-                          autofillHints: [AutofillHints.name],
+                          autofillHints: const [AutofillHints.name],
                           validator: (value){
                             if (value == null || value.isEmpty) {
                               return 'Please enter your pond name';
@@ -108,8 +110,8 @@ class _AddPondState extends State<AddPond> {
                             return null;
                           },
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0),
                           child: Text("Pond Size (m)"),
                         ),
                         Row(
