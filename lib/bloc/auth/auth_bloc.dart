@@ -14,6 +14,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthEvent>((event, emit) {});
 
     on<UserCheckedLogIn>((event, emit) async {
+      emit(AuthLoading());
       try {
         final session = await _repository.checkSession();
         if (session != null) {
