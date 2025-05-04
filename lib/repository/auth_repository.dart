@@ -42,4 +42,8 @@ class AuthRepository {
     final AuthResponse res = await _supabase.auth.refreshSession();
     return res;
   }
+
+  Future<Session?> checkSession() async {
+    return _supabase.auth.currentSession;
+  }
 }

@@ -9,7 +9,8 @@ class UserSignUp extends AuthEvent {
   final String email;
   final String password;
 
-  const UserSignUp({required this.name, required this.email, required this.password});
+  const UserSignUp(
+      {required this.name, required this.email, required this.password});
 
   @override
   List<Object?> get props => [email, password];
@@ -31,13 +32,10 @@ class UserSignOut extends AuthEvent {
 }
 
 class UserCheckedLogIn extends AuthEvent {
-  final Session session;
-
-  const UserCheckedLogIn(this.session);
+  const UserCheckedLogIn();
 
   @override
   List<Object?> get props => [];
-
 }
 
 class UserChangeName extends AuthEvent {
@@ -47,5 +45,4 @@ class UserChangeName extends AuthEvent {
 
   @override
   List<Object?> get props => [newName];
-
 }
