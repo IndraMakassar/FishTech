@@ -8,6 +8,7 @@ import 'package:fishtech/view/pages/profile_screen.dart';
 import 'package:fishtech/view/pages/register_screen.dart';
 import 'package:fishtech/view/pages/login_screen.dart';
 import 'package:fishtech/view/pages/scan_qr.dart';
+import 'package:fishtech/view/pages/statistics_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fishtech/view/pages/settingsPond_screen.dart';
@@ -15,7 +16,7 @@ import 'package:fishtech/view/pages/settingsPond_screen.dart';
 final _rootNavigationKey = GlobalKey<NavigatorState>();
 
 final GoRouter routerConfig = GoRouter(
-  initialLocation: '/details',
+  initialLocation: '/statistics',
   navigatorKey: _rootNavigationKey,
   routes: <RouteBase>[
     GoRoute(
@@ -61,6 +62,10 @@ final GoRouter routerConfig = GoRouter(
     GoRoute(
       path: '/addmachine',
       builder: (context, state) => const AddMachineScreen(),
+    ),
+    GoRoute(
+      path: '/statistics',
+      builder: (context, state) => const StatisticsScreen(),
     ),
   
   ],
