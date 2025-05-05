@@ -1,14 +1,47 @@
+import 'dart:async';
+
+import 'package:fishtech/bloc/auth/auth_bloc.dart';
 import 'package:fishtech/view/pages/pages.dart';
+import 'package:fishtech/view/pages/settings_pond_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fishtech/view/pages/settings_pond_screen.dart';
+
+import 'injection_container.dart';
 
 final _rootNavigationKey = GlobalKey<NavigatorState>();
 
 final GoRouter routerConfig = GoRouter(
-  initialLocation: '/details',
+  initialLocation: '/',
   navigatorKey: _rootNavigationKey,
+  refreshListenable: GoRouterRefreshStream(getIt<AuthBloc>().stream),
+  redirect: (context, state) {
+    final authBloc = getIt<AuthBloc>();
+    final authState = authBloc.state;
+
+    final isAuthenticated = authState is AuthAuthenticated;
+    final isUnauthenticated =
+        authState is AuthUnauthenticated || authState is AuthFailure;
+    final isLoading = authState is AuthLoading || authState is AuthInitial;
+
+    final isLoggingIn = state.matchedLocation.contains('login') ||
+        state.matchedLocation.contains('register');
+
+    if (isAuthenticated && isLoggingIn) {
+      return '/home';
+    }
+
+    if (isUnauthenticated && !isLoggingIn) {
+      return '/login';
+    }
+
+    if (isLoading) {
+      return null;
+    }
+
+    return null;
+  },
   routes: <RouteBase>[
+    GoRoute(path: '/', redirect: (_, __) => '/home'),
     GoRoute(
       path: '/login',
       builder: (context, state) => const LoginScreen(),
@@ -53,6 +86,22 @@ final GoRouter routerConfig = GoRouter(
       path: '/addmachine',
       builder: (context, state) => const AddMachineScreen(),
     ),
-  
   ],
 );
+
+class GoRouterRefreshStream extends ChangeNotifier {
+  final Stream<dynamic> _stream;
+  late final StreamSubscription _subscription;
+
+  GoRouterRefreshStream(this._stream) {
+    _subscription = _stream.asBroadcastStream().listen((_) {
+      notifyListeners();
+    });
+  }
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
+}

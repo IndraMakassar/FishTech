@@ -32,7 +32,7 @@ class _DetailKolamState extends State<DetailKolam> {
           showBackButton: true,
         ),
         body: BlocConsumer<AuthBloc, AuthState>(listener: (context, state) {
-          if (state is AuthSuccess) {
+          if (state is AuthAuthenticated) {
             GoRouter.of(context).go('/home');
           } else if (state is AuthFailure) {
             ScaffoldMessenger.of(context)

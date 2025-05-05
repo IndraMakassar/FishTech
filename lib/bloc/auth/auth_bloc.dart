@@ -1,82 +1,113 @@
+import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:fishtech/repository/auth_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'auth_event.dart';
-
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final AuthRepository _repository;
+  final AuthRepository _repo;
+  late final StreamSubscription<AuthStateChange> _authSub;
 
-  AuthBloc(this._repository) : super(AuthInitial()) {
-    on<AuthEvent>((event, emit) {});
-
-    on<UserCheckedLogIn>((event, emit) async {
-      emit(AuthLoading());
-      try {
-        final session = await _repository.checkSession();
-        if (session != null) {
-          emit(AuthSuccess(session));
-        } else {
-          emit(const AuthFailure("No active session"));
-        }
-      } catch (e) {
-        emit(const AuthFailure("Failed to check session"));
+  AuthBloc(this._repo) : super(AuthInitial()) {
+    // 1) bootstrap from whatever session is already live:
+    _repo.checkSession().then((sess) {
+      if (sess != null) {
+        add(UserLoggedIn(sess));
+      } else {
+        add(UserLoggedOut());
       }
     });
 
-    on<UserSignUp>((event, emit) async {
-      emit(AuthLoading());
-      try {
-        final AuthResponse user = await _repository.signUpWithEmail(
-            event.name, event.email, event.password);
-        emit(AuthSuccess(user.session!));
-      } on AuthException catch (e) {
-        emit(AuthFailure(e.message));
-      } catch (e) {
-        emit(const AuthFailure("enexpected error occurred"));
+    // 2) now listen for *only* signIn / signOut, drop duplicates
+    _authSub = _repo.onAuthStateChange.listen((change) {
+      switch (change.event) {
+        case AuthChangeEvent.initialSession:
+          if (change.session != null) {
+            add(UserLoggedIn(change.session!));
+          } else {
+            add(UserLoggedOut());
+          }
+          break;
+
+        case AuthChangeEvent.signedIn:
+        case AuthChangeEvent.tokenRefreshed:
+          if (change.session != null && state is! AuthAuthenticated) {
+            add(UserLoggedIn(change.session!));
+          }
+          break;
+
+        case AuthChangeEvent.signedOut:
+        case AuthChangeEvent.userDeleted:
+          if (state is! AuthUnauthenticated) {
+            add(UserLoggedOut());
+          }
+          break;
+
+        default:
+        // ignore
       }
     });
 
-    on<UserSignIn>((event, emit) async {
+
+    // 3) your handlers become trivial:
+    on<UserLoggedIn>((e, emit) => emit(AuthAuthenticated(e.session)));
+    on<UserLoggedOut>((e, emit) => emit(AuthUnauthenticated()));
+
+    on<UserSignUp>((e, emit) async {
       emit(AuthLoading());
       try {
-        final AuthResponse user = await _repository.signInWithEmail(
-          event.email,
-          event.password,
-        );
-        emit(AuthSuccess(user.session!));
-      } on AuthException catch (e) {
-        emit(AuthFailure(e.message));
-      } catch (e) {
-        emit(const AuthFailure("enexpected error occurred"));
+        await _repo.signUpWithEmail(e.name, e.email, e.password);
+        // stream will fire signedIn → UserLoggedIn
+      } on AuthException catch (err) {
+        emit(AuthFailure(err.message));
+      } catch (_) {
+        emit(const AuthFailure("Unexpected error"));
       }
     });
 
-    on<UserSignOut>((event, emit) async {
+    on<UserSignIn>((e, emit) async {
       emit(AuthLoading());
       try {
-        _repository.signOut();
-        emit(AuthInitial());
-      } on AuthException catch (e) {
-        emit(AuthFailure(e.message));
-      } catch (e) {
-        emit(const AuthFailure("enexpected error occurred"));
+        await _repo.signInWithEmail(e.email, e.password);
+        // stream will fire signedIn → UserLoggedIn
+      } on AuthException catch (err) {
+        emit(AuthFailure(err.message));
+      } catch (_) {
+        emit(const AuthFailure("Unexpected error"));
       }
     });
 
-    on<UserChangeName>((event, emit) async {
+    on<UserSignOut>((e, emit) async {
       emit(AuthLoading());
       try {
-        final AuthResponse user = await _repository.changeName(event.newName);
-        emit(AuthSuccess(user.session!));
-      } on AuthException catch (e) {
-        emit(AuthFailure(e.message));
-      } catch (e) {
-        emit(const AuthFailure("enexpected error occurred"));
+        await _repo.signOut();
+        // stream will fire signedOut → UserLoggedOut
+      } on AuthException catch (err) {
+        emit(AuthFailure(err.message));
+      } catch (_) {
+        emit(const AuthFailure("Unexpected error"));
       }
     });
+
+    on<UserChangeName>((e, emit) async {
+      emit(AuthLoading());
+      try {
+        await _repo.changeName(e.newName);
+        // (no explicit success‑emit here; you could fetch session again if you like)
+      } on AuthException catch (err) {
+        emit(AuthFailure(err.message));
+      } catch (_) {
+        emit(const AuthFailure("Unexpected error"));
+      }
+    });
+  }
+
+  @override
+  Future<void> close() {
+    _authSub.cancel();
+    return super.close();
   }
 }

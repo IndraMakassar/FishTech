@@ -13,7 +13,7 @@ Future<void> initializeDependencies() async{
   getIt.registerLazySingleton(() => AuthRepository(getIt()));
   getIt.registerLazySingleton(() => PondRepository(supabase: getIt()));
 
-  getIt.registerFactory(() => AuthBloc(getIt()));
+  getIt.registerLazySingleton<AuthBloc>(() => AuthBloc(getIt()));
   getIt.registerFactory(() => PondBloc(getIt()));
 
 }

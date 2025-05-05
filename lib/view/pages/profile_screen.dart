@@ -15,7 +15,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     final state = context.read<AuthBloc>().state;
-    if (state is AuthSuccess) {
+    if (state is AuthAuthenticated) {
       _nameController.text = state.session.user.userMetadata!['Display name'];
       _emailController.text = state.session.user.email!;
     }
@@ -35,7 +35,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthInitial) {
-            GoRouter.of(context).go('/login');
           } else if (state is AuthFailure) {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(state.message)));
@@ -82,7 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             CustomButton(
                               text: "Save",
                               onPressed: () {
-                                if (state is AuthSuccess) {
+                                if (state is AuthAuthenticated) {
                                   if (_nameController.text !=
                                       state.session.user
                                           .userMetadata!['Display name']) {
