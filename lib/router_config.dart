@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:fishtech/bloc/auth/auth_bloc.dart';
-import 'package:fishtech/view/pages/statistics_screen.dart';
 import 'package:fishtech/view/pages/pages.dart';
 import 'package:fishtech/view/pages/settings_pond_screen.dart';
 import 'package:flutter/material.dart';

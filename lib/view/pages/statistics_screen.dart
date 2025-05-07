@@ -1,12 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:go_router/go_router.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fishtech/bloc/auth/auth_bloc.dart';
-import 'package:fishtech/view/widgets/header.dart';
+part of 'pages.dart';
 
 class StatisticsScreen extends StatefulWidget {
-  const StatisticsScreen({Key? key}) : super(key: key);
+  const StatisticsScreen({super.key});
 
   @override
   _StatisticsScreenState createState() => _StatisticsScreenState();
@@ -35,10 +30,10 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(title: 'Statistics', showBackButton: true),
+      appBar: const Header(title: 'Statistics', showBackButton: true),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state is AuthSuccess) {
+          if (state is AuthAuthenticated) {
             GoRouter.of(context).go('/details');
           } else if (state is AuthFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -107,7 +102,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: Color(0xFFC3C6CF),
+        color: const Color(0xFFC3C6CF),
         borderRadius: BorderRadius.circular(20),
       ),
       child: DropdownButtonHideUnderline(
@@ -161,7 +156,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                 barGroups: _buildBarGroups(context),
                 titlesData: _buildTitlesData(),
                 borderData: FlBorderData(show: false),
-                gridData: FlGridData(show: false),
+                gridData: const FlGridData(show: false),
                 barTouchData: BarTouchData(enabled: false),
               ),
             ),
@@ -192,8 +187,8 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   FlTitlesData _buildTitlesData() {
     return FlTitlesData(
       show: true,
-      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-      rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+      topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+      rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
       bottomTitles: AxisTitles(
         sideTitles: SideTitles(
           showTitles: true,
