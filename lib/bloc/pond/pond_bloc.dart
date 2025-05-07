@@ -13,6 +13,25 @@ class PondBloc extends Bloc<PondEvent, PondState> {
   PondBloc(this._repository) : super(PondInitial()) {
     on<PondEvent>((event, emit) {});
 
+    on<AddPond>((event, emit) async {
+      emit(PondLoading());
+      try {
+        final pond = PondModel(
+            id: "",
+            name: event.name,
+            fish: event.fish,
+            createdAt: DateTime.now(),
+            volume: event.volume
+        );
+
+        await _repository.addPond(pond);
+
+        add(FetchPond());
+      } catch (e) {
+        emit(PondFailure(message: e.toString()));
+      }
+    });
+
     on<FetchPond>((event, emit) async {
       emit(PondLoading());
       try {
