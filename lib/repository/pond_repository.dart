@@ -1,5 +1,4 @@
 import 'package:fishtech/model/pond_model.dart';
-import 'package:fishtech/shared_preferences_helper.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class PondRepository {
@@ -8,23 +7,33 @@ class PondRepository {
   PondRepository({required SupabaseClient supabase}) : _supabase = supabase;
 
   Future<List<PondModel>> getAllPonds() async {
-    final pondIds = await SharedPreferencesHelper.getPondIds();
-    final pondList = await _supabase
-    .from("ponds")
-    .select()
-    .inFilter('id', pondIds);
+    final response = await _supabase.from('ponds').select().order('created_at');
 
-    return (pondList).map((data) => PondModel.fromJson(data)).toList();
+    return (response as List<dynamic>)
+        .map((data) => PondModel.fromJson(data as Map<String, dynamic>))
+        .toList();
   }
 
-  Future<PondModel> getPondById(String id) async {
-    final pond = await _supabase.from("ponds").select().eq("id", id);
+  Future<PondModel?> getPondById(String id) async {
+    final response = await _supabase.from('ponds').select().eq('id', id).maybeSingle();
 
-    return (pond).map((data) => PondModel.fromJson(data)).first;
+    if (response == null) return null;
+
+    return PondModel.fromJson(response);
   }
 
-  addPond(PondModel pond) async {
-    pond = await _supabase.from("ponds").insert(pond.toJson());
+  Future<void> addPond(PondModel pond) async {
+    final userId = _supabase.auth.currentUser?.id;
+    if (userId == null) throw Exception('User not authenticated');
+
+    await _supabase.from('ponds').insert(pond.toJson());
   }
 
+  Future<void> deletePond(String id) async {
+    await _supabase.from('ponds').delete().eq('id', id);
+  }
+
+  Future<void> updatePond(PondModel pond) async {
+    await _supabase.from('ponds').update(pond.toJson()).eq('id', pond.id);
+  }
 }
