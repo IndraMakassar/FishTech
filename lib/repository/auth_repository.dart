@@ -1,10 +1,29 @@
+import 'dart:async';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+class AuthStateChange {
+  final AuthChangeEvent event;
+  final Session? session;
+
+  AuthStateChange(this.event, this.session);
+}
 
 // TODO: add exception handling
 class AuthRepository {
   final SupabaseClient _supabase;
+  late final Stream<AuthStateChange> _authChanges =
+  _supabase
+      .auth
+      .onAuthStateChange
+      .map((e) => AuthStateChange(e.event, e.session))
+      .asBroadcastStream();
+
+
 
   AuthRepository(this._supabase);
+
+  Stream<AuthStateChange> get onAuthStateChange => _authChanges;
 
   Future<AuthResponse> signUpWithEmail(
     String name,
@@ -41,5 +60,9 @@ class AuthRepository {
     );
     final AuthResponse res = await _supabase.auth.refreshSession();
     return res;
+  }
+
+  Future<Session?> checkSession() async {
+    return _supabase.auth.currentSession;
   }
 }
