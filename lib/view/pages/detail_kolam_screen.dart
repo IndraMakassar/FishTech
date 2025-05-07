@@ -1,10 +1,4 @@
-import 'package:fishtech/view/pages/home_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:go_router/go_router.dart';
-import 'package:fishtech/bloc/auth/auth_bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fishtech/view/widgets/header.dart';
+part of 'pages.dart';
 
 class DetailKolam extends StatefulWidget {
   const DetailKolam({Key? key}) : super(key: key);
@@ -342,28 +336,19 @@ class _DetailKolamState extends State<DetailKolam> {
     return Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-          color: const Color(0xFFF3F3FA),
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.grey.withOpacity(0.3),
-                blurRadius: 8,
-                spreadRadius: 2,
-                offset: const Offset(2, 4))
-          ]),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 40, color: Colors.black),
+          Icon(icon, size: 40, color: Color(0xFF5CB1F5)),
           SizedBox(height: 8),
           Text(title,
-              style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF43474e))),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
           SizedBox(height: 4),
           Text(value,
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         ],
       ),
     );

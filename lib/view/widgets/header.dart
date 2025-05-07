@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+part of 'widgets.dart';
 
 class Header extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -20,22 +19,42 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if (title == "Dashboard")
-          _iconButton(Icons.menu, context),
+            CustomIconbutton(icon: Icons.menu, onTap: (){Scaffold.of(context).openDrawer();}),
           if (title == "Fish Pond Detail")
           _backButton(context)
           else if (showBackButton)
-            _backButton(context)
+            CustomIconbutton(icon: Icons.arrow_back, onTap: (){Navigator.of(context).pop();},)
           else
             const SizedBox(width: 44),
-          Text(
-            title,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onPrimary,
-              fontSize: 20,
+          Stack(
+              clipBehavior: Clip.none, // penting! biar Positioned bebas keluar Container
+              children: [
+                Align(
+                  alignment: Alignment.center, // atau Alignment.centerLeft kalau mau rata kiri
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: -20,  // bebas geser
+                  right: -32,
+                  child: Image.asset(
+                    'assets/whiteLogo.png',
+                    width: 40,
+                    height: 40,
+                  ),
+                ),
+              ],
             ),
-          ),
+
+
+
           if (title == "Dashboard")
-          _iconButton(Icons.notifications, context, path: '/notification')
+          CustomIconbutton(icon: Icons.notifications, onTap: (){GoRouter.of(context).push('/notification');},)
           else if (title == "Fish Pond Detail")
           _iconButton(Icons.settings, context, path: '/settings')
           else

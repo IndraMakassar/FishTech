@@ -1,0 +1,24 @@
+import 'package:fishtech/bloc/auth/auth_bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+import 'package:fishtech/theme.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:fishtech/model/notification_model.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:fishtech/view/widgets/widgets.dart';
+
+part 'addPond_screen.dart';
+part 'article_screen.dart';
+part 'detail_kolam_screen.dart';
+part 'history_screen.dart';
+part 'home_screen.dart';
+part 'login_screen.dart';
+part 'notification_page.dart';
+part 'profile_screen.dart';
+part 'register_screen.dart';
+part 'scan_qr.dart';
+part 'add_machine_screen.dart';
