@@ -2,28 +2,25 @@ part of 'auth_bloc.dart';
 
 sealed class AuthState extends Equatable {
   const AuthState();
-}
 
-final class AuthInitial extends AuthState {
-  @override
-  List<Object> get props => [];
-}
-
-final class AuthLoading extends AuthState {
   @override
   List<Object?> get props => [];
-
 }
 
-final class AuthSuccess extends AuthState {
+final class AuthInitial extends AuthState {}
+
+final class AuthLoading extends AuthState {}
+
+final class AuthAuthenticated extends AuthState {
   final Session session;
 
-  const AuthSuccess(this.session);
+  const AuthAuthenticated(this.session);
 
   @override
   List<Object?> get props => [session];
-
 }
+
+final class AuthUnauthenticated extends AuthState {}
 
 final class AuthFailure extends AuthState {
   final String message;
@@ -32,5 +29,4 @@ final class AuthFailure extends AuthState {
 
   @override
   List<Object?> get props => [message];
-
 }

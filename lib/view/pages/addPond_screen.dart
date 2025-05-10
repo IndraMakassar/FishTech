@@ -48,7 +48,7 @@ class _AddPondState extends State<AddPond> {
       appBar: const Header(title: 'Add Fish Pond', showBackButton: true),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state){
-          if (state is AuthSuccess) {
+          if (state is AuthAuthenticated) {
             GoRouter.of(context).go('/addPond');
           } else if (state is AuthFailure) {
             ScaffoldMessenger.of(context)

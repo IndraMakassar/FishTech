@@ -17,7 +17,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final state = context
         .read<AuthBloc>()
         .state;
-    if (state is AuthSuccess) {
+    if (state is AuthAuthenticated) {
       _nameController.text = state.session.user.userMetadata!['Display name'];
       _emailController.text = state.session.user.email!;
     }
@@ -84,7 +84,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             CustomButton(
                               text: "Save",
                               onPressed: () {
-                                if (state is AuthSuccess) {
+                                if (state is AuthAuthenticated) {
                                   if (_nameController.text != state.session.user.userMetadata!['Display name']) {
                                     context.read<AuthBloc>().add(UserChangeName(
                                         newName: _nameController.text.trim()));

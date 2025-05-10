@@ -26,7 +26,7 @@ final GoRouter routerConfig = GoRouter(
     ),
     GoRoute(
       path: '/details',
-      builder: (context, state) => const DetailKolam(),
+      builder: (context, state) => DetailKolam(),
     ),
     GoRoute(
       path: '/article',

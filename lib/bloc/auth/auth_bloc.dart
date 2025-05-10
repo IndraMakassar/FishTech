@@ -14,7 +14,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthEvent>((event, emit) {});
 
     on<UserCheckedLogIn>((event, emit) {
-      emit(AuthSuccess(event.session));
+      emit(AuthAuthenticated(event.session));
     });
 
     on<UserSignUp>((event, emit) async {
@@ -22,7 +22,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       try {
         final AuthResponse user =
             await repository.signUpWithEmail(event.name, event.email, event.password);
-        emit(AuthSuccess(user.session!));
+        emit(AuthAuthenticated(user.session!));
       } on AuthException catch (e) {
         emit(AuthFailure(e.message));
       } catch (e) {
@@ -37,7 +37,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           event.email,
           event.password,
         );
-        emit(AuthSuccess(user.session!));
+        emit(AuthAuthenticated(user.session!));
       } on AuthException catch (e) {
         emit(AuthFailure(e.message));
       } catch (e) {
@@ -61,7 +61,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthLoading());
       try {
         final AuthResponse user = await repository.changeName(event.newName);
-        emit(AuthSuccess(user.session!));
+        emit(AuthAuthenticated(user.session!));
       } on AuthException catch (e) {
         emit(AuthFailure(e.message));
       } catch (e) {

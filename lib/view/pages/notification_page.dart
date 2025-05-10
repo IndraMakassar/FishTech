@@ -29,7 +29,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       appBar: const Header(title: 'Notifications', showBackButton: true),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state){
-          if (state is AuthSuccess) {
+          if (state is AuthAuthenticated) {
             GoRouter.of(context).go('/notification');
           } else if (state is AuthFailure) {
             ScaffoldMessenger.of(context)
