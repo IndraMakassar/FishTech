@@ -312,7 +312,7 @@ class _DetailKolamState extends State<DetailKolam> {
             // ),
             ));
   }
-
+  //TODO: buat statistic chartnya juga dalam file widget yang berbeda
   List<BarChartGroupData> _buildBarGroups() {
     final data = [10.0, 12.5, 8.0, 15.0, 18.0, 14.0, 10.0];
     return List.generate(
@@ -331,7 +331,7 @@ class _DetailKolamState extends State<DetailKolam> {
       ),
     );
   }
-
+  //TODO: kalau bisa pisah file widgetnya
   Widget _buildInfoCard(String title, String value, IconData icon) {
     return Container(
       padding: EdgeInsets.all(16),
