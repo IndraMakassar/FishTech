@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 final _rootNavigationKey = GlobalKey<NavigatorState>();
 
 final GoRouter routerConfig = GoRouter(
-  initialLocation: '/details',
+  initialLocation: '/login',
   navigatorKey: _rootNavigationKey,
   routes: <RouteBase>[
     GoRoute(
@@ -47,6 +47,10 @@ final GoRouter routerConfig = GoRouter(
     GoRoute(
       path: '/settings',
       builder: (context, state) => const SettingspondScreen(),
+    ),
+    GoRoute(
+      path: '/addmachine',
+      builder: (context, state) => const AddMachineScreen(),
     ),
 
   ],

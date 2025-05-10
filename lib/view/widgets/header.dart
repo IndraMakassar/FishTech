@@ -4,6 +4,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool showBackButton;
 
+
   const Header({Key? key, required this.title, this.showBackButton = false}) : super(key: key);
 
   @override
@@ -75,7 +76,6 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
       ),
     );
   }
-
   @override
   Size get preferredSize => const Size.fromHeight(80.0);
 }

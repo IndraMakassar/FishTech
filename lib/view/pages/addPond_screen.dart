@@ -40,7 +40,6 @@ class _AddPondState extends State<AddPond> {
   final TextEditingController _width = TextEditingController();
   final TextEditingController _height = TextEditingController();
   final TextEditingController _volume = TextEditingController();
-
   final _passwordFocusNode = FocusNode();
 
   @override
@@ -110,8 +109,8 @@ class _AddPondState extends State<AddPond> {
                             return null;
                           },
                         ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: Text("Pond Size (m)"),
                         ),
                         Row(
