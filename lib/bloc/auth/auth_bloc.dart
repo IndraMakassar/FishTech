@@ -68,16 +68,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthFailure("enexpected error occurred"));
       }
     });
-    on<UserChangeToken>((event,emit)async {
-      emit(AuthLoading());
-      try{
-        final AuthResponse user = await repository.changeToken(event.newToken);
-        emit(AuthAuthenticated(user.session!));
-      } on AuthException catch (e) {
-        emit(AuthFailure(e.message));
-      } catch (e) {
-        emit(AuthFailure("enexpected error occurred"));
-      }
-    });
+
+
   }
 }
