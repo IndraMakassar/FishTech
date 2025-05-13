@@ -16,7 +16,6 @@ class AuthRepository {
       password: password,
       data: {'Display name': name},
     );
-
     return res;
   }
 
@@ -37,6 +36,16 @@ class AuthRepository {
     await _supabase.auth.updateUser(
       UserAttributes(
         data: {'Display name': name},
+      ),
+    );
+    final AuthResponse res = await _supabase.auth.refreshSession();
+    return res;
+  }
+
+  Future<AuthResponse> changeToken(String token) async {
+    await _supabase.auth.updateUser(
+      UserAttributes(
+        data: {'Device token': token},
       ),
     );
     final AuthResponse res = await _supabase.auth.refreshSession();

@@ -137,7 +137,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         const Gap(0),
                         CustomButton(
                           text: "Register",
-                          onPressed: () {
+                          onPressed: () async{
+                            await FirebaseMessaging.instance.deleteToken();
                             _submitForm();
                           },
                         ),
