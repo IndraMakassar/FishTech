@@ -98,8 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         CustomButton(
                           text: "Login",
                           isLoading: state is AuthLoading,
-                          onPressed: () async {
-                            await FirebaseMessaging.instance.deleteToken();
+                          onPressed: () {
                             _submitForm();
                           },
                         ),

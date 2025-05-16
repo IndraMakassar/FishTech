@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fishtech/repository/auth_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'auth_event.dart';
@@ -48,7 +50,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<UserSignOut>((event, emit) async {
       emit(AuthLoading());
       try {
-        repository.signOut();
+        await FirebaseMessaging.instance.deleteToken();
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.remove('fcm_token');
+        // await repository.deleteFcmTokenFromDatabase();
+        await repository.signOut();
         emit(AuthInitial());
       } on AuthException catch (e) {
         emit(AuthFailure(e.message));

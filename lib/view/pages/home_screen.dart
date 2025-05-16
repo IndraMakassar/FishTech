@@ -77,11 +77,11 @@ class _HomeScreenState extends State<HomeScreen> {
         final token = await FirebaseMessaging.instance.getToken();
         if (token != null && token.isNotEmpty) {
           final prefs = await SharedPreferences.getInstance();
-          final oldToken = prefs.getString('fcmToken');
+          final oldToken = prefs.getString('fcm_token');
 
           if (oldToken != token) {
             context.read<AuthBloc>().add(UserChangeToken(newToken: token));
-            await prefs.setString('fcmToken', token);
+            await prefs.setString('fcm_token', token);
             debugPrint('FCM Token updated: $token');
           } else {
             debugPrint('FCM Token unchanged.');
@@ -342,8 +342,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         icon: Icons.logout_rounded, // Contoh ganti icon
                         title: 'Logout',
                         selected: _selectedIndex == 2,
-                        onTap: () {
+                        onTap: () async{
                           context.read<AuthBloc>().add(UserSignOut());
+                          await FirebaseMessaging.instance.deleteToken();
                         },
                         color: Theme.of(context).colorScheme.error,
                       ),
