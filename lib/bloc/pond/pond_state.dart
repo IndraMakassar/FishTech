@@ -10,7 +10,7 @@ final class PondInitial extends PondState {
 }
 
 final class PondSuccess extends PondState {
-  final List<PondModel> ponds;
+  final List<PondCardModel> ponds;
 
   const PondSuccess({required this.ponds});
 
