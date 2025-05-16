@@ -1,5 +1,6 @@
 import 'package:fishtech/app_bloc_observer.dart';
 import 'package:fishtech/bloc/auth/auth_bloc.dart';
+import 'package:fishtech/bloc/pond/pond_bloc.dart';
 import 'package:fishtech/const.dart';
 import 'package:fishtech/injection_container.dart';
 import 'package:fishtech/router_config.dart';
@@ -28,6 +29,7 @@ Future<void> main() async {
     MultiBlocProvider(
       providers: [
         BlocProvider<AuthBloc>(create: (context) => getIt()),
+        BlocProvider<PondBloc>(create: (context) => getIt()),
       ],
       child: const MyApp(),
     ),

@@ -1,22 +1,9 @@
 part of 'widgets.dart';
 
 class FishPondCard extends StatelessWidget {
-  final String name;
-  final int machineCount;
-  final double feedAmount;
-  final double pH;
-  final double temperature;
-  final String condition;
+  final PondCardModel pondModel;
 
-  const FishPondCard({
-    super.key,
-    required this.name,
-    required this.machineCount,
-    required this.feedAmount,
-    required this.pH,
-    required this.temperature,
-    required this.condition,
-  });
+  const FishPondCard({super.key, required this.pondModel});
 
   //TODO: ganti warna sesuai Theme kalau bisa
   Color _getConditionColor(BuildContext context, String condition) {
@@ -48,7 +35,7 @@ class FishPondCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    name,
+                    pondModel.name,
                     maxLines: 2,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
@@ -60,7 +47,7 @@ class FishPondCard extends StatelessWidget {
                 const Gap(5),
                 Icon(
                   Icons.circle,
-                  color: _getConditionColor(context, condition),
+                  color: _getConditionColor(context, pondModel.condition),
                   size: 12,
                 ),
               ],
@@ -73,12 +60,12 @@ class FishPondCard extends StatelessWidget {
                 //TODO: Apakah Kata informasi perlu diubah?
                 DataPondWidget(
                   icon: const Icon(Icons.precision_manufacturing),
-                  value: '$machineCount',
+                  value: pondModel.machineCount.toString(),
                   label: 'Machine',
                 ),
                 DataPondWidget(
                   icon: const Icon(Icons.scale),
-                  value: '$feedAmount',
+                  value: pondModel.feedAmount.toStringAsFixed(1),
                   label: 'Kg/day',
                 ),
               ],
@@ -89,12 +76,12 @@ class FishPondCard extends StatelessWidget {
               children: [
                 DataPondWidget(
                   icon: const Icon(Icons.water_drop),
-                  value: '$pH',
+                  value: pondModel.pH.toStringAsFixed(2),
                   label: 'Ph',
                 ),
                 DataPondWidget(
                   icon: const Icon(Icons.thermostat),
-                  value: '$temperature°',
+                  value: '${pondModel.temperature.toStringAsFixed(1)}°',
                   label: 'Temperature',
                 ),
               ],

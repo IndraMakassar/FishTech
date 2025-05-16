@@ -5,6 +5,8 @@ sealed class PondEvent extends Equatable {
 }
 
 class FetchPond extends PondEvent {
+  const FetchPond();
+
   @override
   List<Object?> get props => [];
 }

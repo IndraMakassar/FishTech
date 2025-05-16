@@ -1,5 +1,7 @@
 import 'dart:async';
+
 import 'package:fishtech/bloc/auth/auth_bloc.dart';
+import 'package:fishtech/model/pond_card_model.dart';
 import 'package:fishtech/view/pages/pages.dart';
 import 'package:fishtech/view/pages/settings_pond_screen.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +61,10 @@ final GoRouter routerConfig = GoRouter(
     ),
     GoRoute(
       path: '/details',
-      builder: (context, state) => const DetailKolam(),
+      builder: (context, state) {
+        final pond = state.extra as PondCardModel;
+        return DetailKolam(pond: pond);
+      },
     ),
     GoRoute(
       path: '/article',
