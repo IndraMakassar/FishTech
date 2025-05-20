@@ -1,7 +1,9 @@
 part of 'pages.dart';
 
 class DetailKolam extends StatefulWidget {
-  const DetailKolam({Key? key}) : super(key: key);
+  final PondCardModel pond;
+
+  const DetailKolam({Key? key, required this.pond}) : super(key: key);
 
   @override
   _DetailKolamState createState() => _DetailKolamState();
@@ -14,20 +16,19 @@ class _DetailKolamState extends State<DetailKolam> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-        backgroundColor: Color(0xFFF9F9FF),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             GoRouter.of(context).push('/addPond');
           },
           backgroundColor: Theme.of(context).colorScheme.primary,
-          child: const Icon(
+          child: Icon(
             Icons.add,
-            color: Colors.white,
+            color: colorScheme.onPrimary,
             size: 38,
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        appBar: Header(
+        appBar: const Header(
           title: 'Fish Pond Detail',
           showBackButton: true,
         ),
@@ -40,13 +41,13 @@ class _DetailKolamState extends State<DetailKolam> {
           }
         }, builder: (context, state) {
           return SingleChildScrollView(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: const Color(0xFFE0E2EC),
+                    color: colorScheme.surfaceDim,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Column(
@@ -54,10 +55,10 @@ class _DetailKolamState extends State<DetailKolam> {
                     children: [
                       Container(
                         width: double.infinity,
-                        padding: EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.primary,
-                          borderRadius: BorderRadius.only(
+                          borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(12),
                             topRight: Radius.circular(12),
                           ),
@@ -66,11 +67,12 @@ class _DetailKolamState extends State<DetailKolam> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Kolam Ikan Nila 1",
+                              widget.pond.name,
                               style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: colorScheme.onPrimary,
+                              ),
                             ),
                             Switch(
                               value: isOn,
@@ -95,46 +97,56 @@ class _DetailKolamState extends State<DetailKolam> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  "Jenis Ikan",
+                                const Text(
+                                  "Fish Type",
                                   style: TextStyle(
-                                      color: Color(0xFF43474E), fontSize: 14),
+                                    color: Color(0xFF43474E),
+                                    fontSize: 14,
+                                  ),
                                 ),
                                 Text(
-                                  "Ikan Nila",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                                  widget.pond.fish ?? "",
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 8,
                                 ),
-                                Text(
-                                  "Port Size",
+                                const Text(
+                                  "Pord Size",
                                   style: TextStyle(
-                                      color: Color(0xFF43474E), fontSize: 14),
+                                    color: Color(0xFF43474E),
+                                    fontSize: 14,
+                                  ),
                                 ),
                                 Text(
-                                  "1.000.000 m3",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                                  "${widget.pond.volume ?? 0}m3",
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 )
                               ],
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  "Tanggal Budidaya",
+                                const Text(
+                                  "Date of Creation",
                                   style: TextStyle(
-                                      color: Color(0xFF43474E), fontSize: 14),
+                                    color: Color(0xFF43474E),
+                                    fontSize: 14,
+                                  ),
                                 ),
                                 Text(
-                                  "20 Des 2024",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                                  DateFormat('dd MMM yyyy')
+                                      .format(widget.pond.createdAt),
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ],
                             ),
@@ -144,12 +156,12 @@ class _DetailKolamState extends State<DetailKolam> {
                     ],
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8.0),
                       child: Text(
                         "Sensors",
                         style: TextStyle(
@@ -159,36 +171,53 @@ class _DetailKolamState extends State<DetailKolam> {
                       ),
                     ),
                     GridView(
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         crossAxisSpacing: 5,
                         mainAxisSpacing: 12,
                       ),
                       children: [
-                        _buildInfoCard("pH ", "7", Icons.opacity),
                         _buildInfoCard(
-                            "Temperature", "27° C", Icons.thermostat),
-                        _buildInfoCard("Food Used/day", "3kg", Icons.food_bank),
-                        _buildInfoCard("Last Autofeeder", "15 Hours 14 Minutes",
-                            Icons.timer),
+                          "pH ",
+                          widget.pond.pH.toStringAsFixed(2),
+                          Icons.opacity,
+                        ),
+                        _buildInfoCard(
+                          "Temperature",
+                          widget.pond.temperature.toStringAsFixed(1),
+                          Icons.thermostat,
+                        ),
+                        _buildInfoCard(
+                          "Food Used/day",
+                          widget.pond.feedAmount.toStringAsFixed(1),
+                          Icons.food_bank,
+                        ),
+                        _buildInfoCard(
+                          "Last Autofeeder",
+                          widget.pond.lastAutofeederOn != null
+                              ? _getElapsedTime(widget.pond.lastAutofeederOn!)
+                              : 'Unknown',
+                          Icons.timer,
+                        ),
                       ],
                     ),
                   ],
                 ),
-                SizedBox(height: 16),
-                Column(
+                const SizedBox(height: 16),
+                const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       "Statistics",
                       style:
-                      TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
                     )
                   ],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Container(
                   decoration: BoxDecoration(
                       color: Colors.white,
@@ -198,20 +227,20 @@ class _DetailKolamState extends State<DetailKolam> {
                             color: Colors.grey.withOpacity(0.5),
                             blurRadius: 8,
                             spreadRadius: 2,
-                            offset: Offset(0, 4))
+                            offset: const Offset(0, 4))
                       ]),
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         "Use of Fish Feed",
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF43474e)),
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       Container(
                         height: 200,
                         child: BarChart(
@@ -219,10 +248,10 @@ class _DetailKolamState extends State<DetailKolam> {
                             barGroups: _buildBarGroups(),
                             titlesData: FlTitlesData(
                               show: true,
-                              topTitles: AxisTitles(
+                              topTitles: const AxisTitles(
                                 sideTitles: SideTitles(showTitles: false),
                               ),
-                              rightTitles: AxisTitles(
+                              rightTitles: const AxisTitles(
                                 sideTitles: SideTitles(showTitles: false),
                               ),
                               bottomTitles: AxisTitles(
@@ -238,28 +267,28 @@ class _DetailKolamState extends State<DetailKolam> {
                                     Widget text;
                                     switch (value.toInt()) {
                                       case 0:
-                                        text = Text('Mon', style: style);
+                                        text = const Text('Mon', style: style);
                                         break;
                                       case 1:
-                                        text = Text('Tue', style: style);
+                                        text = const Text('Tue', style: style);
                                         break;
                                       case 2:
-                                        text = Text('Wed', style: style);
+                                        text = const Text('Wed', style: style);
                                         break;
                                       case 3:
-                                        text = Text('Thu', style: style);
+                                        text = const Text('Thu', style: style);
                                         break;
                                       case 4:
-                                        text = Text('Fri', style: style);
+                                        text = const Text('Fri', style: style);
                                         break;
                                       case 5:
-                                        text = Text('Sat', style: style);
+                                        text = const Text('Sat', style: style);
                                         break;
                                       case 6:
-                                        text = Text('Sun', style: style);
+                                        text = const Text('Sun', style: style);
                                         break;
                                       default:
-                                        text = Text('', style: style);
+                                        text = const Text('', style: style);
                                         break;
                                     }
                                     return SideTitleWidget(
@@ -291,7 +320,7 @@ class _DetailKolamState extends State<DetailKolam> {
                               ),
                             ),
                             borderData: FlBorderData(show: false),
-                            gridData: FlGridData(show: false),
+                            gridData: const FlGridData(show: false),
                             barTouchData: BarTouchData(enabled: false),
                           ),
                         ),
@@ -304,20 +333,20 @@ class _DetailKolamState extends State<DetailKolam> {
           );
         }
 
-          // floatingActionButton: FloatingActionButton(
-          //   backgroundColor: Color(0xFF5CB1F5),
-          //   onPressed: () {
-          //   },
-          //   child: Icon(Icons.add, color: Colors.white),
-          // ),
-        ));
+            // floatingActionButton: FloatingActionButton(
+            //   backgroundColor: Color(0xFF5CB1F5),
+            //   onPressed: () {
+            //   },
+            //   child: Icon(Icons.add, color: Colors.white),
+            // ),
+            ));
   }
 
   List<BarChartGroupData> _buildBarGroups() {
     final data = [10.0, 12.5, 8.0, 15.0, 18.0, 14.0, 10.0];
     return List.generate(
       data.length,
-          (index) => BarChartGroupData(
+      (index) => BarChartGroupData(
         x: index,
         barRods: [
           BarChartRodData(
@@ -334,7 +363,7 @@ class _DetailKolamState extends State<DetailKolam> {
 
   Widget _buildInfoCard(String title, String value, IconData icon) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -342,15 +371,32 @@ class _DetailKolamState extends State<DetailKolam> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 40, color: Color(0xFF5CB1F5)),
-          SizedBox(height: 8),
+          Icon(icon, size: 40, color: const Color(0xFF5CB1F5)),
+          const SizedBox(height: 8),
           Text(title,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-          SizedBox(height: 4),
+              style:
+                  const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+          const SizedBox(height: 4),
           Text(value,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              style:
+                  const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         ],
       ),
     );
+  }
+
+  String _getElapsedTime(DateTime time) {
+    final now = DateTime.now();
+    final difference = now.difference(time);
+
+    if (difference.inDays > 0) {
+      return '${difference.inDays} day(s) ago';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours} hour(s) ago';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes} minute(s) ago';
+    } else {
+      return 'Just now';
+    }
   }
 }

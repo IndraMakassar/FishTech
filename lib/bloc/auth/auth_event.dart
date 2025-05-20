@@ -30,10 +30,10 @@ class UserSignOut extends AuthEvent {
   List<Object?> get props => [];
 }
 
-class UserCheckedLogIn extends AuthEvent {
+class UserLoggedIn extends AuthEvent {
   final Session session;
 
-  const UserCheckedLogIn(this.session);
+  const UserLoggedIn(this.session);
 
   @override
   List<Object?> get props => [];
@@ -48,6 +48,11 @@ class UserChangeName extends AuthEvent {
   @override
   List<Object?> get props => [newName];
 
+}
+
+class UserLoggedOut extends AuthEvent {
+  @override
+  List<Object?> get props => [];
 }
 
 class UserChangeToken extends AuthEvent{

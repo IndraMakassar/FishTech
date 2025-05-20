@@ -1,5 +1,7 @@
 part of 'pages.dart';
 
+import '../widgets/widgets.dart';
+
 class SettingspondScreen extends StatefulWidget {
   const SettingspondScreen({super.key});
 
@@ -168,6 +170,7 @@ class _SettingspondScreenState extends State<SettingspondScreen> {
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.2),
+            color: Colors.black.withValues(alpha: 0.4),
             spreadRadius: 0,
             blurRadius: 6,
             offset: const Offset(0, 4),

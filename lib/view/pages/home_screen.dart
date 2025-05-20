@@ -9,59 +9,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-  final List<Map<String, dynamic>> statisticData =[
-
-  ];
-  final List<Map<String, dynamic>> fishPondData = [
-    {
-      'name': 'Kolam Ikan Nila 1',
-      'machineCount': 1,
-      'feedAmount': 3,
-      'pH': 7,
-      'temperature': 27.0,
-      'condition' : 'Good',
-    },
-    {
-      'name': 'Kolam Ikan Lele',
-      'machineCount': 2,
-      'feedAmount': 5,
-      'pH': 6.5,
-      'temperature': 28.0,
-      'condition' : 'Warning',
-    },
-    {
-      'name': 'Kolam Ikan Gurame',
-      'machineCount': 1,
-      'feedAmount': 4,
-      'pH': 7.2,
-      'temperature': 26.0,
-      'condition' : 'Danger',
-    },
-    {
-      'name': 'Kolam Ikan Patin',
-      'machineCount': 3,
-      'feedAmount': 6,
-      'pH': 6.8,
-      'temperature': 29.0,
-      'condition' : 'Warning',
-    },
-    {
-      'name': 'Kolam Ikan Patin',
-      'machineCount': 3,
-      'feedAmount': 6,
-      'pH': 6.8,
-      'temperature': 29.0,
-      'condition' : 'Good',
-    },
-    {
-      'name': 'Kolam Ikan Patin',
-      'machineCount': 3,
-      'feedAmount': 6,
-      'pH': 6.8,
-      'temperature': 29.0,
-      'condition' : 'Good',
-    },
-  ];
+  final List<Map<String, dynamic>> statisticData = [];
   final PageController _pageController = PageController();
 
   void _onItemTapped(int index) {
@@ -102,6 +50,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     _pageController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<PondBloc>().add(const FetchPond());
   }
 
   @override
@@ -359,39 +313,41 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
-  List<Widget> _buildPages() {
-    List<Widget> pages = [];
-    int totalPages = (fishPondData.length / 4).ceil();
 
-    for (int i = 0; i < totalPages; i++) {
-      final start = i * 4;
-      final end = (start + 4) > fishPondData.length ? fishPondData.length : start + 4;
-      final ponds = fishPondData.sublist(start, end);
+  List<Widget> _buildPages(List<PondCardModel> ponds) {
+    final pages = <Widget>[];
+    final chunkCount = (ponds.length / 4).ceil();
+
+    for (var page = 0; page < chunkCount; page++) {
+      final start = page * 4;
+      final end = (start + 4) > ponds.length ? ponds.length : start + 4;
+      final slice = ponds.sublist(start, end);
 
       pages.add(
         MasonryGridView.count(
           crossAxisCount: 2,
           mainAxisSpacing: 12,
           crossAxisSpacing: 12,
-          itemCount: ponds.length,
-          physics: const NeverScrollableScrollPhysics(), // Disable scroll di grid
+          itemCount: slice.length,
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           padding: EdgeInsets.zero,
-          itemBuilder: (context, index) {
-            final pond = ponds[index];
-            return FishPondCard(
-              name: pond['name'],
-              machineCount: pond['machineCount'],
-              feedAmount: pond['feedAmount'].toDouble(),
-              pH: pond['pH'].toDouble(),
-              temperature: pond['temperature'].toDouble(),
-              condition: pond['condition'],
+          itemBuilder: (ctx, i) {
+            final pond = slice[i];
+            return GestureDetector(
+              onTap: () {
+                GoRouter.of(context).push(
+                  '/details',
+                  extra: pond,
+                );
+              },
+              child: FishPondCard(pondModel: pond),
             );
           },
         ),
       );
     }
+
     return pages;
   }
-
 }

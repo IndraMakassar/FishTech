@@ -14,9 +14,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    final state = context
-        .read<AuthBloc>()
-        .state;
+    final state = context.read<AuthBloc>().state;
     if (state is AuthAuthenticated) {
       _nameController.text = state.session.user.userMetadata!['Display name'];
       _emailController.text = state.session.user.email!;
@@ -37,7 +35,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthInitial) {
-            GoRouter.of(context).go('/login');
           } else if (state is AuthFailure) {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(state.message)));
@@ -85,7 +82,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               text: "Save",
                               onPressed: () {
                                 if (state is AuthAuthenticated) {
-                                  if (_nameController.text != state.session.user.userMetadata!['Display name']) {
+                                  if (_nameController.text !=
+                                      state.session.user
+                                          .userMetadata!['Display name']) {
                                     context.read<AuthBloc>().add(UserChangeName(
                                         newName: _nameController.text.trim()));
                                   }
@@ -94,6 +93,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ],
                         ),
+                      ),
+                      const Gap(30),
+                      CustomButton(
+                        text: 'Logout',
+                        backgroundColor: Theme.of(context).colorScheme.error,
+                        onPressed: () {
+                          context.read<AuthBloc>().add(UserSignOut());
+                        },
                       ),
                     ],
                   ),

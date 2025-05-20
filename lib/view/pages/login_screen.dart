@@ -33,7 +33,6 @@ class _LoginScreenState extends State<LoginScreen> {
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthAuthenticated) {
-            GoRouter.of(context).go('/home');
           } else if (state is AuthFailure) {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(state.message)));
@@ -116,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          GoRouter.of(context).go('/register');
+                          GoRouter.of(context).push('/register');
                         },
                         child: Text(
                           ' Sign Up',

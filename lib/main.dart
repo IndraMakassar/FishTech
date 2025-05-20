@@ -55,14 +55,9 @@ Future<void> main() async {
   );
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     const materialTheme = MaterialTheme(TextTheme());
@@ -79,16 +74,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-
-    Supabase.instance.client.auth.onAuthStateChange.listen((data) {
-      final session = data.session;
-      if (session != null) {
-        context.read<AuthBloc>().add(UserCheckedLogIn(session));
-        GoRouter.of(context).go('/home');
-      } else {
-
-      }
-    });
     FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
       final session = Supabase.instance.client.auth.currentSession;
       final prefs = await SharedPreferences.getInstance();
@@ -103,4 +88,3 @@ class _MyAppState extends State<MyApp> {
     });
   }
 }
-
