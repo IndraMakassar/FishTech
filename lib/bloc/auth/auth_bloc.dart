@@ -113,7 +113,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthLoading());
       try{
         await _repo.changeToken(e.newToken);
-        emit(AuthAuthenticated(user.session!));
       } on AuthException catch (e) {
         emit(AuthFailure(e.message));
       } catch (e) {
