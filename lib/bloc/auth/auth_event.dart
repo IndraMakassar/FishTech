@@ -54,3 +54,12 @@ class UserLoggedOut extends AuthEvent {
   @override
   List<Object?> get props => [];
 }
+
+class UserChangeToken extends AuthEvent{
+  final String newToken;
+
+  const UserChangeToken({required this.newToken});
+
+  @override
+  List<Object?> get props => [newToken];
+}

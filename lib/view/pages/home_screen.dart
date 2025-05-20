@@ -12,6 +12,30 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Map<String, dynamic>> statisticData = [];
   final PageController _pageController = PageController();
 
+  Future<void> _updateFcmTokenIfLoggedIn() async {
+    final authState = context.read<AuthBloc>().state;
+
+    if (authState is AuthAuthenticated) {
+      try {
+        final token = await FirebaseMessaging.instance.getToken();
+        if (token != null && token.isNotEmpty) {
+          final prefs = await SharedPreferences.getInstance();
+          final oldToken = prefs.getString('fcm_token');
+
+          if (oldToken != token) {
+            context.read<AuthBloc>().add(UserChangeToken(newToken: token));
+            await prefs.setString('fcm_token', token);
+            debugPrint('FCM Token updated: $token');
+          } else {
+            debugPrint('FCM Token unchanged.');
+          }
+        }
+      } catch (e) {
+        debugPrint('Error getting FCM token: $e');
+      }
+    }
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -28,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     context.read<PondBloc>().add(const FetchPond());
+    _updateFcmTokenIfLoggedIn();
   }
 
   @override
@@ -49,8 +74,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         if (pondState is PondSuccess) {
                           warningCount = pondState.ponds
                               .where((p) =>
-                                  p.condition == 'Warning' ||
-                                  p.condition == 'Danger')
+                          p.condition == 'Warning' ||
+                              p.condition == 'Danger')
                               .length;
                         }
 
@@ -134,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     dotHeight: 10,
                                     dotWidth: 10,
                                     activeDotColor:
-                                        Theme.of(context).colorScheme.primary,
+                                    Theme.of(context).colorScheme.primary,
                                   ),
                                 ),
                               )
@@ -178,12 +203,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: double.infinity,
                         child: Center(
                             child: Text(
-                          'No Statistics data available yet.',
-                          style: TextStyle(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant),
-                        )),
+                              'No Statistics data available yet.',
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant),
+                            )),
                       )
                     else
                       const Gap(0),
@@ -239,7 +264,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Material(
                       elevation: 2,
                       color:
-                          Theme.of(context).colorScheme.surfaceContainerHighest,
+                      Theme.of(context).colorScheme.surfaceContainerHighest,
                       child: Padding(
                         padding: const EdgeInsets.all(12),
                         child: Row(

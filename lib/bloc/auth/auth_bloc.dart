@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fishtech/repository/auth_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'auth_event.dart';
@@ -83,7 +85,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<UserSignOut>((e, emit) async {
       emit(AuthLoading());
       try {
+        await FirebaseMessaging.instance.deleteToken();
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.remove('fcm_token');
         await _repo.signOut();
+        emit(AuthInitial());
         // stream will fire signedOut → UserLoggedOut
       } on AuthException catch (err) {
         emit(AuthFailure(err.message));
@@ -101,6 +107,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthFailure(err.message));
       } catch (_) {
         emit(const AuthFailure("Unexpected error"));
+      }
+    });
+    on<UserChangeToken>((e,emit)async {
+      emit(AuthLoading());
+      try{
+        await _repo.changeToken(e.newToken);
+      } on AuthException catch (e) {
+        emit(AuthFailure(e.message));
+      } catch (e) {
+        emit(const AuthFailure("enexpected error occurred"));
       }
     });
   }

@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fishtech/app_bloc_observer.dart';
 import 'package:fishtech/bloc/auth/auth_bloc.dart';
 import 'package:fishtech/bloc/pond/pond_bloc.dart';
@@ -8,11 +9,29 @@ import 'package:fishtech/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  await FirebaseMessaging.instance.setAutoInitEnabled(true);
+  print('Handling background message: ${message.messageId}');
+}
+
 
 Future<void> main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+  print('Token HP: ${fcmToken}');
 
   await Supabase.initialize(
     url: SUPABASE_URL,
@@ -36,9 +55,14 @@ Future<void> main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     const materialTheme = MaterialTheme(TextTheme());
@@ -50,5 +74,22 @@ class MyApp extends StatelessWidget {
       // themeMode: ThemeMode.system,
       routerConfig: routerConfig,
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
+      final session = Supabase.instance.client.auth.currentSession;
+      final prefs = await SharedPreferences.getInstance();
+      if (session != null) {
+        context.read<AuthBloc>().add(UserChangeToken(
+          newToken : newToken));
+        await prefs.setString('fcm_token', newToken);
+        print('FCM token updated to Supabase: $newToken');
+      } else {
+        print('User belum login. Tidak bisa update FCM token.');
+      }
+    });
   }
 }

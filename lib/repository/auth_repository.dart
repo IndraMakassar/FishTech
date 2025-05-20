@@ -35,7 +35,6 @@ class AuthRepository {
       password: password,
       data: {'Display name': name},
     );
-
     return res;
   }
 
@@ -64,5 +63,15 @@ class AuthRepository {
 
   Future<Session?> checkSession() async {
     return _supabase.auth.currentSession;
+  }
+
+  Future<AuthResponse> changeToken(String token) async {
+    await _supabase.auth.updateUser(
+      UserAttributes(
+        data: {'Device token': token},
+      ),
+    );
+    final AuthResponse res = await _supabase.auth.refreshSession();
+    return res;
   }
 }
