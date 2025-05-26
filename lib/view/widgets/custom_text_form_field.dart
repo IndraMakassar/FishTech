@@ -8,6 +8,7 @@ class FormFieldWidget extends StatefulWidget {
   final String? hintText;
   final IconData? prefixIcon;
   final TextInputType keyboardType;
+  final TextInputFormatter? inputFormatter;
   final TextInputAction textInputAction;
   final FocusNode? focusNode;
   final List<String>? autofillHints;
@@ -29,6 +30,7 @@ class FormFieldWidget extends StatefulWidget {
     this.prefixIcon,
     this.keyboardType = TextInputType.text,
     this.textInputAction = TextInputAction.next,
+    this.inputFormatter,
     this.focusNode,
     this.autofillHints,
     this.validator,
@@ -38,7 +40,6 @@ class FormFieldWidget extends StatefulWidget {
     this.isDatePicker = false,
     this.isReadOnly =false,
     this.onDateSelected,
-
   });
 
   @override
@@ -72,7 +73,7 @@ class _FormFieldWidgetState extends State<FormFieldWidget> {
           )
         else
           const Gap(0),
-        Container(
+        SizedBox(
           width: widget.width,
           child: TextFormField(
             controller: widget.controller,
@@ -93,7 +94,7 @@ class _FormFieldWidgetState extends State<FormFieldWidget> {
               hintText: widget.hintText,
               hintStyle:  TextStyle(
                   fontSize: 13,
-                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6)
+                  color: Theme.of(context).colorScheme.onSurfaceVariant
               ),
               prefixIcon: widget.prefixIcon != null ? Icon(widget.prefixIcon) : null,
               border: OutlineInputBorder(
@@ -133,6 +134,7 @@ class _FormFieldWidgetState extends State<FormFieldWidget> {
             ),
             validator: widget.validator,
             onFieldSubmitted: widget.onFieldSubmitted,
+            inputFormatters: widget.inputFormatter != null ? [widget.inputFormatter!] : [],
           ),
         ),
       ],

@@ -7,6 +7,14 @@ class PondRepository {
 
   PondRepository({required SupabaseClient supabase}) : _supabase = supabase;
 
+  Future<PondModel> addNewPond(PondModel pondModel) async {
+    final data = await _supabase.from("ponds").insert(pondModel.toJson()).select();
+
+    final newPondModel = PondModel.fromJson(data.first);
+
+    return newPondModel;
+  }
+
   Future<List<PondModel>> getAllPonds() async {
     final pondList = await _supabase
         .from("ponds")
@@ -27,10 +35,6 @@ class PondRepository {
   }
 
   Future<List<PondCardModel>> getPondCards() async {
-    // 1) Make sure the user is authenticated (RLS handles filtering)
-    final userId = _supabase.auth.currentUser?.id;
-    if (userId == null) throw Exception('User not authenticated');
-
     // 2) Grab the base pond data via your existing method
     final ponds = await getAllPonds();
 
@@ -40,14 +44,12 @@ class PondRepository {
     // 3) For each PondModel, fetch sensors, feeders, logs, then build a PondCardModel
     for (final pond in ponds) {
       // — find the PH & Temp sensor IDs
-      final sensorData = await _supabase
-          .from('sensor')
-          .select()
-          .eq('pond', pond.id);
+      final sensorData =
+          await _supabase.from('sensor').select().eq('pond_id', pond.id);
 
       String? phId, tempId;
       for (final s in sensorData) {
-        if (s['type'] == 'ph')   phId   = s['id'];
+        if (s['type'] == 'ph') phId = s['id'];
         if (s['type'] == 'temp') tempId = s['id'];
       }
 
@@ -64,7 +66,7 @@ class PondRepository {
         return (r.first['reading'] as num).toDouble();
       }
 
-      final ph          = await latest(phId);
+      final ph = await latest(phId);
       final temperature = await latest(tempId);
 
       // — count autofeeders
@@ -73,7 +75,8 @@ class PondRepository {
           .select('autofeeder_id')
           .eq('kolam_id', pond.id);
       final machineCount = (feeders as List).length;
-      final feederIds    = feeders.map((f) => f['autofeeder_id'] as String).toList();
+      final feederIds =
+          feeders.map((f) => f['autofeeder_id'] as String).toList();
 
       // — sum feed given today
       double totalFeed = 0;
@@ -101,20 +104,20 @@ class PondRepository {
 
       // 4) build and collect the card model
       cards.add(PondCardModel(
-        id:              pond.id,
-        name:            pond.name,
-        fish:            pond.fish,
-        createdAt:       pond.createdAt,
-        volume:          pond.volume,
-        condition:       condition,
-        machineCount:    machineCount,
-        feedAmount:      totalFeed,
-        pH:              ph ?? 0,
-        temperature:     temperature ?? 0,
+        id: pond.id,
+        name: pond.name,
+        fish: pond.fish,
+        fishAmount: pond.fishAmount,
+        createdAt: pond.createdAt,
+        volume: pond.volume,
+        condition: condition,
+        machineCount: machineCount,
+        feedAmount: totalFeed,
+        pH: ph ?? 0,
+        temperature: temperature ?? 0,
       ));
     }
 
     return cards;
   }
-
 }
