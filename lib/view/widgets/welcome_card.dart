@@ -64,7 +64,7 @@ class WelcomeCard extends StatelessWidget {
                              fontWeight: FontWeight.bold,
                            ),
                          ),
-                         const TextSpan(text: ' to Check now!'),
+                         const TextSpan(text: ' ponds in warning or danger state!'),
                        ],
                      ),
                    ),

@@ -35,7 +35,7 @@ class DataPondWidget extends StatelessWidget {
           label,
           style: TextStyle(
             fontSize: 10,
-            color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.7),
+            color: Theme.of(context).colorScheme.onSurfaceVariant
           ),
         ),
       ],

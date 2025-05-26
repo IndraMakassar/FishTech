@@ -4,6 +4,7 @@ class PondCardModel extends Equatable {
   final String id;
   final String name;
   final String? fish;
+  final int? fishAmount;
   final DateTime createdAt;
   final double? volume;
   final String condition;
@@ -17,6 +18,7 @@ class PondCardModel extends Equatable {
     required this.id,
     required this.name,
     required this.fish,
+    required this.fishAmount,
     required this.createdAt,
     required this.volume,
     this.condition = 'Unknown',
@@ -32,6 +34,7 @@ class PondCardModel extends Equatable {
     id,
     name,
     fish,
+    fishAmount,
     createdAt,
     volume,
     condition,
@@ -47,6 +50,7 @@ class PondCardModel extends Equatable {
       id: data["id"],
       name: data["name"] as String,
       fish: data["fish"] as String?,
+      fishAmount: data["fish_amount"] ?? 0,
       createdAt: DateTime.parse(data["created_at"]),
       volume: (data["volume"] as num).toDouble(),
       condition: data["condition"] ?? 'Unknown',
@@ -81,6 +85,7 @@ class PondCardModel extends Equatable {
     String? id,
     String? name,
     String? fish,
+    int? fishAmount,
     DateTime? createdAt,
     double? volume,
     String? condition,
@@ -94,6 +99,7 @@ class PondCardModel extends Equatable {
       id: id ?? this.id,
       name: name ?? this.name,
       fish: fish ?? this.fish,
+      fishAmount: fishAmount ?? this.fishAmount,
       createdAt: createdAt ?? this.createdAt,
       volume: volume ?? this.volume,
       condition: condition ?? this.condition,

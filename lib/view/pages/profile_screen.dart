@@ -46,66 +46,68 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: CircularProgressIndicator(),
             );
           }
-          return Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                Center(
-                  child: Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 60,
-                        backgroundColor: Colors.blue[100],
-                        child: const Icon(
-                          Icons.person,
-                          size: 100,
-                          color: Colors.blue,
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  Center(
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 60,
+                          backgroundColor: Colors.blue[100],
+                          child: const Icon(
+                            Icons.person,
+                            size: 100,
+                            color: Colors.blue,
+                          ),
                         ),
-                      ),
-                      const Gap(28),
-                      Form(
-                        child: OverflowBar(
-                          overflowAlignment: OverflowBarAlignment.center,
-                          alignment: MainAxisAlignment.start,
-                          overflowSpacing: 20,
-                          children: [
-                            FormFieldWidget(
-                              controller: _emailController,
-                              labelText: "Email",
-                              isReadOnly: true,
-                            ),
-                            FormFieldWidget(
-                              controller: _nameController,
-                              labelText: "Name",
-                            ),
-                            CustomButton(
-                              text: "Save",
-                              onPressed: () {
-                                if (state is AuthAuthenticated) {
-                                  if (_nameController.text !=
-                                      state.session.user
-                                          .userMetadata!['Display name']) {
-                                    context.read<AuthBloc>().add(UserChangeName(
-                                        newName: _nameController.text.trim()));
+                        const Gap(28),
+                        Form(
+                          child: OverflowBar(
+                            overflowAlignment: OverflowBarAlignment.center,
+                            alignment: MainAxisAlignment.start,
+                            overflowSpacing: 20,
+                            children: [
+                              FormFieldWidget(
+                                controller: _emailController,
+                                labelText: "Email",
+                                isReadOnly: true,
+                              ),
+                              FormFieldWidget(
+                                controller: _nameController,
+                                labelText: "Name",
+                              ),
+                              CustomButton(
+                                text: "Save",
+                                onPressed: () {
+                                  if (state is AuthAuthenticated) {
+                                    if (_nameController.text !=
+                                        state.session.user
+                                            .userMetadata!['Display name']) {
+                                      context.read<AuthBloc>().add(UserChangeName(
+                                          newName: _nameController.text.trim()));
+                                    }
                                   }
-                                }
-                              },
-                            ),
-                          ],
+                                },
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      const Gap(30),
-                      CustomButton(
-                        text: 'Logout',
-                        backgroundColor: Theme.of(context).colorScheme.error,
-                        onPressed: () {
-                          context.read<AuthBloc>().add(UserSignOut());
-                        },
-                      ),
-                    ],
+                        const Gap(30),
+                        CustomButton(
+                          text: 'Logout',
+                          backgroundColor: Theme.of(context).colorScheme.error,
+                          onPressed: () {
+                            context.read<AuthBloc>().add(UserSignOut());
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },

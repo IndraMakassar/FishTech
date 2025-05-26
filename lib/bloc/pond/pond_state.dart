@@ -9,6 +9,11 @@ final class PondInitial extends PondState {
   List<Object> get props => [];
 }
 
+class PondAddSuccess extends PondState {
+  @override
+  List<Object?> get props => [];
+}
+
 final class PondSuccess extends PondState {
   final List<PondCardModel> ponds;
 
