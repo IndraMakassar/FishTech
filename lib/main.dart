@@ -29,6 +29,14 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  final settings = await FirebaseMessaging.instance.requestPermission(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+  print('User granted permission: ${settings.authorizationStatus}');
+
   final fcmToken = await FirebaseMessaging.instance.getToken();
   print('Token HP: ${fcmToken}');
 
@@ -62,15 +70,16 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
   @override
   Widget build(BuildContext context) {
     const materialTheme = MaterialTheme(TextTheme());
 
     return MaterialApp.router(
+      scaffoldMessengerKey: _scaffoldMessengerKey,  // Add this line
       debugShowCheckedModeBanner: false,
       theme: materialTheme.light(),
-      // darkTheme: materialTheme.dark(),
-      // themeMode: ThemeMode.system,
       routerConfig: routerConfig,
     );
   }
@@ -78,6 +87,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    setupFirebaseMessaging();
     FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
       final session = Supabase.instance.client.auth.currentSession;
       final prefs = await SharedPreferences.getInstance();
@@ -91,4 +101,32 @@ class _MyAppState extends State<MyApp> {
       }
     });
   }
+  void setupFirebaseMessaging() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print("Got a message whilst in the foreground!");
+      print("Message data: ${message.data}");
+      print("Message notification: ${message.notification?.title}");
+      print("Message notification body: ${message.notification?.body}");
+
+      final notification = message.notification;
+      if (notification != null) {
+        _scaffoldMessengerKey.currentState?.showSnackBar(
+          SnackBar(
+            content: Text('${notification.title} ${notification.body}'),
+          ),
+        );
+      }
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('Message clicked! ${message.data}');
+    });
+
+    FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
+      if (message != null) {
+        print('Terminated state message: ${message.data}');
+      }
+    });
+  }
+
 }

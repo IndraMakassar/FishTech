@@ -65,13 +65,19 @@ class AuthRepository {
     return _supabase.auth.currentSession;
   }
 
-  Future<AuthResponse> changeToken(String token) async {
-    await _supabase.auth.updateUser(
-      UserAttributes(
-        data: {'Device token': token},
-      ),
-    );
-    final AuthResponse res = await _supabase.auth.refreshSession();
-    return res;
+  Future<void> changeToken(String token) async {
+    final user = _supabase.auth.currentUser;
+    if (user == null) throw Exception('User not authenticated');
+
+    final response = await _supabase
+        .from('profiles')
+        .upsert({
+          'id': user.id,  // Required for upsert
+          'fcm_token': token,
+        });
+
+    if (response.error != null) {
+      throw response.error!;
+    }
   }
 }
