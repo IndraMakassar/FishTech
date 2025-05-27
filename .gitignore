@@ -10,6 +10,9 @@
 .svn/
 .env
 migrate_working_dir/
+deno.lock
+
+
 
 # IntelliJ related
 *.iml
@@ -43,4 +46,6 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 /lib/const.dart
+/supabase
 /supabase/functions/service-account.json
+/supabase/functions/deno.json
