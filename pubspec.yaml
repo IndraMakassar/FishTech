@@ -82,6 +82,7 @@ flutter:
     - assets/gambar_ikan_nila.jpeg
     - assets/Logo.png
     - assets/whiteLogo.png
+    - assets/FishTech_Logo.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
@@ -108,10 +109,45 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
 
+# dart run flutter_native_splash:create
 flutter_native_splash:
-  color: "#ffffff" # Background color
-  image: assets/Logo.png # Path to the logo or image
+  color: "##f9f9ff" # Background color
+  image: assets/FishTech_Logo.png # Path to the logo or image
   android: true
   ios: true
   web: true
   fullscreen: false
+
+
+  # flutter pub run flutter_launcher_icons
+  flutter_launcher_icons:
+    image_path: "assets/FishTech_Logo.png"
+
+    android: "launcher_icon"
+    # image_path_android: "assets/icon/icon.png"
+    min_sdk_android: 21 # android min sdk min:16, default 21
+    # adaptive_icon_background: "assets/icon/background.png"
+    # adaptive_icon_foreground: "assets/icon/foreground.png"
+    # adaptive_icon_monochrome: "assets/icon/monochrome.png"
+
+    ios: true
+    # image_path_ios: "assets/icon/icon.png"
+    remove_alpha_channel_ios: true
+    # image_path_ios_dark_transparent: "assets/icon/icon_dark.png"
+    # image_path_ios_tinted_grayscale: "assets/icon/icon_tinted.png"
+    # desaturate_tinted_to_grayscale_ios: true
+
+    web:
+      generate: true
+      image_path: "assets/Logo.png"
+      background_color: "##f9f9ff"
+      theme_color: "##f9f9ff"
+
+    windows:
+      generate: true
+      image_path: "assets/Logo.png"
+      icon_size: 48 # min:48, max:256, default: 48
+
+    macos:
+      generate: true
+      image_path: "assets/Logo.png"
