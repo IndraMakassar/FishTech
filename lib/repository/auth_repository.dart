@@ -20,16 +20,15 @@ class AuthRepository {
       .asBroadcastStream();
 
 
-
   AuthRepository(this._supabase);
 
   Stream<AuthStateChange> get onAuthStateChange => _authChanges;
 
   Future<AuthResponse> signUpWithEmail(
-    String name,
-    String email,
-    String password,
-  ) async {
+      String name,
+      String email,
+      String password,
+      ) async {
     final AuthResponse res = await _supabase.auth.signUp(
       email: email,
       password: password,
@@ -66,18 +65,19 @@ class AuthRepository {
   }
 
   Future<void> changeToken(String token) async {
-    final user = _supabase.auth.currentUser;
-    if (user == null) throw Exception('User not authenticated');
+    try {
+      final user = _supabase.auth.currentUser;
+      if (user == null) throw Exception('User not authenticated');
 
-    final response = await _supabase
-        .from('profiles')
-        .upsert({
-          'id': user.id,  // Required for upsert
-          'fcm_token': token,
-        });
-
-    if (response.error != null) {
-      throw response.error!;
+      await _supabase
+          .from('profiles')
+          .upsert({
+        'id': user.id,
+        'fcm_token': token,
+      });
+    } catch (e) {
+      print('Error in changeToken: $e');
+      rethrow;
     }
   }
 }
