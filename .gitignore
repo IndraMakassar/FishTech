@@ -8,7 +8,11 @@
 .buildlog/
 .history
 .svn/
+.env
 migrate_working_dir/
+deno.lock
+
+
 
 # IntelliJ related
 *.iml
@@ -42,3 +46,16 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 /lib/const.dart
+/supabase/functions/service-account.json
+/supabase/functions/.env.ts
+
+# Supabase
+.branches
+.temp
+/supabase/config.toml
+
+
+# dotenvx
+.env.keys
+.env.local
+.env.*.local

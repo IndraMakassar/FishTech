@@ -1,13 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Permission for posting notifications -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:usesCleartextTraffic="true"
         android:label="fishtech"
         android:name="${applicationName}"
-        android:icon="@mipmap/launcher_icon">
-        
+        android:icon="@mipmap/ic_launcher">
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -20,13 +22,20 @@
 
             <!-- Metadata for Firebase notifications -->
             <meta-data
-                android:name="com.google.firebase.messaging.default_notification_channel_id"
-                android:value="default_channel" />
+                    android:name="com.google.firebase.messaging.default_notification_channel_id"
+                    android:value="default_channel" />
+
+            <meta-data
+                    android:name="firebase_messaging_auto_init_enabled"
+                    android:value="false" />
+            <meta-data
+                    android:name="firebase_analytics_collection_enabled"
+                    android:value="false" />
 
             <!-- Metadata for Flutter theme -->
             <meta-data
-                android:name="io.flutter.embedding.android.NormalTheme"
-                android:resource="@style/NormalTheme" />
+                    android:name="io.flutter.embedding.android.NormalTheme"
+                    android:resource="@style/NormalTheme" />
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -38,6 +47,10 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <!-- Add this inside application tag -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="high_importance_channel" />
     </application>
 
     <!-- Query for processing text activities -->

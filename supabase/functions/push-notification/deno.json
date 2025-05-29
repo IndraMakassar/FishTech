@@ -1,0 +1,13 @@
+{
+  "tasks": {
+    "dev": "deno run -A --watch supabase/functions/index.ts"
+  },
+  "compilerOptions": {
+    "allowJs": true,
+    "strict": true,
+    "lib": ["deno.window", "deno.ns", "deno.unstable", "dom"]
+  },
+  "imports": {
+    "google-auth-library": "npm:google-auth-library@^9.15.1"
+  }
+}

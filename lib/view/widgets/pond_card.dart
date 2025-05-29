@@ -34,13 +34,17 @@ class FishPondCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Text(
-                    pondModel.name,
-                    maxLines: 2,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                      overflow: TextOverflow.ellipsis,
+                  child: SizedBox(
+                    height: (15 * 1.2) * 2, // fontSize * lineHeight * numberOfLines
+                    child: Text(
+                      pondModel.name,
+                      maxLines: 2,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        height: 1.2, // Add this to control line height
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ),
                 ),
@@ -58,15 +62,19 @@ class FishPondCard extends StatelessWidget {
               children: [
                 //TODO: Apakah Icon Perlu diubah?
                 //TODO: Apakah Kata informasi perlu diubah?
-                DataPondWidget(
-                  icon: const Icon(Icons.precision_manufacturing),
-                  value: pondModel.machineCount.toString(),
-                  label: 'Machine',
+                Flexible(
+                  child: DataPondWidget(
+                    icon: const Icon(Icons.precision_manufacturing),
+                    value: pondModel.machineCount.toString(),
+                    label: 'Machine',
+                  ),
                 ),
-                DataPondWidget(
-                  icon: const Icon(Icons.scale),
-                  value: pondModel.feedAmount.toStringAsFixed(1),
-                  label: 'Kg/day',
+                Flexible(
+                  child: DataPondWidget(
+                    icon: const Icon(Icons.scale),
+                    value: pondModel.feedAmount.toStringAsFixed(1),
+                    label: 'Kg/day',
+                  ),
                 ),
               ],
             ),
@@ -74,15 +82,19 @@ class FishPondCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                DataPondWidget(
-                  icon: const Icon(Icons.water_drop),
-                  value: pondModel.pH.toStringAsFixed(2),
-                  label: 'Ph',
+                Flexible(
+                  child: DataPondWidget(
+                    icon: const Icon(Icons.water_drop),
+                    value: pondModel.pH.toStringAsFixed(2),
+                    label: 'Ph',
+                  ),
                 ),
-                DataPondWidget(
-                  icon: const Icon(Icons.thermostat),
-                  value: '${pondModel.temperature.toStringAsFixed(1)}°',
-                  label: 'Temperature',
+                Flexible(
+                  child: DataPondWidget(
+                    icon: const Icon(Icons.thermostat),
+                    value: '${pondModel.temperature.toStringAsFixed(1)}°',
+                    label: 'Temp',
+                  ),
                 ),
               ],
             ),

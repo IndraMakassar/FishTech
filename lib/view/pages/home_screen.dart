@@ -30,8 +30,9 @@ class _HomeScreenState extends State<HomeScreen> {
             debugPrint('FCM Token unchanged.');
           }
         }
-      } catch (e) {
-        debugPrint('Error getting FCM token: $e');
+      } catch (e, stackTrace) {
+        debugPrint('Error getting/updating FCM token: $e');
+        debugPrint('Stack trace: $stackTrace');
       }
     }
   }
@@ -51,8 +52,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<PondBloc>().add(const FetchPond());
     _updateFcmTokenIfLoggedIn();
+    context.read<PondBloc>().add(const FetchPond());
   }
 
   @override
@@ -60,162 +61,160 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: const Header(title: "Dashboard"),
       body: SingleChildScrollView(
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              BlocBuilder<AuthBloc, AuthState>(
-                builder: (context, authState) {
-                  if (authState is AuthAuthenticated) {
-                    return BlocBuilder<PondBloc, PondState>(
-                      builder: (context, pondState) {
-                        int warningCount = 0;
-                        if (pondState is PondSuccess) {
-                          warningCount = pondState.ponds
-                              .where((p) =>
-                          p.condition == 'Warning' ||
-                              p.condition == 'Danger')
-                              .length;
-                        }
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            BlocBuilder<AuthBloc, AuthState>(
+              builder: (context, authState) {
+                if (authState is AuthAuthenticated) {
+                  return BlocBuilder<PondBloc, PondState>(
+                    builder: (context, pondState) {
+                      int warningCount = 0;
+                      if (pondState is PondSuccess) {
+                        warningCount = pondState.ponds
+                            .where((p) =>
+                        p.condition == 'Warning' ||
+                            p.condition == 'Danger')
+                            .length;
+                      }
 
-                        return WelcomeCard(
-                          name: authState
-                              .session.user.userMetadata!['Display name'],
-                          total: warningCount,
-                        );
-                      },
-                    );
-                  } else {
-                    return const SizedBox.shrink();
-                  }
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Fish Pond',
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: Theme.of(context).colorScheme.onSurface,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    const Gap(10),
-                    BlocBuilder<PondBloc, PondState>(
-                      builder: (context, state) {
-                        if (state is PondLoading) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
+                      return WelcomeCard(
+                        name: authState
+                            .session.user.userMetadata!['Display name'],
+                        total: warningCount,
+                      );
+                    },
+                  );
+                } else {
+                  return const SizedBox.shrink();
+                }
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Fish Pond',
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  const Gap(10),
+                  BlocBuilder<PondBloc, PondState>(
+                    builder: (context, state) {
+                      if (state is PondLoading) {
+                        return const Center(
+                            child: CircularProgressIndicator());
+                      }
 
-                        if (state is PondFailure) {
-                          return Center(child: Text("Error: ${state.message}"));
-                        }
+                      if (state is PondFailure) {
+                        return Center(child: Text("Error: ${state.message}"));
+                      }
 
-                        final ponds = (state is PondSuccess)
-                            ? state.ponds
-                            : <PondCardModel>[];
+                      final ponds = (state is PondSuccess)
+                          ? state.ponds
+                          : <PondCardModel>[];
 
-                        if (ponds.isEmpty) {
-                          return SizedBox(
-                            height: 200,
-                            width: double.infinity,
-                            child: Center(
-                              child: InkWell(
-                                onTap: () {
-                                  GoRouter.of(context).push('/addPond');
-                                },
-                                child: Text(
-                                  'No Fish Pond data available. Click to Add',
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        } else {
-                          return Column(
-                            children: [
-                              SizedBox(
-                                height: 400,
-                                child: PageView(
-                                  controller: _pageController,
-                                  children: _buildPages(ponds),
-                                ),
-                              ),
-                              const Gap(10),
-                              Center(
-                                child: SmoothPageIndicator(
-                                  controller: _pageController,
-                                  count: (ponds.length / 4).ceil(),
-                                  effect: WormEffect(
-                                    dotHeight: 10,
-                                    dotWidth: 10,
-                                    activeDotColor:
-                                    Theme.of(context).colorScheme.primary,
-                                  ),
-                                ),
-                              )
-                            ],
-                          );
-                        }
-                      },
-                    ),
-
-                    const Gap(20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'All Statistics',
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Theme.of(context).colorScheme.onSurface,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            GoRouter.of(context).push('/statistics');
-                          },
-                          child: Text(
-                            'see all',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    //TODO: tambah widgetStatistik
-                    if (statisticData.isEmpty)
-                      SizedBox(
-                        height: 200,
-                        width: double.infinity,
-                        child: Center(
-                            child: Text(
-                              'No Statistics data available yet.',
-                              style: TextStyle(
+                      if (ponds.isEmpty) {
+                        return SizedBox(
+                          height: 200,
+                          width: double.infinity,
+                          child: Center(
+                            child: InkWell(
+                              onTap: () {
+                                GoRouter.of(context).push('/addPond');
+                              },
+                              child: Text(
+                                'No Fish Pond data available. Click to Add',
+                                style: TextStyle(
                                   color: Theme.of(context)
                                       .colorScheme
-                                      .onSurfaceVariant),
-                            )),
+                                      .onSurfaceVariant
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      } else {
+                        return Column(
+                          children: [
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.5,
+                              child: PageView(
+                                controller: _pageController,
+                                children: _buildPages(ponds),
+                              ),
+                            ),
+                            const Gap(10),
+                            Center(
+                              child: SmoothPageIndicator(
+                                controller: _pageController,
+                                count: (ponds.length / 4).ceil(),
+                                effect: WormEffect(
+                                  dotHeight: 10,
+                                  dotWidth: 10,
+                                  activeDotColor:
+                                  Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                            )
+                          ],
+                        );
+                      }
+                    },
+                  ),
+
+                  const Gap(20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'All Statistics',
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Theme.of(context).colorScheme.onSurface,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          GoRouter.of(context).push('/statistics');
+                        },
+                        child: Text(
+                          'see all',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurfaceVariant,
+                          ),
+                        ),
                       )
-                    else
-                      const Gap(0),
-                  ],
-                ),
+                    ],
+                  ),
+                  //TODO: tambah widgetStatistik
+                  if (statisticData.isEmpty)
+                    SizedBox(
+                      height: 200,
+                      width: double.infinity,
+                      child: Center(
+                          child: Text(
+                            'No Statistics data available yet.',
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant),
+                          )),
+                    )
+                  else
+                    const Gap(0),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
