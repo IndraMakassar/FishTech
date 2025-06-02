@@ -117,6 +117,11 @@ flutter_native_splash:
   ios: true
   web: true
   fullscreen: false
+  android_12:
+    image: assets/FishTech_Logo.png # Path to the logo or image
+    icon_background_color: "#f9f9ff"
+
+
 
 
   # flutter pub run flutter_launcher_icons
