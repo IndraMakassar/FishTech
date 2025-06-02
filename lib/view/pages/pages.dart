@@ -13,10 +13,11 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:fishtech/model/notification_model.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:fishtech/view/widgets/widgets.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:fishtech/bloc/notification/notif_bloc.dart';
+import 'package:fishtech/utils/date_time_formatter.dart';
 
 part 'add_pond_screen.dart';
 part 'article_screen.dart';

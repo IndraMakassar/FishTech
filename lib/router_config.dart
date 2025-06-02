@@ -4,7 +4,9 @@ import 'package:fishtech/bloc/auth/auth_bloc.dart';
 import 'package:fishtech/model/pond_card_model.dart';
 import 'package:fishtech/view/pages/pages.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fishtech/bloc/notification/notif_bloc.dart';
 import 'injection_container.dart';
 
 final _rootNavigationKey = GlobalKey<NavigatorState>();
@@ -74,7 +76,10 @@ final GoRouter routerConfig = GoRouter(
     ),
     GoRoute(
       path: '/notification',
-      builder: (context, state) => const NotificationScreen(),
+      builder: (context, state) => BlocProvider(
+        create: (context) => getIt<NotifBloc>(), // Use the registered bloc
+        child: const NotificationScreen(),
+      ),
     ),
     GoRoute(
       path: '/scan',
