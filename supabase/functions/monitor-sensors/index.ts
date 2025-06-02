@@ -49,7 +49,28 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 const THRESHOLDS = {
   pH: { min: 6.5, max: 8.5 },
   temperature: { min: 25.0, max: 32.0 },
-  maxReadingAge: 10,
+  maxReadingAge: 30, // Increased to 30 minutes
+  staleSensorThreshold: 3 // Number of consecutive stale readings before notification
+}
+
+// Add function to check sensor's last readings
+async function checkSensorHistory(sensorId: string, minutes: number) {
+  const timeThreshold = new Date(Date.now() - minutes * 60 * 1000).toISOString();
+
+  const { data, error } = await supabase
+    .from('data_sensor')
+    .select('created_at')
+    .eq('sensor_id', sensorId)
+    .gte('created_at', timeThreshold)
+    .order('created_at', { ascending: false })
+    .limit(1);
+
+  if (error) {
+    console.error('Error checking sensor history:', error);
+    return false;
+  }
+
+  return data && data.length > 0;
 }
 
 async function createNotification({
@@ -59,7 +80,7 @@ async function createNotification({
 }: {
   pond_id: string,
   title: string,
-  body: string
+  body: string,
 }) {
   // Get both the pond name and user_id
   const { data: pond, error: pondError } = await supabase
@@ -79,6 +100,7 @@ async function createNotification({
       user_id: pond.user_id,
       title,
       body,
+      status: 'unread'  // Add this line to set default status
     }])
 
   if (error) {
@@ -87,7 +109,6 @@ async function createNotification({
   }
 }
 
-// Then update the notification messages in the serve function:
 serve(async (req: Request) => {
   try {
     if (req.method !== 'POST') {
@@ -162,7 +183,7 @@ serve(async (req: Request) => {
         await createNotification({
           pond_id: sensor.pond_id,
           title: `pH Alert - ${sensor.ponds.name}`,
-          body: `Pond ${sensor.ponds.name}: pH level out of range (${reading})`
+          body: `Pond ${sensor.ponds.name}: pH level out of range (${reading}). Normal range is ${THRESHOLDS.pH.min}-${THRESHOLDS.pH.max}`
         })
       }
     }
@@ -173,20 +194,26 @@ serve(async (req: Request) => {
         await createNotification({
           pond_id: sensor.pond_id,
           title: `Temperature Alert - ${sensor.ponds.name}`,
-          body: `Pond ${sensor.ponds.name}: Temperature out of range (${reading}°C)`
+          body: `Pond ${sensor.ponds.name}: Temperature out of range (${reading}°C). Normal range is ${THRESHOLDS.temperature.min}-${THRESHOLDS.temperature.max}°C`
         })
       }
     }
 
-    // Update stale data notification
+    // Improved stale sensor detection
     if (validation.age_minutes > THRESHOLDS.maxReadingAge) {
-      validation.issues.push(`Stale reading (${validation.age_minutes} mins old)`)
-      validation.isValid = false
-      await createNotification({
-        pond_id: sensor.pond_id,
-        title: `Stale Sensor - ${sensor.ponds.name}`,
-        body: `${sensor.ponds.name}: ${sensorType.toUpperCase()} sensor reading is stale (${validation.age_minutes} minutes old)`
-      })
+      // Check if there were any readings in the last period
+      const hasRecentReadings = await checkSensorHistory(sensor.id, THRESHOLDS.maxReadingAge);
+
+      if (!hasRecentReadings) {
+        validation.issues.push(`Sensor inactive for ${validation.age_minutes} minutes`)
+        validation.isValid = false
+
+        await createNotification({
+          pond_id: sensor.pond_id,
+          title: `Sensor Maintenance Required - ${sensor.ponds.name}`,
+          body: `${sensorType.toUpperCase()} sensor in ${sensor.ponds.name} hasn't reported for ${validation.age_minutes} minutes.`
+        })
+      }
     }
 
     return new Response(JSON.stringify({
