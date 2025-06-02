@@ -1,18 +1,40 @@
 import 'package:equatable/equatable.dart';
 
-class Notifications extends Equatable{
-  final String pondName;
-  final String description;
-  final String dateTime;
+class NotifModel extends Equatable{
+  final String id;
+  final String title;
+  final String body;
+  final DateTime created_at;
   final String status;
 
-  Notifications({
-    required this.pondName,
-    required this.description,
-    required this.dateTime,
+  NotifModel({
+    required this.id,
+    required this.title,
+    required this.body,
+    required this.created_at,
     required this.status
   });
 
   @override
-  List<Object?> get props => [pondName, description, dateTime, status];
+  List<Object?> get props => [title, body, created_at, status];
+
+  factory NotifModel.fromJson(Map<String, dynamic> data) {
+  return NotifModel(
+    id: data["id"]?.toString() ?? '', // Convert to string and provide default
+    title: data["title"]?.toString() ?? 'No Title',
+    body: data["body"]?.toString() ?? 'No Content',
+    created_at: data["created_at"] != null
+      ? DateTime.parse(data["created_at"].toString())
+      : DateTime.now(),
+    status: data["status"]?.toString() ?? 'unread'
+  );
+}
+
+  Map<String, dynamic> toJson(){
+    return{
+      "title" : title,
+      "body" : body,
+      "status": status,
+    };
+  }
 }

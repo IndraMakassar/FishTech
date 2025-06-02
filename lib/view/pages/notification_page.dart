@@ -7,60 +7,58 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
-  List<Notifications> notifications = [
-    Notifications(
-      pondName: "Pond 1",
-      description: "Pond maintenance scheduled.",
-      dateTime: "2.30 pm",
-      status: 'unread',
-    ),
-    Notifications(
-      pondName: "Pond 2",
-      description: "Caution! Kolam Ikan Nila 1 pH is below the normal average for a long time",
-      dateTime: "2.30 pm",
-      status: 'unread',
-    ),
-    // Tambahkan lebih banyak data jika diperlukan
-  ];
-
+  @override
+  void initState(){
+    super.initState();
+    context.read<NotifBloc>().add(const FetchNotif());
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const Header(title: 'Notifications', showBackButton: true),
-      body: BlocConsumer<AuthBloc, AuthState>(
-        listener: (context, state){
-          if (state is AuthAuthenticated) {
-            GoRouter.of(context).go('/notification');
-          } else if (state is AuthFailure) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(state.message)));
-          }
-        },
+      body: BlocBuilder<NotifBloc, NotifState>(
         builder: (context, state){
-          return ListView.builder(
-            padding: const EdgeInsets.all(16),
-            itemCount: notifications.length,
-            itemBuilder: (context, index){
-              final notif = notifications[index];
-              return NotificationCard(
-                pondName: notif.pondName,
-                description: notif.description,
-                dateTime: notif.dateTime,
-                status: notif.status,
-                onTap: () async{
-                  setState(() {
-                    notifications[index] = Notifications(
-                        pondName: notif.pondName,
-                        description: notif.description,
-                        dateTime: notif.dateTime,
-                        status: 'read',
-                    );
-                  });
-                  GoRouter.of(context).push('/${notif.pondName}');
-                },
+          if (state is NotifLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (state is NotifFailure) {
+            return Center(
+              child: Text('Error: ${state.message}'),
+            );
+          }
+          if (state is NotifSuccess) {
+            if (state.notif.isEmpty) {
+              return const Center(
+                child: Text('No notifications'),
               );
-            },
-          );
+            }
+            return ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: state.notif.length,
+              itemBuilder: (context, index){
+                final notif = state.notif[index];
+                return NotificationCard(
+                  pondName: notif.title,
+                  description: notif.body,
+                  dateTime: DateTimeFormatter.getRelativeTime(notif.created_at),
+                  status: notif.status,
+                  onTap: () async {
+                    // Dispatch event to update status in Supabase
+                    context.read<NotifBloc>().add(
+                      UpdateNotifStatus(
+                        notifId: notif.id,
+                        status: 'read',
+                      ),
+                    );
+                    GoRouter.of(context).push('/${notif.title}');
+                  },
+                );
+              },
+            );
+          }
+          return const SizedBox.shrink();
         },
       )
 

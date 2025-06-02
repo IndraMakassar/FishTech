@@ -13,7 +13,7 @@ class NotificationCard extends StatefulWidget {
     required this.description,
     required this.dateTime,
     required this.onTap,
-    this.status = 'unread'
+    required this.status
   });
 
   @override
@@ -85,7 +85,8 @@ class _NotificationCardState extends State<NotificationCard> {
                       widget.dateTime,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onPrimaryContainer,
-                      fontWeight: FontWeight.w500
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10
                     ),
                   ),
                   const Gap(5),

@@ -1,8 +1,14 @@
 import { createClient } from "npm:@supabase/supabase-js@2"
 import { JWT } from "npm:google-auth-library@9"
 import serviceAccount from '../service-account.json' with { type: 'json' }
-import { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } from '../.env.ts'
 
+const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
+const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+
+// Add validation
+if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+  throw new Error('Missing required environment variables');
+}
 interface Notification {
   id: string
   user_id: string
