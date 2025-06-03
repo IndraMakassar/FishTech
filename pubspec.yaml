@@ -116,13 +116,11 @@ flutter:
 # dart run flutter_native_splash:create
 flutter_native_splash:
   color: "##f9f9ff" # Background color
-  image: assets/FishTech_Logo.png # Path to the logo or image
   android: true
   ios: true
   web: true
   fullscreen: false
   android_12:
-    image: assets/FishTech_Logo.png # Path to the logo or image
     icon_background_color: "#f9f9ff"
 
 
