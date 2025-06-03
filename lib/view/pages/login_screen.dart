@@ -104,6 +104,39 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                   ),
+                  const Gap(7),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            color: Colors.black,
+                            thickness: 1,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('OR'),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            color: Colors.black,
+                            thickness: 1,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Gap(7),
+                  CustomButton(
+                      text: "Continue with Goggle",
+                      onPressed: (){},
+                    backgroundColor: Colors.white,
+                    fontColour: Colors.black,
+                    outlineBorder: 1,
+                    image: 'assets/google2.png',
+                  ),
                   const Gap(14),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

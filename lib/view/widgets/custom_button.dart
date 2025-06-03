@@ -8,6 +8,8 @@ class CustomButton extends StatelessWidget {
   final Color? fontColour;
   final double height;
   final double borderRadius;
+  final String? image;
+  final double? outlineBorder;
 
   const CustomButton({
     super.key,
@@ -18,6 +20,8 @@ class CustomButton extends StatelessWidget {
     this.fontColour,
     this.height = 64.0,
     this.borderRadius = double.infinity,
+    this.image,
+    this.outlineBorder
   });
 
   @override
@@ -27,14 +31,33 @@ class CustomButton extends StatelessWidget {
       style: FilledButton.styleFrom(
         minimumSize: const Size.fromHeight(56),
         backgroundColor: backgroundColor,
+        side: outlineBorder != null ? BorderSide(
+          width: outlineBorder!,
+          color: Theme.of(context).colorScheme.outline
+        ): null
       ),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: fontColour,
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          if (image != null)
+            SizedBox(
+              width: 24,
+              height: 24,
+              child:
+                Image.asset(
+                  image!,
+                  fit: BoxFit.contain,
+                ),
+            ),
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: fontColour,
+            ),
+          ),
+        ],
       ),
     );
   }
