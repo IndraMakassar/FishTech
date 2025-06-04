@@ -110,14 +110,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     });
 
-    on<UserChangeToken>((e,emit)async {
-      emit(AuthLoading(loadingType: AuthLoadingType.profile));
-      try {
-        await _repo.changeToken(e.newToken);
-      } on AuthException catch (e) {
-        emit(AuthFailure(e.message));
-      } catch (e) {
-        emit(const AuthFailure("unexpected error occurred"));
+    on<UserChangeToken>((e, emit) async {
+      if (state is AuthAuthenticated) {
+        emit(AuthLoadingWhileAuthenticated(
+          session: (state as AuthAuthenticated).session,
+          loadingType: AuthLoadingType.profile,
+        ));
+
+        try {
+          await _repo.changeToken(e.newToken);
+          emit(AuthAuthenticated((state as AuthLoadingWhileAuthenticated).session));
+        } on AuthException catch (e) {
+          emit(AuthFailure(e.message));
+        } catch (e) {
+          emit(const AuthFailure("unexpected error occurred"));
+        }
       }
     });
     // Add this handler inside your AuthBloc constructor after other handlers
@@ -127,7 +134,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await _repo.signInWithGoogle();
         // No need to emit AuthAuthenticated here as the stream will handle it
       } on AuthException catch (err) {
-        emit(AuthFailure("error authException: ${err.message}"));
+        emit(AuthFailure(err.message));
       } catch (e) {
         if (e.toString().contains('popup_closed_by_user') ||
             e.toString().contains('Sign in was canceled by user') ||

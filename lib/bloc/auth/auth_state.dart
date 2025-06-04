@@ -23,7 +23,19 @@ final class AuthLoading extends AuthState {
 
   @override
   List<Object?> get props => [loadingType];
+}
 
+final class AuthLoadingWhileAuthenticated extends AuthState {
+  final Session session;
+  final AuthLoadingType loadingType;
+
+  const AuthLoadingWhileAuthenticated({
+    required this.session,
+    required this.loadingType,
+  });
+
+  @override
+  List<Object?> get props => [session, loadingType];
 }
 
 final class AuthAuthenticated extends AuthState {
@@ -35,9 +47,7 @@ final class AuthAuthenticated extends AuthState {
   List<Object?> get props => [session];
 }
 
-final class AuthUnauthenticated extends AuthState {
-
-}
+final class AuthUnauthenticated extends AuthState {}
 
 final class AuthFailure extends AuthState {
   final String message;

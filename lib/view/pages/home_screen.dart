@@ -67,7 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             BlocBuilder<AuthBloc, AuthState>(
               builder: (context, authState) {
-                if (authState is AuthAuthenticated) {
+                if (authState is AuthAuthenticated ||
+                    authState is AuthLoadingWhileAuthenticated) {
                   return BlocBuilder<PondBloc, PondState>(
                     builder: (context, pondState) {
                       int warningCount = 0;
@@ -79,10 +80,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             .length;
                       }
 
+                      final session = authState is AuthAuthenticated
+                          ? authState.session
+                          : (authState as AuthLoadingWhileAuthenticated).session;
+
+
+                      final userName = session.user.userMetadata?['name'] ?? // Google login name
+                          session.user.userMetadata?['Display name'] ?? // Email login display name
+                          'User';
+
                       return WelcomeCard(
-                        name:authState.session.user.userMetadata?['name'] ?? // Google login name
-                             authState.session.user.userMetadata?['Display name'] ?? // Email login display name
-                            'User',
+                        name: userName,
                         total: warningCount,
                       );
                     },
