@@ -96,7 +96,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         const Gap(0),
                         CustomButton(
                           text: "Login",
-                          isLoading: state is AuthLoading,
+                          isLoading: state is AuthLoading &&
+                              (state).loadingType == AuthLoadingType.email,
                           onPressed: () {
                             _submitForm();
                           },
@@ -130,14 +131,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const Gap(7),
                   CustomButton(
-                      text: "Continue with Goggle",
-                      onPressed: (){},
+                    text: "Continue with Google",
+                    isLoading: state is AuthLoading &&
+                        (state).loadingType == AuthLoadingType.google,
+                    onPressed: (){
+                        context.read<AuthBloc>().add(UserSignInWithGoogle());
+                      },
                     backgroundColor: Colors.white,
                     fontColour: Colors.black,
                     outlineBorder: 1,
                     image: 'assets/google2.png',
                   ),
-                  const Gap(14),
+                  const Gap(20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

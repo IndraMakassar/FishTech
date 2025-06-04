@@ -80,8 +80,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       }
 
                       return WelcomeCard(
-                        name: authState
-                            .session.user.userMetadata!['Display name'],
+                        name:authState.session.user.userMetadata?['name'] ?? // Google login name
+                             authState.session.user.userMetadata?['Display name'] ?? // Email login display name
+                            'User',
                         total: warningCount,
                       );
                     },

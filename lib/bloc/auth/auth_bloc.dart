@@ -59,7 +59,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<UserLoggedOut>((e, emit) => emit(AuthUnauthenticated()));
 
     on<UserSignUp>((e, emit) async {
-      emit(AuthLoading());
+      emit(AuthLoading(loadingType: AuthLoadingType.email));
       try {
         await _repo.signUpWithEmail(e.name, e.email, e.password);
         // stream will fire signedIn → UserLoggedIn
@@ -71,7 +71,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
 
     on<UserSignIn>((e, emit) async {
-      emit(AuthLoading());
+      emit(AuthLoading(loadingType: AuthLoadingType.email));
       try {
         await _repo.signInWithEmail(e.email, e.password);
         // stream will fire signedIn → UserLoggedIn
@@ -83,7 +83,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
 
     on<UserSignOut>((e, emit) async {
-      emit(AuthLoading());
+      emit(AuthLoading(loadingType: AuthLoadingType.email));
       try {
         await FirebaseMessaging.instance.deleteToken();
         final prefs = await SharedPreferences.getInstance();
@@ -99,7 +99,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
 
     on<UserChangeName>((e, emit) async {
-      emit(AuthLoading());
+      emit(AuthLoading(loadingType: AuthLoadingType.profile));
       try {
         await _repo.changeName(e.newName);
         // (no explicit success‑emit here; you could fetch session again if you like)
@@ -109,14 +109,28 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(const AuthFailure("Unexpected error"));
       }
     });
+
     on<UserChangeToken>((e,emit)async {
-      emit(AuthLoading());
-      try{
+      emit(AuthLoading(loadingType: AuthLoadingType.profile));
+      try {
         await _repo.changeToken(e.newToken);
       } on AuthException catch (e) {
         emit(AuthFailure(e.message));
       } catch (e) {
-        emit(const AuthFailure("enexpected error occurred"));
+        emit(const AuthFailure("unexpected error occurred"));
+      }
+    });
+    // Add this handler inside your AuthBloc constructor after other handlers
+    on<UserSignInWithGoogle>((e, emit) async {
+      emit(AuthLoading(loadingType: AuthLoadingType.google));
+      try {
+        await _repo.signInWithGoogle();
+        // No need to emit AuthAuthenticated here as the stream will handle it
+      } on AuthException catch (err) {
+        emit(AuthFailure(err.message));
+      } catch (e) {
+        print('Error during Google Sign In: $e'); // For debugging
+        emit(const AuthFailure("Failed to sign in with Google"));
       }
     });
   }

@@ -1,5 +1,11 @@
 part of 'auth_bloc.dart';
 
+enum AuthLoadingType {
+  email,
+  google,
+  profile
+}
+
 sealed class AuthState extends Equatable {
   const AuthState();
 
@@ -7,9 +13,18 @@ sealed class AuthState extends Equatable {
   List<Object?> get props => [];
 }
 
+
 final class AuthInitial extends AuthState {}
 
-final class AuthLoading extends AuthState {}
+final class AuthLoading extends AuthState {
+  final AuthLoadingType loadingType;
+
+  const AuthLoading({required this.loadingType});
+
+  @override
+  List<Object?> get props => [loadingType];
+
+}
 
 final class AuthAuthenticated extends AuthState {
   final Session session;

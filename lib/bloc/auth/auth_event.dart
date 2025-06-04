@@ -40,6 +40,11 @@ class UserLoggedIn extends AuthEvent {
 
 }
 
+class UserSignInWithGoogle extends AuthEvent {
+  @override
+  List<Object?> get props => [];
+}
+
 class UserChangeName extends AuthEvent {
   final String newName;
 
