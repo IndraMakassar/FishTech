@@ -12,34 +12,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
-
-
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  await FirebaseMessaging.instance.setAutoInitEnabled(true);
-  print('Handling background message: ${message.messageId}');
-}
-
 
 Future<void> main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  final settings = await FirebaseMessaging.instance.requestPermission(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
-  print('User granted permission: ${settings.authorizationStatus}');
-
-  final fcmToken = await FirebaseMessaging.instance.getToken();
-  print('Token HP: ${fcmToken}');
 
   await Supabase.initialize(
     url: SUPABASE_URL,
@@ -47,6 +23,15 @@ Future<void> main() async {
   );
 
   await initializeDependencies();
+
+  final firebaseMessaging = getIt<FirebaseMessaging>();
+
+  await firebaseMessaging.setAutoInitEnabled(true);
+  await firebaseMessaging.requestPermission(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
 
   Bloc.observer = const AppBlocObserver();
 
@@ -79,7 +64,8 @@ class _MyAppState extends State<MyApp> {
     const materialTheme = MaterialTheme(TextTheme());
 
     return MaterialApp.router(
-      scaffoldMessengerKey: _scaffoldMessengerKey,  // Add this line
+      scaffoldMessengerKey: _scaffoldMessengerKey,
+      // Add this line
       debugShowCheckedModeBanner: false,
       theme: materialTheme.light(),
       routerConfig: routerConfig,
@@ -91,11 +77,10 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     setupFirebaseMessaging();
     FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
-      final session = Supabase.instance.client.auth.currentSession;
+      final session = getIt<SupabaseClient>().auth.currentSession;
       final prefs = await SharedPreferences.getInstance();
       if (session != null) {
-        context.read<AuthBloc>().add(UserChangeToken(
-          newToken : newToken));
+        context.read<AuthBloc>().add(UserChangeToken(newToken: newToken));
         await prefs.setString('fcm_token', newToken);
         print('FCM token updated to Supabase: $newToken');
       } else {
@@ -103,6 +88,7 @@ class _MyAppState extends State<MyApp> {
       }
     });
   }
+
   void setupFirebaseMessaging() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print("Got a message whilst in the foreground!");
@@ -124,11 +110,12 @@ class _MyAppState extends State<MyApp> {
       print('Message clicked! ${message.data}');
     });
 
-    FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((RemoteMessage? message) {
       if (message != null) {
         print('Terminated state message: ${message.data}');
       }
     });
   }
-
 }
