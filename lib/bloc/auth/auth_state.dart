@@ -35,7 +35,9 @@ final class AuthAuthenticated extends AuthState {
   List<Object?> get props => [session];
 }
 
-final class AuthUnauthenticated extends AuthState {}
+final class AuthUnauthenticated extends AuthState {
+
+}
 
 final class AuthFailure extends AuthState {
   final String message;

@@ -127,10 +127,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await _repo.signInWithGoogle();
         // No need to emit AuthAuthenticated here as the stream will handle it
       } on AuthException catch (err) {
-        emit(AuthFailure(err.message));
+        emit(AuthFailure("error authException: ${err.message}"));
       } catch (e) {
-        print('Error during Google Sign In: $e'); // For debugging
-        emit(const AuthFailure("Failed to sign in with Google"));
+        if (e.toString().contains('popup_closed_by_user') ||
+            e.toString().contains('Sign in was canceled by user') ||
+            e.toString().contains('cancelled')) {
+          // Return to initial/unauthenticated state when user cancels
+          emit(AuthUnauthenticated());
+        } else {
+          print('Error during Google Sign In: $e'); // For debugging
+          emit(const AuthFailure("Failed to sign in with Google"));
+        }
       }
     });
   }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter/services.dart';
 
 class AuthStateChange {
   final AuthChangeEvent event;
@@ -103,7 +104,7 @@ class AuthRepository {
 
     if (googleUser == null) {
       print('Sign in was canceled by user');
-      return;
+      throw 'Sign in was canceled by user';
     }
 
     print('Successfully signed in with Google. Email: ${googleUser.email}');
@@ -112,9 +113,6 @@ class AuthRepository {
     final googleAuth = await googleUser.authentication;
     final accessToken = googleAuth.accessToken;
     final idToken = googleAuth.idToken;
-
-    print('Access Token: ${accessToken?.substring(0, 20)}...'); // Only print first 20 chars for security
-    print('ID Token: ${idToken?.substring(0, 20)}...'); // Only print first 20 chars for security
 
     if (accessToken == null) {
       throw 'No Access Token found.';
@@ -132,10 +130,31 @@ class AuthRepository {
 
     print('Successfully signed in with Supabase!');
 
+  } on PlatformException catch (e, stackTrace) {
+    print('Platform Exception during Google Sign In: $e');
+    print('Stack trace: $stackTrace');
+
+    if (e.code == 'network_error') {
+      throw 'Please check your internet connection and try again';
+    } else if (e.message?.contains('7:') ?? false) {
+      throw 'Network error occurred. Please check your connection';
+    } else if (e.message?.contains('canceled') ?? false ||
+              e.message!.contains('cancelled') ?? false) {
+      throw 'Sign in was canceled by user';
+    }
+    throw 'Failed to sign in with Google: ${e.message}';
   } catch (e, stackTrace) {
     print('Error during Google Sign In: $e');
     print('Stack trace: $stackTrace');
-    rethrow; // Re-throw the error so it can be handled by the calling code
+
+    if (e.toString().contains('network_error') ||
+        e.toString().contains('ApiException: 7')) {
+      throw 'Network error occurred. Please check your connection';
+    } else if (e.toString().contains('canceled') ||
+               e.toString().contains('cancelled')) {
+      throw 'Sign in was canceled by user';
+    }
+    rethrow;
   }
 }
 }
