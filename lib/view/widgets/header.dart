@@ -20,9 +20,9 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
         children: [
           (title == "Dashboard")
               ? CustomIconbutton(
-            icon: Icons.menu,
+            icon: Icons.person,
             onTap: () {
-              Scaffold.of(context).openDrawer();
+              GoRouter.of(context).push('/profile');
             },
           )
               : (showBackButton

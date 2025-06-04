@@ -42,7 +42,7 @@ final GoRouter routerConfig = GoRouter(
     return null;
   },
   routes: <RouteBase>[
-    GoRoute(path: '/', redirect: (_, __) => '/home'),
+    GoRoute(path: '/', redirect: (_, __) => '/login'),
     GoRoute(
       path: '/login',
       builder: (context, state) => const LoginScreen(),

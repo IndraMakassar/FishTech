@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter/services.dart';
 
 class AuthStateChange {
   final AuthChangeEvent event;
@@ -53,7 +55,11 @@ class AuthRepository {
   Future<AuthResponse> changeName(String name) async {
     await _supabase.auth.updateUser(
       UserAttributes(
-        data: {'Display name': name},
+        data: {
+          'Display name': name,  // for email login users
+          'name': name,          // for Google login users
+          'full_name': name,     // also update full_name for consistency
+        },
       ),
     );
     final AuthResponse res = await _supabase.auth.refreshSession();
@@ -80,4 +86,75 @@ class AuthRepository {
       rethrow;
     }
   }
+
+  Future<void> signInWithGoogle() async {
+  try {
+    print('Starting Google Sign In process...');
+
+    const webClientId = '247526764850-d5l6n1l27auhpkksku79lh3r44vh340a.apps.googleusercontent.com';
+    const iosClientId = '247526764850-k0fd3ckqi4k93u012iq1juhg7m58rsvm.apps.googleusercontent.com';
+
+    final GoogleSignIn googleSignIn = GoogleSignIn(
+      clientId: iosClientId,
+      serverClientId: webClientId,
+    );
+
+    print('Attempting to show Google Sign In dialog...');
+    final googleUser = await googleSignIn.signIn();
+
+    if (googleUser == null) {
+      print('Sign in was canceled by user');
+      throw 'Sign in was canceled by user';
+    }
+
+    print('Successfully signed in with Google. Email: ${googleUser.email}');
+
+    print('Getting Google auth tokens...');
+    final googleAuth = await googleUser.authentication;
+    final accessToken = googleAuth.accessToken;
+    final idToken = googleAuth.idToken;
+
+    if (accessToken == null) {
+      throw 'No Access Token found.';
+    }
+    if (idToken == null) {
+      throw 'No ID Token found.';
+    }
+
+    print('Attempting to sign in with Supabase...');
+    await _supabase.auth.signInWithIdToken(
+      provider: OAuthProvider.google,
+      idToken: idToken,
+      accessToken: accessToken,
+    );
+
+    print('Successfully signed in with Supabase!');
+
+  } on PlatformException catch (e, stackTrace) {
+    print('Platform Exception during Google Sign In: $e');
+    print('Stack trace: $stackTrace');
+
+    if (e.code == 'network_error') {
+      throw 'Please check your internet connection and try again';
+    } else if (e.message?.contains('7:') ?? false) {
+      throw 'Network error occurred. Please check your connection';
+    } else if (e.message?.contains('canceled') ?? false ||
+              e.message!.contains('cancelled') ?? false) {
+      throw 'Sign in was canceled by user';
+    }
+    throw 'Failed to sign in with Google: ${e.message}';
+  } catch (e, stackTrace) {
+    print('Error during Google Sign In: $e');
+    print('Stack trace: $stackTrace');
+
+    if (e.toString().contains('network_error') ||
+        e.toString().contains('ApiException: 7')) {
+      throw 'Network error occurred. Please check your connection';
+    } else if (e.toString().contains('canceled') ||
+               e.toString().contains('cancelled')) {
+      throw 'Sign in was canceled by user';
+    }
+    rethrow;
+  }
+}
 }

@@ -16,7 +16,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
     final state = context.read<AuthBloc>().state;
     if (state is AuthAuthenticated) {
-      _nameController.text = state.session.user.userMetadata!['Display name'];
+      // Try Google login name first, then fallback to email login name
+      _nameController.text = state.session.user.userMetadata?['name'] ??
+                          state.session.user.userMetadata?['Display name'] ??
+                          'User';
       _emailController.text = state.session.user.email!;
     }
   }
@@ -57,11 +60,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         CircleAvatar(
                           radius: 60,
                           backgroundColor: Colors.blue[100],
-                          child: const Icon(
-                            Icons.person,
-                            size: 100,
-                            color: Colors.blue,
-                          ),
+                          child: state is AuthAuthenticated
+                            ? ClipOval(
+                                child: Image.network(
+                                  state.session.user.userMetadata?['picture'] ?? // Google login avatar
+                                  state.session.user.userMetadata?['avatar_url'] ?? // Alternative Google login avatar
+                                  'https://ui-avatars.com/api/?name=${_nameController.text}', // Fallback to generated avatar
+                                  fit: BoxFit.cover,
+                                  width: 120,
+                                  height: 120,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return const Icon(
+                                      Icons.person,
+                                      size: 100,
+                                      color: Colors.blue,
+                                    );
+                                  },
+                                  loadingBuilder: (context, child, loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return const CircularProgressIndicator();
+                                  },
+                                ),
+                              )
+                            : const Icon(
+                                Icons.person,
+                                size: 100,
+                                color: Colors.blue,
+                              ),
                         ),
                         const Gap(28),
                         Form(
@@ -81,13 +106,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                               CustomButton(
                                 text: "Save",
+                                isLoading: state is AuthLoading &&
+                                    (state).loadingType == AuthLoadingType.profile,
                                 onPressed: () {
                                   if (state is AuthAuthenticated) {
-                                    if (_nameController.text !=
-                                        state.session.user
-                                            .userMetadata!['Display name']) {
-                                      context.read<AuthBloc>().add(UserChangeName(
-                                          newName: _nameController.text.trim()));
+                                    final currentName = state.session.user.userMetadata?['name'] ??
+                                       state.session.user.userMetadata?['Display name'];
+                                    if (_nameController.text != currentName) {
+                                      context.read<AuthBloc>().add(
+                                        UserChangeName(newName: _nameController.text.trim())
+                                      );
                                     }
                                   }
                                 },

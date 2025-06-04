@@ -130,9 +130,13 @@ class _AddPondState extends State<AddPond> {
 
                       ),
                       const Gap(5),
-                      CustomButton(text: "Add Pond", onPressed: () {
+                      CustomButton(
+                        text: "Add Pond",
+                        isLoading: state is PondLoading,
+                        onPressed: () {
                         _submitForm();
-                      },),
+                        },
+                      ),
                     ],),)
               ],)),);
       },),);
