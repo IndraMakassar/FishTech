@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:fishtech/bloc/auth/auth_bloc.dart';
 import 'package:fishtech/model/pond_card_model.dart';
 import 'package:fishtech/view/pages/pages.dart';
+import 'package:fishtech/view/pages/pond_settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -87,7 +88,7 @@ final GoRouter routerConfig = GoRouter(
     ),
     GoRoute(
       path: '/settings',
-      builder: (context, state) => const SettingspondScreen(),
+      builder: (context, state) => const PondSettingsScreen(),
     ),
     GoRoute(
       path: '/addmachine',
