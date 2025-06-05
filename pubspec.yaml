@@ -56,10 +56,15 @@ dependencies:
   firebase_messaging: ^15.2.5
   google_sign_in: ^6.3.0
   firebase_auth: ^5.5.4
+  build_runner: ^2.4.15
+  mockito: ^5.4.5
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  mocktail: ^1.0.4
+  bloc_test: ^9.1.7
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -67,6 +72,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+  test: ^1.25.8
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -116,6 +122,7 @@ flutter:
 # dart run flutter_native_splash:create
 flutter_native_splash:
   color: "##f9f9ff" # Background color
+  image_android: "assets/FishTech_Logo.png"
   android: true
   ios: true
   web: true

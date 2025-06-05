@@ -137,6 +137,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         const Gap(0),
                         CustomButton(
                           text: "Register",
+                          isLoading: state is AuthLoading &&
+                              (state).loadingType == AuthLoadingType.email,
                           onPressed: (){
                             _submitForm();
                           },
@@ -185,14 +187,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Have an account?",
+                      const Text("Have an account? ",
                           style: TextStyle(color: Colors.black)),
                       GestureDetector(
                         onTap: () {
                           GoRouter.of(context).go('/login');
                         },
                         child: Text(
-                          ' Sign In',
+                          'Sign In',
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.bold,

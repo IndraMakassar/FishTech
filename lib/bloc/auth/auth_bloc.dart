@@ -61,8 +61,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<UserSignUp>((e, emit) async {
       emit(AuthLoading(loadingType: AuthLoadingType.email));
       try {
-        await _repo.signUpWithEmail(e.name, e.email, e.password);
+        final response = await _repo.signUpWithEmail(e.name, e.email, e.password);
         // stream will fire signedIn → UserLoggedIn
+        emit(AuthAuthenticated(response.session!));
       } on AuthException catch (err) {
         emit(AuthFailure(err.message));
       } catch (_) {
