@@ -3,10 +3,10 @@ part of 'pages.dart';
 class DetailKolam extends StatefulWidget {
   final PondCardModel pond;
 
-  const DetailKolam({Key? key, required this.pond}) : super(key: key);
+  const DetailKolam({super.key, required this.pond});
 
   @override
-  _DetailKolamState createState() => _DetailKolamState();
+  State<DetailKolam> createState() => _DetailKolamState();
 }
 
 class _DetailKolamState extends State<DetailKolam> {
@@ -33,6 +33,8 @@ class _DetailKolamState extends State<DetailKolam> {
           showBackButton: true,
         ),
         body: BlocConsumer<AuthBloc, AuthState>(listener: (context, state) {
+
+
           if (state is AuthAuthenticated) {
             GoRouter.of(context).go('/home');
           } else if (state is AuthFailure) {
@@ -47,7 +49,7 @@ class _DetailKolamState extends State<DetailKolam> {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: colorScheme.surfaceDim,
+                    color: colorScheme.surfaceContainerLowest,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Column(
@@ -97,10 +99,10 @@ class _DetailKolamState extends State<DetailKolam> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
+                                Text(
                                   "Fish Type",
                                   style: TextStyle(
-                                    color: Color(0xFF43474E),
+                                    color: colorScheme.onSurfaceVariant,
                                     fontSize: 14,
                                   ),
                                 ),
@@ -114,10 +116,10 @@ class _DetailKolamState extends State<DetailKolam> {
                                 const SizedBox(
                                   height: 8,
                                 ),
-                                const Text(
-                                  "Pord Size",
+                                Text(
+                                  "Pond Size",
                                   style: TextStyle(
-                                    color: Color(0xFF43474E),
+                                    color: colorScheme.onSurfaceVariant,
                                     fontSize: 14,
                                   ),
                                 ),
@@ -133,10 +135,10 @@ class _DetailKolamState extends State<DetailKolam> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
+                                Text(
                                   "Date of Creation",
                                   style: TextStyle(
-                                    color: Color(0xFF43474E),
+                                    color: colorScheme.onSurfaceVariant,
                                     fontSize: 14,
                                   ),
                                 ),
@@ -220,11 +222,11 @@ class _DetailKolamState extends State<DetailKolam> {
                 const SizedBox(height: 16),
                 Container(
                   decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: colorScheme.surfaceContainerLowest,
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
+                            color: colorScheme.outlineVariant,
                             blurRadius: 8,
                             spreadRadius: 2,
                             offset: const Offset(0, 4))
@@ -233,15 +235,15 @@ class _DetailKolamState extends State<DetailKolam> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         "Use of Fish Feed",
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF43474e)),
+                            color: colorScheme.onSurfaceVariant),
                       ),
                       const SizedBox(height: 16),
-                      Container(
+                      SizedBox(
                         height: 200,
                         child: BarChart(
                           BarChartData(
@@ -259,36 +261,36 @@ class _DetailKolamState extends State<DetailKolam> {
                                   showTitles: true,
                                   getTitlesWidget:
                                       (double value, TitleMeta meta) {
-                                    const style = TextStyle(
-                                      color: Color(0xFF75729E),
+                                    var style = TextStyle(
+                                      color: colorScheme.onSurfaceVariant,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 10,
                                     );
                                     Widget text;
                                     switch (value.toInt()) {
                                       case 0:
-                                        text = const Text('Mon', style: style);
+                                        text = Text('Mon', style: style);
                                         break;
                                       case 1:
-                                        text = const Text('Tue', style: style);
+                                        text = Text('Tue', style: style);
                                         break;
                                       case 2:
-                                        text = const Text('Wed', style: style);
+                                        text = Text('Wed', style: style);
                                         break;
                                       case 3:
-                                        text = const Text('Thu', style: style);
+                                        text = Text('Thu', style: style);
                                         break;
                                       case 4:
-                                        text = const Text('Fri', style: style);
+                                        text = Text('Fri', style: style);
                                         break;
                                       case 5:
-                                        text = const Text('Sat', style: style);
+                                        text = Text('Sat', style: style);
                                         break;
                                       case 6:
-                                        text = const Text('Sun', style: style);
+                                        text = Text('Sun', style: style);
                                         break;
                                       default:
-                                        text = const Text('', style: style);
+                                        text = Text('', style: style);
                                         break;
                                     }
                                     return SideTitleWidget(
@@ -304,8 +306,8 @@ class _DetailKolamState extends State<DetailKolam> {
                                   interval: 5,
                                   getTitlesWidget:
                                       (double value, TitleMeta meta) {
-                                    const style = TextStyle(
-                                      color: Color(0xFF75729E),
+                                    var style = TextStyle(
+                                      color: colorScheme.onSurfaceVariant,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 8,
                                     );
@@ -331,15 +333,7 @@ class _DetailKolamState extends State<DetailKolam> {
               ],
             ),
           );
-        }
-
-            // floatingActionButton: FloatingActionButton(
-            //   backgroundColor: Color(0xFF5CB1F5),
-            //   onPressed: () {
-            //   },
-            //   child: Icon(Icons.add, color: Colors.white),
-            // ),
-            ));
+        }));
   }
 
   List<BarChartGroupData> _buildBarGroups() {
@@ -365,13 +359,13 @@ class _DetailKolamState extends State<DetailKolam> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 40, color: const Color(0xFF5CB1F5)),
+          Icon(icon, size: 40, color: Theme.of(context).colorScheme.onSurfaceVariant),
           const SizedBox(height: 8),
           Text(title,
               style:
