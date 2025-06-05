@@ -76,26 +76,18 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     setupFirebaseMessaging();
-    FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
+    getIt<FirebaseMessaging>().onTokenRefresh.listen((newToken) async {
       final session = getIt<SupabaseClient>().auth.currentSession;
-      final prefs = await SharedPreferences.getInstance();
+      final prefs = getIt<SharedPreferences>();
       if (session != null) {
         context.read<AuthBloc>().add(UserChangeToken(newToken: newToken));
         await prefs.setString('fcm_token', newToken);
-        print('FCM token updated to Supabase: $newToken');
-      } else {
-        print('User belum login. Tidak bisa update FCM token.');
       }
     });
   }
 
   void setupFirebaseMessaging() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("Got a message whilst in the foreground!");
-      print("Message data: ${message.data}");
-      print("Message notification: ${message.notification?.title}");
-      print("Message notification body: ${message.notification?.body}");
-
       final notification = message.notification;
       if (notification != null) {
         _scaffoldMessengerKey.currentState?.showSnackBar(
@@ -103,18 +95,6 @@ class _MyAppState extends State<MyApp> {
             content: Text('${notification.title} ${notification.body}'),
           ),
         );
-      }
-    });
-
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('Message clicked! ${message.data}');
-    });
-
-    FirebaseMessaging.instance
-        .getInitialMessage()
-        .then((RemoteMessage? message) {
-      if (message != null) {
-        print('Terminated state message: ${message.data}');
       }
     });
   }
