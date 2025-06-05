@@ -130,10 +130,7 @@ flutter_native_splash:
   android_12:
     icon_background_color: "#f9f9ff"
 
-
-
-
-  # flutter pub run flutter_launcher_icons
+# flutter pub run flutter_launcher_icons
 flutter_launcher_icons:
   image_path: "assets/FishTech_Logo.png"
 
