@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "247526764850",
+    "project_id": "fishtech-c2f1f",
+    "storage_bucket": "fishtech-c2f1f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:247526764850:android:7bf20852b2aaa5cacfa72b",
+        "android_client_info": {
+          "package_name": "com.fishtech.fishtech"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA54cFnygz2UaBXQp-z701p7KXmXjSe1BU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

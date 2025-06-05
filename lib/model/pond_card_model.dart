@@ -26,7 +26,7 @@ class PondCardModel extends Equatable {
     this.feedAmount = 0.0,
     this.pH = 0.0,
     this.temperature = 0.0,
-    this.lastAutofeederOn,
+    this.lastAutofeederOn, 
   });
 
   @override

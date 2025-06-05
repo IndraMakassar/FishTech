@@ -20,7 +20,7 @@ Future<void> initializeDependencies() async{
   getIt.registerSingleton<FirebaseApp>(await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform));
   getIt.registerSingleton<FirebaseMessaging>(FirebaseMessaging.instance);
 
-  getIt.registerLazySingleton(() => AuthRepository(getIt()));
+  // getIt.registerLazySingleton(() => AuthRepository(getIt()));
   getIt.registerLazySingleton(() => PondRepository(supabase: getIt()));
   getIt.registerLazySingleton(() => NotifRepository(supabase: getIt()));
 
