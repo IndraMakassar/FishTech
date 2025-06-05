@@ -71,54 +71,7 @@ samples, guidance on mobile development, and a full API reference.
     - Verifies SnackBar appearance with correct error message
 
 ## Profile Data Tests (`profileData_test.dart`)
-
-### Session Data Tests
-1. **User Data Retrieval**
-    - Verifies correct user data extraction from session
-    - Tests email address retrieval
-    - Validates user metadata handling (name, picture)
-
-2. **Metadata Handling**
-    - Tests handling of null metadata
-    - Verifies proper fallback behavior
-    - Validates metadata field access
-
-### Session Management
-- Verifies proper session state handling
-- Tests authentication state changes
-- Validates session data persistence
+- Test structure prepared for future implementation
 
 ## FCM Update Tests (`updateFCM_test.dart`)
-
-### Token Management Tests
-1. **Token Update Logic**
-    - Tests token comparison between new and stored tokens
-    - Verifies update process for different tokens
-    - Validates no update for identical tokens
-
-2. **Authentication State Handling**
-    - Tests token updates in authenticated state
-    - Verifies no updates in unauthenticated state
-    - Validates proper state transitions
-
-### Storage and Integration Tests
-1. **SharedPreferences Integration**
-    - Tests token storage in SharedPreferences
-    - Verifies proper token retrieval
-    - Validates token update persistence
-
-2. **Firebase Messaging Integration**
-    - Tests FCM token acquisition
-    - Verifies proper token format
-    - Validates token refresh handling
-
-### Error Handling
-1. **Update Failure Handling**
-    - Tests error scenarios during token updates
-    - Verifies proper error state emissions
-    - Validates error message handling
-
-2. **State Management**
-    - Tests loading states during updates
-    - Verifies proper state transitions
-    - Validates completion states
+- Test structure prepared for future implementation

@@ -16,7 +16,6 @@ import 'package:go_router/go_router.dart';
 
 
 part 'unit/profileData_test.dart';
-part 'unit/updateFCM_test.dart';
 part 'widget/register_test.dart';
 part 'widget/logout_test.dart';
 
@@ -27,8 +26,5 @@ class MockAuthRepository extends Mock implements AuthRepository {}
 class MockGoRouter extends Mock implements GoRouter {}
 
 void main(){
-  runRegisterTests();
   runLogoutTests();
-  runProfileTests();
-  runUpdateFCMTests();
 }

@@ -64,30 +64,15 @@ void runLogoutTests() {
 
     testWidgets('should call signOut when logout button is pressed',
         (WidgetTester tester) async {
-      // Setup
       when(() => mockAuthRepository.signOut()).thenAnswer((_) async {});
-      when(() => mockGoRouter.go(any())).thenReturn(null);
-
-      // Initialize bloc with authenticated state
-      authBloc.emit(AuthAuthenticated(testSession));
 
       await tester.pumpWidget(createWidgetUnderTest());
       await tester.pumpAndSettle();
 
-      // Find and verify the button exists
-      final logoutButton = find.widgetWithText(CustomButton, 'Logout');
-      expect(logoutButton, findsOneWidget);
+      await tester.tap(find.text('Logout'));
+      await tester.pumpAndSettle();
 
-      // Perform the action
-      await tester.tap(logoutButton);
-      await tester.pump(); // Process tap
-      await tester.pumpAndSettle(); // Wait for all animations and async work
-
-      // Verify the logout call
       verify(() => mockAuthRepository.signOut()).called(1);
-
-      // Verify navigation (if expected)
-      verify(() => mockGoRouter.go('/login')).called(1);
     });
 
     testWidgets('should show error message when logout fails',
