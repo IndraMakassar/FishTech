@@ -1,9 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fishtech/app_bloc_observer.dart';
 import 'package:fishtech/bloc/auth/auth_bloc.dart';
 import 'package:fishtech/bloc/notification/notif_bloc.dart';
 import 'package:fishtech/bloc/pond/pond_bloc.dart';
 import 'package:fishtech/const.dart';
+import 'package:fishtech/firebase_options.dart';
 import 'package:fishtech/injection_container.dart';
 import 'package:fishtech/router_config.dart';
 import 'package:fishtech/theme.dart';
@@ -17,12 +19,28 @@ Future<void> main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
+  final firebaseAppFuture = Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  final sharedPrefsFuture = SharedPreferences.getInstance();
+
+  final results = await Future.wait([firebaseAppFuture, sharedPrefsFuture]);
+
+  final firebaseApp = results[0] as FirebaseApp;
+  final prefs = results[1] as SharedPreferences;
+
+  getIt.registerSingleton<FirebaseApp>(firebaseApp);
+  getIt.registerSingleton<SharedPreferences>(prefs);
+  getIt.registerSingleton<FirebaseMessaging>(FirebaseMessaging.instance);
+
   await Supabase.initialize(
     url: SUPABASE_URL,
     anonKey: ANON_KEY,
   );
 
-  await initializeDependencies();
+  getIt.registerSingleton<SupabaseClient>(Supabase.instance.client);
+
+  initializeDependencies();
 
   final firebaseMessaging = getIt<FirebaseMessaging>();
 
