@@ -5,7 +5,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
   final bool showBackButton;
 
 
-  const Header({Key? key, required this.title, this.showBackButton = false}) : super(key: key);
+  const Header({super.key, required this.title, this.showBackButton = false});
 
   @override
   Widget build(BuildContext context) {
