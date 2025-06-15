@@ -8,6 +8,11 @@ class StatisticsScreen extends StatefulWidget {
 }
 
 class _StatisticsScreenState extends State<StatisticsScreen> {
+  @override
+  void initState(){
+    super.initState();
+    context.read<PondBloc>().add(const FetchPond());
+  }
   final List<double> _weeklyData = [10.0, 12.5, 8.0, 15.0, 18.0, 14.0, 10.0];
   final List<Map<String, dynamic>> _ponds = [
     {'title': 'Kolam Nila 1', 'details': ['Fish Feed', '5kg']},
@@ -16,14 +21,12 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     {'title': 'Kolam Nila 4', 'details': ['Fish Feed', '5kg']},
   ];
 
- 
+
   String _dropdownValue1 = 'Fish Pond';
   String _dropdownValue2 = 'Fish Type';
   String _dropdownValue3 = 'Day';
   String _dropdownValue4 = 'Information Type';
 
-  final List<String> _pondOptions = ['Fish Pond', 'Kolam Nila 1', 'Kolam Nila 2'];
-  final List<String> _fishTypeOptions = ['Fish Type', 'Nila', 'Lele'];
   final List<String> _dayOptions = ['Day', 'Mon', 'Tue', 'Wed'];
   final List<String> _infoTypeOptions = ['Information Type', 'Feed', 'pH', 'Temp'];
 
@@ -52,28 +55,48 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 16),
+                BlocBuilder<PondBloc, PondState>(
+                  builder: (context, state) {
+                    if (state is PondSuccess) {
+                      final pondList = state.ponds;
 
-                Wrap(
-                  spacing: 8.0,
-                  runSpacing: 8.0,
-                  children: [
-                    _buildDropdown('Fish Pond', _dropdownValue1, _pondOptions,
-                        (val) {
-                      setState(() => _dropdownValue1 = val!);
-                    }),
-                    _buildDropdown('Fish Type', _dropdownValue2, _fishTypeOptions,
-                        (val) {
-                      setState(() => _dropdownValue2 = val!);
-                    }),
-                    _buildDropdown('Day', _dropdownValue3, _dayOptions, (val) {
-                      setState(() => _dropdownValue3 = val!);
-                    }),
-                    _buildDropdown('Information Type', _dropdownValue4,
-                        _infoTypeOptions, (val) {
-                      setState(() => _dropdownValue4 = val!);
-                    }),
-                  ],
+                      // Extract dropdown options
+                      final pondOptions = ['Fish Pond', ...pondList.map((e) => e.name).toSet()];
+                      final fishOptions = ['Fish Type', ...pondList.map((e) => e.fish!).toSet()];
+
+                      // You can keep day/infoType statically like before
+                      return Wrap(
+                        spacing: 8.0,
+                        runSpacing: 8.0,
+                        children: [
+                          _buildDropdown('Fish Pond', _dropdownValue1, pondOptions, (val) {
+                            setState(() => _dropdownValue1 = val!);
+                          }),
+                          _buildDropdown('Fish Type', _dropdownValue2, fishOptions, (val) {
+                            setState(() => _dropdownValue2 = val!);
+                          }),
+                          _buildDropdown('Day', _dropdownValue3, _dayOptions, (val) {
+                            setState(() => _dropdownValue3 = val!);
+                          }),
+                          _buildDropdown('Information Type', _dropdownValue4, _infoTypeOptions,
+                                  (val) {
+                                setState(() => _dropdownValue4 = val!);
+                              }),
+                        ],
+                      );
+                    } else if (state is PondLoading) {
+                      return const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Center(child: CircularProgressIndicator()),
+                      );
+                    } else if (state is PondFailure) {
+                      return Text("Failed: ${state.message}");
+                    }
+                    return const SizedBox();
+                  },
                 ),
+
+
                 const SizedBox(height: 16),
 
                 _buildStatisticCard(context),
