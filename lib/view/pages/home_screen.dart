@@ -152,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         return Column(
                           children: [
                             SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.5,
+                              height: MediaQuery.of(context).size.height * 0.55,
                               child: PageView(
                                 controller: _pageController,
                                 children: _buildPages(ponds),

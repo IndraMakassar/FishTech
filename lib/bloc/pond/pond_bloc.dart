@@ -42,6 +42,7 @@ class PondBloc extends Bloc<PondEvent, PondState> {
           infoType: event.infoType,
           pondId: event.pondId,
           startDate: event.startDate,
+          endDate: event.endDate,
         );
         emit(FilteredDataSuccess(
           data: filteredData,

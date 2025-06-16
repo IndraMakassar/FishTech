@@ -125,6 +125,7 @@ class PondRepository {
     required String infoType,
     required String pondId,
     required DateTime startDate,
+    required DateTime endDate,
   }) async {
     if (infoType == 'Feed') {
       final feeders = await _supabase
@@ -138,7 +139,8 @@ class PondRepository {
           .from('feedinglogs')
           .select('food_amount, created_at')
           .inFilter('autofeeder_id', feederIds)
-          .gte('created_at', startDate.toIso8601String());
+          .gte('created_at', startDate.toIso8601String())
+          .lt('created_at', endDate.toIso8601String());
 
       return logs;
     } else if (infoType == 'pH' || infoType == 'temp') {
@@ -158,7 +160,8 @@ class PondRepository {
           .from('data_sensor')
           .select('reading, created_at')
           .eq('sensor_id', sensorId)
-          .gte('created_at', startDate.toIso8601String());
+          .gte('created_at', startDate.toIso8601String())
+          .lt('created_at', endDate.toIso8601String());
 
       return readings;
     }

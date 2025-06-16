@@ -24,11 +24,13 @@ class FetchFilteredData extends PondEvent {
   final String infoType;
   final String pondId;
   final DateTime startDate;
+  final DateTime endDate;
 
   const FetchFilteredData({
     required this.infoType,
     required this.pondId,
     required this.startDate,
+    required this.endDate,
   });
 
   @override

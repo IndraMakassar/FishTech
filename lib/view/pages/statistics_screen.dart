@@ -18,41 +18,52 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
 
   void _updateStatistics() {
     if (_selectedPondId != null && _dropdownValue4 != 'Information Type') {
-      final DateTime now = DateTime.now();
-      final DateTime startDate;
+      final DateTime now = DateTime.now().toUtc(); // Use current UTC time
+      DateTime startDate;
+      DateTime endDate;
+
 
       switch (_selectedTimeRange) {
         case 'Day':
-          // Start from beginning of current day in local time
-          startDate = DateTime(now.year, now.month, now.day);
+          startDate = DateTime.utc(now.year, now.month, now.day);
+          endDate = startDate.add(Duration(days: 1));
           break;
         case 'Week':
-          // Start from beginning of current week in local time
-          startDate = now.subtract(Duration(days: now.weekday - 1))
-              .copyWith(hour: 0, minute: 0, second: 0, millisecond: 0);
+        // Start from beginning of current week in UTC
+          startDate = now.subtract(Duration(days: now.weekday - 1));
+          startDate = DateTime.utc(startDate.year, startDate.month, startDate.day);
+          endDate = startDate.add(Duration(days: 7));
           break;
         case 'Month':
-          // Start from beginning of current month in local time
-          startDate = DateTime(now.year, now.month, 1);
+          startDate = DateTime.utc(now.year, now.month, 1);
+          if (now.month == 12) {
+            endDate = DateTime.utc(now.year + 1, 1, 1); // Tahun berikutnya, Januari
+          } else {
+            endDate = DateTime.utc(now.year, now.month + 1, 1); // Bulan berikutnya
+          }
           break;
+
         case 'Year':
-          // Start from beginning of current year in local time
-          startDate = DateTime(now.year, 1, 1);
+        // Start from beginning of current year in UTC
+          startDate = DateTime.utc(now.year, 1, 1);
+          endDate = DateTime.utc(now.year + 1, 1, 1);
           break;
         default:
-          startDate = DateTime(now.year, now.month, now.day);
+          startDate = DateTime.utc(now.year, now.month, now.day);
+          endDate = startDate.add(Duration(days: 1));
       }
 
       context.read<PondBloc>().add(FetchFilteredData(
         infoType: _dropdownValue4,
         pondId: _selectedPondId!,
         startDate: startDate,
+        endDate: endDate,
       ));
     }
-}
+  }
 
 
-  final List<double> _weeklyData = [10.0, 12.5, 8.0, 15.0, 18.0, 14.0, 10.0];
+
   final List<Map<String, dynamic>> _ponds = [
     {'title': 'Kolam Nila 1', 'details': ['Fish Feed', '5kg']},
     {'title': 'Kolam Nila 2', 'details': ['Fish Feed', '5kg']},
