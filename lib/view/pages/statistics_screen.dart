@@ -18,10 +18,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
 
   void _updateStatistics() {
     if (_selectedPondId != null && _dropdownValue4 != 'Information Type') {
-      final DateTime now = DateTime.now().toUtc(); // Use current UTC time
+      final DateTime now = DateTime.now().toUtc();
       DateTime startDate;
       DateTime endDate;
-
 
       switch (_selectedTimeRange) {
         case 'Day':
@@ -29,7 +28,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
           endDate = startDate.add(Duration(days: 1));
           break;
         case 'Week':
-        // Start from beginning of current week in UTC
           startDate = now.subtract(Duration(days: now.weekday - 1));
           startDate = DateTime.utc(startDate.year, startDate.month, startDate.day);
           endDate = startDate.add(Duration(days: 7));
@@ -37,14 +35,12 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         case 'Month':
           startDate = DateTime.utc(now.year, now.month, 1);
           if (now.month == 12) {
-            endDate = DateTime.utc(now.year + 1, 1, 1); // Tahun berikutnya, Januari
+            endDate = DateTime.utc(now.year + 1, 1, 1);
           } else {
-            endDate = DateTime.utc(now.year, now.month + 1, 1); // Bulan berikutnya
+            endDate = DateTime.utc(now.year, now.month + 1, 1);
           }
           break;
-
         case 'Year':
-        // Start from beginning of current year in UTC
           startDate = DateTime.utc(now.year, 1, 1);
           endDate = DateTime.utc(now.year + 1, 1, 1);
           break;
@@ -61,6 +57,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
       ));
     }
   }
+
 
 
 
@@ -102,67 +99,64 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Statistics",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-                ),
+
                 const SizedBox(height: 16),
                 BlocBuilder<PondBloc, PondState>(
-  builder: (context, state) {
-    final List<PondCardModel> pondList;
+                  builder: (context, state) {
+                    final List<PondCardModel> pondList;
 
-    if (state is PondSuccess) {
-      pondList = state.ponds;
-    } else if (state is FilteredDataSuccess) {
-      pondList = state.ponds;
-    } else if (state is PondLoading) {
-      return const Padding(
-        padding: EdgeInsets.all(8.0),
-        child: Center(child: CircularProgressIndicator()),
-      );
-    } else if (state is PondFailure) {
-      return Text("Failed: ${state.message}");
-    } else {
-      return const SizedBox();
-    }
+                    if (state is PondSuccess) {
+                      pondList = state.ponds;
+                    } else if (state is FilteredDataSuccess) {
+                      pondList = state.ponds;
+                    } else if (state is PondLoading) {
+                      return const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Center(child: CircularProgressIndicator()),
+                      );
+                    } else if (state is PondFailure) {
+                      return Text("Failed: ${state.message}");
+                    } else {
+                      return const SizedBox();
+                    }
 
-    // Extract dropdown options
-    final pondOptions = ['Fish Pond', ...pondList.map((e) => e.name).toSet()];
-    final fishOptions = ['Fish Type', ...pondList.map((e) => e.fish!).toSet()];
+                    // Extract dropdown options
+                    final pondOptions = ['Fish Pond', ...pondList.map((e) => e.name).toSet()];
+                    final fishOptions = ['Fish Type', ...pondList.map((e) => e.fish!).toSet()];
 
-    return Wrap(
-      spacing: 8.0,
-      runSpacing: 8.0,
-      children: [
-        _buildDropdown('Fish Pond', _dropdownValue1, pondOptions, (val) {
-          setState(() {
-            _dropdownValue1 = val!;
-            if (val != 'Fish Pond') {
-              _selectedPondId = pondList.firstWhere((pond) => pond.name == val).id;
-              _updateStatistics();
-            }
-          });
-        }),
-        _buildDropdown('Fish Type', _dropdownValue2, fishOptions, (val) {
-          setState(() => _dropdownValue2 = val!);
-        }),
-        _buildDropdown('Time Range', _selectedTimeRange, _timeRangeOptions, (val) {
-          setState(() {
-            _selectedTimeRange = val!;
-            _updateStatistics();
-          });
-        }),
-        _buildDropdown('Information Type', _dropdownValue4, _infoTypeOptions,
-                (val) {
-              setState(() {
-                _dropdownValue4 = val!;
-                _updateStatistics();
-              });
-            }),
-      ],
-    );
-  },
-),
+                    return Wrap(
+                      spacing: 8.0,
+                      runSpacing: 8.0,
+                      children: [
+                        _buildDropdown('Fish Pond', _dropdownValue1, pondOptions, (val) {
+                          setState(() {
+                            _dropdownValue1 = val!;
+                            if (val != 'Fish Pond') {
+                              _selectedPondId = pondList.firstWhere((pond) => pond.name == val).id;
+                              _updateStatistics();
+                            }
+                          });
+                        }),
+                        _buildDropdown('Fish Type', _dropdownValue2, fishOptions, (val) {
+                          setState(() => _dropdownValue2 = val!);
+                        }),
+                        _buildDropdown('Time Range', _selectedTimeRange, _timeRangeOptions, (val) {
+                          setState(() {
+                            _selectedTimeRange = val!;
+                            _updateStatistics();
+                          });
+                        }),
+                        _buildDropdown('Information Type', _dropdownValue4, _infoTypeOptions,
+                                (val) {
+                              setState(() {
+                                _dropdownValue4 = val!;
+                                _updateStatistics();
+                              });
+                            }),
+                      ],
+                    );
+                  },
+                ),
 
 
                 const SizedBox(height: 16),
@@ -193,7 +187,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFFC3C6CF),
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(20),
       ),
       child: DropdownButtonHideUnderline(
@@ -208,6 +202,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
           onChanged: onChanged,
           style: const TextStyle(color: Colors.black),
           dropdownColor: Colors.white,
+          borderRadius: BorderRadius.circular(16),
         ),
       ),
     );
@@ -386,66 +381,6 @@ String _getChartTitle() {
   return 'Average $timeFrame ${_dropdownValue4} Data';
 }
 
-List<BarChartGroupData> _buildBarGroups(BuildContext context) {
-  if (_filteredData == null || _filteredData!.isEmpty) {
-    return [];
-  }
-
-  final Map<String, double> groupedData = {};
-
-  for (var data in _filteredData!) {
-    final DateTime date = DateTime.parse(data['created_at']);
-    String key;
-
-    switch (_selectedTimeRange) {
-      case 'Day':
-        // Group by hour
-        key = date.hour.toString().padLeft(2, '0');
-        break;
-      case 'Week':
-        // Group by day of week
-        key = _getDayName(date.weekday);
-        break;
-      case 'Month':
-        // Group by day of month
-        key = date.day.toString();
-        break;
-      default:
-        key = date.hour.toString();
-    }
-
-    final value = _dropdownValue4 == 'Feed'
-        ? (data['food_amount'] as num).toDouble()
-        : (data['reading'] as num).toDouble();
-
-    groupedData[key] = (groupedData[key] ?? 0) + value;
-  }
-
-  // Sort the data
-  var sortedEntries = groupedData.entries.toList()
-    ..sort((a, b) {
-      if (_selectedTimeRange == 'Week') {
-        // Sort by day of week
-        return _getDayIndex(a.key).compareTo(_getDayIndex(b.key));
-      }
-      return a.key.compareTo(b.key);
-    });
-
-  return sortedEntries.asMap().entries.map((entry) {
-    return BarChartGroupData(
-      x: entry.key,
-      barRods: [
-        BarChartRodData(
-          fromY: 0,
-          toY: entry.value.value,
-          width: 20,
-          color: Theme.of(context).colorScheme.primary,
-          borderRadius: BorderRadius.circular(4),
-        ),
-      ],
-    );
-  }).toList();
-}
 
 String _getDayName(int weekday) {
   switch (weekday) {
