@@ -4,8 +4,8 @@
     const ProfileScreen({super.key});
 
     @override
-    _ProfileScreenState createState() => _ProfileScreenState();
-  }
+     State<ProfileScreen> createState() => _ProfileScreenState();
+    }
 
   class _ProfileScreenState extends State<ProfileScreen> {
     final TextEditingController _nameController = TextEditingController();

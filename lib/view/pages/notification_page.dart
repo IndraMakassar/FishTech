@@ -42,7 +42,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 return NotificationCard(
                   pondName: notif.title,
                   description: notif.body,
-                  dateTime: DateTimeFormatter.getRelativeTime(notif.created_at),
+                  dateTime: DateTimeFormatter.getRelativeTime(notif.createdAt),
                   status: notif.status,
                   onTap: () async {
                     // Dispatch event to update status in Supabase
