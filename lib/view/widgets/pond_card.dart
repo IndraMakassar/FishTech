@@ -85,14 +85,14 @@ class FishPondCard extends StatelessWidget {
                 Flexible(
                   child: DataPondWidget(
                     icon: const Icon(Icons.water_drop),
-                    value: pondModel.pH.toStringAsFixed(2),
+                    value: pondModel.pH.toStringAsFixed(1),
                     label: 'Ph',
                   ),
                 ),
                 Flexible(
                   child: DataPondWidget(
                     icon: const Icon(Icons.thermostat),
-                    value: '${pondModel.temperature.toStringAsFixed(1)}°',
+                    value: '${pondModel.temperature.toStringAsFixed(0)}°',
                     label: 'Temp',
                   ),
                 ),
