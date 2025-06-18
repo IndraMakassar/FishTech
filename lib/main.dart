@@ -99,8 +99,6 @@ class _MyAppState extends State<MyApp> {
       if (session != null) {
         context.read<AuthBloc>().add(UserChangeToken(newToken: newToken));
         await prefs.setString('fcm_token', newToken);
-      } else {
-        print('User belum login. Tidak bisa update FCM token.');
       }
     });
   }
@@ -114,18 +112,6 @@ class _MyAppState extends State<MyApp> {
             content: Text('${notification.title} ${notification.body}'),
           ),
         );
-      }
-    });
-
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('Message clicked! ${message.data}');
-    });
-
-    getIt<FirebaseMessaging>()
-        .getInitialMessage()
-        .then((RemoteMessage? message) {
-      if (message != null) {
-        print('Terminated state message: ${message.data}');
       }
     });
   }
