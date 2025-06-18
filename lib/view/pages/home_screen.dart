@@ -17,9 +17,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (authState is AuthAuthenticated) {
       try {
-        final token = await FirebaseMessaging.instance.getToken();
+        final token = await getIt<FirebaseMessaging>().getToken();
         if (token != null && token.isNotEmpty) {
-          final prefs = await SharedPreferences.getInstance();
+          final prefs = getIt<SharedPreferences>();
           final oldToken = prefs.getString('fcm_token');
 
           if (oldToken != token) {
