@@ -19,3 +19,20 @@ class AddNewPond extends PondEvent {
   @override
   List<Object?> get props => [pondModel];
 }
+
+class FetchFilteredData extends PondEvent {
+  final String infoType;
+  final String pondId;
+  final DateTime startDate;
+  final DateTime endDate;
+
+  const FetchFilteredData({
+    required this.infoType,
+    required this.pondId,
+    required this.startDate,
+    required this.endDate,
+  });
+
+  @override
+  List<Object?> get props => [infoType, pondId, startDate];
+}

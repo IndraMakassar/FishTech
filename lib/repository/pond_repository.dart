@@ -120,4 +120,52 @@ class PondRepository {
 
     return cards;
   }
+
+  Future<List<Map<String, dynamic>>> fetchFilteredData({
+    required String infoType,
+    required String pondId,
+    required DateTime startDate,
+    required DateTime endDate,
+  }) async {
+    if (infoType == 'Feed') {
+      final feeders = await _supabase
+          .from('autofeeder')
+          .select('autofeeder_id')
+          .eq('kolam_id', pondId);
+
+      final feederIds = (feeders as List).map((e) => e['autofeeder_id']).toList();
+
+      final logs = await _supabase
+          .from('feedinglogs')
+          .select('food_amount, created_at')
+          .inFilter('autofeeder_id', feederIds)
+          .gte('created_at', startDate.toIso8601String())
+          .lt('created_at', endDate.toIso8601String());
+
+      return logs;
+    } else if (infoType == 'pH' || infoType == 'temp') {
+      final sensorType = infoType == 'pH' ? 'ph' : 'temp';
+
+      final sensors = await _supabase
+          .from('sensor')
+          .select('id')
+          .eq('pond_id', pondId)
+          .eq('type', sensorType);
+
+      if (sensors.isEmpty) return [];
+
+      final sensorId = sensors.first['id'];
+
+      final readings = await _supabase
+          .from('data_sensor')
+          .select('reading, created_at')
+          .eq('sensor_id', sensorId)
+          .gte('created_at', startDate.toIso8601String())
+          .lt('created_at', endDate.toIso8601String());
+
+      return readings;
+    }
+
+    return [];
+  }
 }

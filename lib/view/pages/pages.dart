@@ -19,6 +19,7 @@ import 'package:fishtech/view/widgets/widgets.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:fishtech/bloc/notification/notif_bloc.dart';
 import 'package:fishtech/utils/date_time_formatter.dart';
+import 'dart:math' show min, max;
 
 part 'add_pond_screen.dart';
 part 'article_screen.dart';

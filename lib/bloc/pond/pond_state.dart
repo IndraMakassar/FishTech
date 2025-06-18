@@ -36,3 +36,17 @@ final class PondFailure extends PondState {
   @override
   List<Object> get props => [message];
 }
+
+// In pond_state.dart
+final class FilteredDataSuccess extends PondState {
+  final List<Map<String, dynamic>> data;
+  final List<PondCardModel> ponds;  // Add this
+
+  const FilteredDataSuccess({
+    required this.data,
+    required this.ponds,  // Add this
+  });
+
+  @override
+  List<Object> get props => [data, ponds];
+}

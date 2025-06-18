@@ -83,7 +83,6 @@ class _MyAppState extends State<MyApp> {
 
     return MaterialApp.router(
       scaffoldMessengerKey: _scaffoldMessengerKey,
-      // Add this line
       debugShowCheckedModeBanner: false,
       theme: materialTheme.light(),
       routerConfig: routerConfig,

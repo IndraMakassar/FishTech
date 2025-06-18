@@ -1,0 +1,36 @@
+name: Staging Preview Build
+
+on:
+  push:
+    branches:
+      - staging
+
+jobs:
+  staging:
+    name: Build APK for Staging
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.27.1
+          cache: true
+      - run: flutter --version
+
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --debug
+
+      - name: Upload APK to GitHub Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: staging-apk
+          path: build/app/outputs/flutter-apk/app-debug.apk

@@ -78,7 +78,7 @@ final GoRouter routerConfig = GoRouter(
     GoRoute(
       path: '/notification',
       builder: (context, state) => BlocProvider(
-        create: (context) => getIt<NotifBloc>(), // Use the registered bloc
+        create: (context) => getIt<NotifBloc>(),
         child: const NotificationScreen(),
       ),
     ),
