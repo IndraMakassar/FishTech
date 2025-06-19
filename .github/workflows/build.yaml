@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: Build for ${{ matrix.os }}
+    name: Build for ${{ matrix.os }} - ${{ matrix.build }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -35,7 +35,8 @@ jobs:
       - name: Check Flutter version
         run: flutter --version
 
-      - name: Enable macOS platform (safe to re-run)
+      - name: Enable macOS platform (for macOS only)
+        if: matrix.build == 'macos'
         run: flutter config --enable-macos-desktop && flutter create .
 
       - name: Get dependencies
@@ -44,12 +45,10 @@ jobs:
       - name: Generate lib/const.dart
         run: echo "const SUPABASE_URL = '${{ secrets.SUPABASE_URL }}'; const ANON_KEY = '${{ secrets.SUPABASE_ANON_KEY }}';" > lib/const.dart
 
-      # Decode firebase_options.dart for Linux/macOS
       - name: Decode firebase_options.dart (Unix)
         if: runner.os != 'Windows'
         run: echo "${{ secrets.FIREBASE_OPTIONS_BASE64 }}" | base64 -d > lib/firebase_options.dart
 
-      # Decode firebase_options.dart for Windows
       - name: Decode firebase_options.dart (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
@@ -59,12 +58,10 @@ jobs:
             [System.Convert]::FromBase64String("${{ secrets.FIREBASE_OPTIONS_BASE64 }}")
           )
 
-      # Decode google-services.json (Unix)
       - name: Decode google-services.json (Unix)
         if: runner.os != 'Windows'
         run: echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 -d > android/app/google-services.json
 
-      # Decode google-services.json (Windows)
       - name: Decode google-services.json (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
@@ -87,4 +84,10 @@ jobs:
         run: flutter pub run flutter_launcher_icons
 
       - name: Build app
-        run: flutter build ${{ matrix.build }} --debug
+        run: |
+          if [ "${{ matrix.build }}" = "ios" ]; then
+            flutter build ios --debug --simulator
+          else
+            flutter build ${{ matrix.build }} --debug
+          fi
+        shell: bash
