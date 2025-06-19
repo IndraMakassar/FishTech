@@ -19,6 +19,8 @@ jobs:
             build: windows
           - os: macos-latest
             build: macos
+          - os: macos-latest
+            build: ios
 
     steps:
       - name: Checkout code
