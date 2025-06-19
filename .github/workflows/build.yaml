@@ -7,9 +7,10 @@ on:
 
 jobs:
   build:
-    name: Build for ${{ matrix.os }}
+    name: Build for ${{ matrix.os }} - ${{ matrix.build }}
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         include:
           - os: ubuntu-latest
@@ -18,6 +19,8 @@ jobs:
             build: windows
           - os: macos-latest
             build: macos
+          - os: macos-latest
+            build: ios
 
     steps:
       - name: Checkout code
@@ -27,11 +30,98 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: 3.27.1
           cache: true
-      - run: flutter --version
+
+      - name: Check Flutter version
+        run: flutter --version
+
+      - name: Enable macOS platform (for macOS only)
+        if: matrix.build == 'macos'
+        run: flutter config --enable-macos-desktop && flutter create .
+
       - name: Get dependencies
         run: flutter pub get
 
+      - name: Generate lib/const.dart
+        run: echo "const SUPABASE_URL = '${{ secrets.SUPABASE_URL }}'; const ANON_KEY = '${{ secrets.SUPABASE_ANON_KEY }}';" > lib/const.dart
+
+      - name: Decode firebase_options.dart (Unix)
+        if: runner.os != 'Windows'
+        run: echo "${{ secrets.FIREBASE_OPTIONS_BASE64 }}" | base64 -d > lib/firebase_options.dart
+
+      - name: Decode firebase_options.dart (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          [System.IO.File]::WriteAllBytes(
+            'lib/firebase_options.dart',
+            [System.Convert]::FromBase64String("${{ secrets.FIREBASE_OPTIONS_BASE64 }}")
+          )
+
+      - name: Decode google-services.json (Unix)
+        if: runner.os != 'Windows'
+        run: echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 -d > android/app/google-services.json
+
+      - name: Decode google-services.json (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          [System.IO.File]::WriteAllBytes(
+            'android/app/google-services.json',
+            [System.Convert]::FromBase64String("${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}")
+          )
+
+      - name: Check required files
+        run: |
+          test -f lib/const.dart && echo "const.dart OK"
+          test -f lib/firebase_options.dart && echo "firebase_options.dart OK"
+          test -f android/app/google-services.json && echo "google-services.json OK"
+
+      - name: Generate splash screen
+        run: dart run flutter_native_splash:create
+
+      - name: Generate launcher icons
+        run: flutter pub run flutter_launcher_icons
+
+      # Step khusus iOS untuk memicu Flutter agar generate ios/Podfile dulu
+      - name: Pre-warm iOS folder
+        if: matrix.build == 'ios'
+        run: flutter build ios --debug --simulator || true
+
+      - name: Set iOS minimum deployment target to 16.0
+        if: matrix.build == 'ios'
+        run: |
+          if grep -q "platform :ios" ios/Podfile; then
+            sed -i '' "s/platform :ios.*/platform :ios, '16.0'/" ios/Podfile
+          else
+            sed -i '' '1s;^;platform :ios, '\''16.0'\''\n;' ios/Podfile
+          fi
+
+      - name: Force set deployment target in Xcode project
+        if: matrix.build == 'ios'
+        run: |
+          sed -i '' "s/IPHONEOS_DEPLOYMENT_TARGET = 12.0;/IPHONEOS_DEPLOYMENT_TARGET = 16.0;/g" ios/Runner.xcodeproj/project.pbxproj
+
+
+      - name: Set macOS minimum deployment target to 10.15
+        if: matrix.build == 'macos'
+        run: |
+          if grep -q "platform :osx" macos/Podfile; then
+            sed -i '' "s/platform :osx.*/platform :osx, '10.15'/" macos/Podfile
+          else
+            sed -i '' '1s;^;platform :osx, '\''10.15'\''\n;' macos/Podfile
+          fi
+
       - name: Build app
-        run: flutter build ${{ matrix.build }} --debug
+        run: |
+          if [ "${{ matrix.build }}" = "ios" ]; then
+            flutter clean
+            flutter pub get
+            cd ios
+            pod install
+            cd ..
+            flutter build ios --debug --simulator
+          else
+            flutter build ${{ matrix.build }} --debug
+          fi
+        shell: bash
