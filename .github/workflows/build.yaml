@@ -33,6 +33,9 @@ jobs:
       - name: Check Flutter version
         run: flutter --version
 
+      - name: Enable macOS platform (safe to re-run)
+        run: flutter config --enable-macos-desktop && flutter create .
+
       - name: Get dependencies
         run: flutter pub get
 
