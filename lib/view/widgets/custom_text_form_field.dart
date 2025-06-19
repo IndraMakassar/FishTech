@@ -38,7 +38,7 @@ class FormFieldWidget extends StatefulWidget {
     this.isPassword = false,
     this.borderRadius = 12,
     this.isDatePicker = false,
-    this.isReadOnly =false,
+    this.isReadOnly = false,
     this.onDateSelected,
   });
 
@@ -55,21 +55,18 @@ class _FormFieldWidgetState extends State<FormFieldWidget> {
     _obscureText = widget.isPassword;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (widget.title != null)
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-          child: Text(
-            widget.title!,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onSurface
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+            child: Text(
+              widget.title!,
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             ),
-        ),
           )
         else
           const Gap(0),
@@ -89,14 +86,14 @@ class _FormFieldWidgetState extends State<FormFieldWidget> {
                   const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
               labelText: widget.labelText,
               labelStyle: const TextStyle(
-                  fontSize: 14,
+                fontSize: 14,
               ),
               hintText: widget.hintText,
-              hintStyle:  TextStyle(
+              hintStyle: TextStyle(
                   fontSize: 13,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant
-              ),
-              prefixIcon: widget.prefixIcon != null ? Icon(widget.prefixIcon) : null,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant),
+              prefixIcon:
+                  widget.prefixIcon != null ? Icon(widget.prefixIcon) : null,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(widget.borderRadius),
               ),
@@ -112,27 +109,31 @@ class _FormFieldWidgetState extends State<FormFieldWidget> {
                       },
                     )
                   : widget.isDatePicker
-                  ? IconButton(
-                icon: const Icon(Icons.calendar_month),
-                onPressed: () async {
-                  DateTime? pickedDate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2100),
-                  );
-                  widget.controller.text =
-                  "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
+                      ? IconButton(
+                          icon: const Icon(Icons.calendar_month),
+                          onPressed: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                            );
 
-                  // callback ke parent jika dibutuhkan
-                  widget.onDateSelected?.call(pickedDate);
-                                },
-              )
-                  : null,
+                            if (pickedDate != null) {
+                              widget.controller.text =
+                                  "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
+
+                              // callback ke parent jika dibutuhkan
+                              widget.onDateSelected?.call(pickedDate);
+                            }
+                          },
+                        )
+                      : null,
             ),
             validator: widget.validator,
             onFieldSubmitted: widget.onFieldSubmitted,
-            inputFormatters: widget.inputFormatter != null ? [widget.inputFormatter!] : [],
+            inputFormatters:
+                widget.inputFormatter != null ? [widget.inputFormatter!] : [],
           ),
         ),
       ],
