@@ -47,8 +47,12 @@ jobs:
       - name: Generate lib/firebase_options.dart
         run: echo "${{ secrets.FIREBASE_OPTIONS_BASE64 }}" | base64 -d > lib/firebase_options.dart
 
+      - name: Generate google-services.json
+        run: echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 -d > android/app/google-services.json
+
+
       - name: Check required files
-        run: test -f lib/const.dart && echo "const.dart OK" && test -f lib/firebase_options.dart && echo "firebase_options.dart OK"
+        run: test -f lib/const.dart && echo "const.dart OK" && test -f lib/firebase_options.dart && echo "firebase_options.dart OK" && test -f android/app/google-services.json && echo "google-services.json OK"
 
 
       - name: Build app
