@@ -83,6 +83,11 @@ jobs:
       - name: Generate launcher icons
         run: flutter pub run flutter_launcher_icons
 
+      # Step khusus iOS untuk memicu Flutter agar generate ios/Podfile dulu
+      - name: Pre-warm iOS folder
+        if: matrix.build == 'ios'
+        run: flutter build ios --debug --simulator || true
+
       - name: Set iOS minimum deployment target to 13.0
         if: matrix.build == 'ios'
         run: |
@@ -104,6 +109,11 @@ jobs:
       - name: Build app
         run: |
           if [ "${{ matrix.build }}" = "ios" ]; then
+            flutter clean
+            flutter pub get
+            cd ios
+            pod install
+            cd ..
             flutter build ios --debug --simulator
           else
             flutter build ${{ matrix.build }} --debug
