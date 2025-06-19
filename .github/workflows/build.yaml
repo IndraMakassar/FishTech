@@ -30,8 +30,16 @@ jobs:
           flutter-version: 3.27.1
           cache: true
       - run: flutter --version
+
+
       - name: Get dependencies
         run: flutter pub get
+
+      - name: Generate lib/const.dart
+        run: echo "const SUPABASE_URL = '${{ secrets.SUPABASE_URL }}'; const ANON_KEY = '${{ secrets.SUPABASE_ANON_KEY }}';" > lib/const.dart
+
+      - name: Generate lib/firebase_options.dart
+        run: echo "${{ secrets.FIREBASE_OPTIONS_BASE64 }}" | base64 -d > lib/firebase_options.dart
 
       - name: Build app
         run: flutter build ${{ matrix.build }} --debug
