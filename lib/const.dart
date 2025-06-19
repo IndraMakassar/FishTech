@@ -1,0 +1,3 @@
+const OPENWEATHER_API_KEY = "3c7b0d4a32f8fab6752b64736cbb7511";
+const SUPABASE_URL = 'https://tyumikqftrhxgcziakay.supabase.co';
+const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR5dW1pa3FmdHJoeGdjemlha2F5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYyMjM1MDEsImV4cCI6MjA1MTc5OTUwMX0.-12NMKqL9KGkSg-8xlOVpowNf34dFnioZIofPqq7jjs';

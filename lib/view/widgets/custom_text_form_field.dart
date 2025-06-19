@@ -121,14 +121,12 @@ class _FormFieldWidgetState extends State<FormFieldWidget> {
                     firstDate: DateTime(2000),
                     lastDate: DateTime(2100),
                   );
-                  if (pickedDate != null) {
-                    widget.controller.text =
-                    "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
+                  widget.controller.text =
+                  "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
 
-                    // callback ke parent jika dibutuhkan
-                    widget.onDateSelected?.call(pickedDate);
-                  }
-                },
+                  // callback ke parent jika dibutuhkan
+                  widget.onDateSelected?.call(pickedDate);
+                                },
               )
                   : null,
             ),
