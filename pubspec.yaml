@@ -54,7 +54,7 @@ dependencies:
   animated_custom_dropdown: ^3.1.1
   firebase_core: ^3.13.0
   firebase_messaging: ^15.2.5
-  google_sign_in: ^6.3.0
+  google_sign_in: ^6.2.2
   firebase_auth: ^5.5.4
   build_runner: ^2.4.15
   mockito: ^5.4.5
@@ -65,6 +65,7 @@ dev_dependencies:
     sdk: flutter
   mocktail: ^1.0.4
   bloc_test: ^9.1.7
+ 
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
