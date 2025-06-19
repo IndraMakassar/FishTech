@@ -1,61 +1,61 @@
-# Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
-.DS_Store
-.atom/
-.buildlog/
-.history
-.svn/
-.env
-migrate_working_dir/
-deno.lock
+# # Miscellaneous
+# *.class
+# *.log
+# *.pyc
+# *.swp
+# .DS_Store
+# .atom/
+# .buildlog/
+# .history
+# .svn/
+# .env
+# migrate_working_dir/
+# deno.lock
 
 
 
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
-.idea/
+# # IntelliJ related
+# *.iml
+# *.ipr
+# *.iws
+# .idea/
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
+# # The .vscode folder contains launch configuration and tasks you configure in
+# # VS Code which you may wish to be included in version control, so this line
+# # is commented out by default.
+# #.vscode/
 
-# Flutter/Dart/Pub related
-**/doc/api/
-**/ios/Flutter/.last_build_id
-.dart_tool/
-.flutter-plugins
-.flutter-plugins-dependencies
-.pub-cache/
-.pub/
-/build/
+# # Flutter/Dart/Pub related
+# **/doc/api/
+# **/ios/Flutter/.last_build_id
+# .dart_tool/
+# .flutter-plugins
+# .flutter-plugins-dependencies
+# .pub-cache/
+# .pub/
+# /build/
 
-# Symbolication related
-app.*.symbols
+# # Symbolication related
+# app.*.symbols
 
-# Obfuscation related
-app.*.map.json
+# # Obfuscation related
+# app.*.map.json
 
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
-/lib/const.dart
-/supabase/functions/service-account.json
-/supabase/functions/.env.ts
+# # Android Studio will place build artifacts here
+# /android/app/debug
+# /android/app/profile
+# /android/app/release
+# /lib/const.dart
+# /supabase/functions/service-account.json
+# /supabase/functions/.env.ts
 
-# Supabase
-.branches
-.temp
-/supabase/config.toml
+# # Supabase
+# .branches
+# .temp
+# /supabase/config.toml
 
 
-# dotenvx
-.env.keys
-.env.local
-.env.*.local
+# # dotenvx
+# .env.keys
+# .env.local
+# .env.*.local
