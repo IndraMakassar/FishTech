@@ -87,11 +87,19 @@ jobs:
         if: matrix.build == 'ios'
         run: |
           if grep -q "platform :ios" ios/Podfile; then
-            sed -i '' 's/platform :ios.*/platform :ios, '\''13.0'\''/' ios/Podfile
+            sed -i '' "s/platform :ios.*/platform :ios, '13.0'/" ios/Podfile
           else
             sed -i '' '1s;^;platform :ios, '\''13.0'\''\n;' ios/Podfile
           fi
 
+      - name: Set macOS minimum deployment target to 10.15
+        if: matrix.build == 'macos'
+        run: |
+          if grep -q "platform :osx" macos/Podfile; then
+            sed -i '' "s/platform :osx.*/platform :osx, '10.15'/" macos/Podfile
+          else
+            sed -i '' '1s;^;platform :osx, '\''10.15'\''\n;' macos/Podfile
+          fi
 
       - name: Build app
         run: |
