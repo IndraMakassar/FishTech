@@ -54,6 +54,11 @@ jobs:
       - name: Check required files
         run: test -f lib/const.dart && echo "const.dart OK" && test -f lib/firebase_options.dart && echo "firebase_options.dart OK" && test -f android/app/google-services.json && echo "google-services.json OK"
 
+      - name: Generate splash screen
+        run: dart run flutter_native_splash:create
+
+      - name: Generate launcher icons
+        run: flutter pub run flutter_launcher_icons
 
       - name: Build app
         run: flutter build ${{ matrix.build }} --debug
