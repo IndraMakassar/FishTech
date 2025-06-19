@@ -83,13 +83,13 @@ jobs:
       - name: Generate launcher icons
         run: flutter pub run flutter_launcher_icons
 
-      - name: Set iOS minimum deployment target to 12.0
+      - name: Set iOS minimum deployment target to 13.0
         if: matrix.build == 'ios'
         run: |
           if grep -q "platform :ios" ios/Podfile; then
-            sed -i '' "s/platform :ios.*/platform :ios, '12.0'/" ios/Podfile
+            sed -i '' "s/platform :ios.*/platform :ios, '13.0'/" ios/Podfile
           else
-            sed -i '' '1s;^;platform :ios, '\''12.0'\''\n;' ios/Podfile
+            sed -i '' '1s;^;platform :ios, '\''13.0'\''\n;' ios/Podfile
           fi
 
       - name: Set macOS minimum deployment target to 10.15
