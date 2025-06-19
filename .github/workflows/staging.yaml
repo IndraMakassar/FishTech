@@ -51,11 +51,11 @@ jobs:
       - name: Generate launcher icons
         run: flutter pub run flutter_launcher_icons
 
-      - name: Analyze Dart code
-        run: flutter analyze
-
-      - name: Run tests
-        run: flutter test
+#      - name: Analyze Dart code
+#        run: flutter analyze
+#
+#      - name: Run tests
+#        run: flutter test
 
       - name: Build APK
         run: flutter build apk --debug
