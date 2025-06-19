@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - staging
+  pull_request:
+    branches:
+      - staging
 
 jobs:
   staging:
@@ -11,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Clone Repository
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
       - name: Setup Flutter
@@ -20,11 +23,39 @@ jobs:
           channel: stable
           flutter-version: 3.27.1
           cache: true
-      - run: flutter --version
 
+      - name: Check Flutter version
+        run: flutter --version
 
       - name: Get dependencies
         run: flutter pub get
+
+      - name: Generate lib/const.dart
+        run: echo "const SUPABASE_URL = '${{ secrets.SUPABASE_URL }}'; const ANON_KEY = '${{ secrets.SUPABASE_ANON_KEY }}';" > lib/const.dart
+
+      - name: Decode firebase_options.dart
+        run: echo "${{ secrets.FIREBASE_OPTIONS_BASE64 }}" | base64 -d > lib/firebase_options.dart
+
+      - name: Decode google-services.json
+        run: echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 -d > android/app/google-services.json
+
+      - name: Check required files
+        run: |
+          test -f lib/const.dart && echo "const.dart OK"
+          test -f lib/firebase_options.dart && echo "firebase_options.dart OK"
+          test -f android/app/google-services.json && echo "google-services.json OK"
+
+      - name: Generate splash screen
+        run: dart run flutter_native_splash:create
+
+      - name: Generate launcher icons
+        run: flutter pub run flutter_launcher_icons
+
+      - name: Analyze Dart code
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test
 
       - name: Build APK
         run: flutter build apk --debug
