@@ -88,19 +88,19 @@ jobs:
         if: matrix.build == 'ios'
         run: flutter build ios --debug --simulator || true
 
-      - name: Set iOS minimum deployment target to 13.0
+      - name: Set iOS minimum deployment target to 14.0
         if: matrix.build == 'ios'
         run: |
           if grep -q "platform :ios" ios/Podfile; then
-            sed -i '' "s/platform :ios.*/platform :ios, '13.0'/" ios/Podfile
+            sed -i '' "s/platform :ios.*/platform :ios, '14.0'/" ios/Podfile
           else
-            sed -i '' '1s;^;platform :ios, '\''13.0'\''\n;' ios/Podfile
+            sed -i '' '1s;^;platform :ios, '\''14.0'\''\n;' ios/Podfile
           fi
 
       - name: Force set deployment target in Xcode project
         if: matrix.build == 'ios'
         run: |
-          sed -i '' "s/IPHONEOS_DEPLOYMENT_TARGET = 12.0;/IPHONEOS_DEPLOYMENT_TARGET = 13.0;/g" ios/Runner.xcodeproj/project.pbxproj
+          sed -i '' "s/IPHONEOS_DEPLOYMENT_TARGET = 12.0;/IPHONEOS_DEPLOYMENT_TARGET = 14.0;/g" ios/Runner.xcodeproj/project.pbxproj
 
 
       - name: Set macOS minimum deployment target to 10.15
