@@ -86,7 +86,11 @@ jobs:
       - name: Set iOS minimum deployment target to 13.0
         if: matrix.build == 'ios'
         run: |
-          sed -i '' 's/platform :ios, .*/platform :ios, '13.0'/' ios/Podfile || echo "platform :ios, '13.0'" >> ios/Podfile
+          if grep -q "platform :ios" ios/Podfile; then
+            sed -i '' 's/platform :ios.*/platform :ios, '\''13.0'\''/' ios/Podfile
+          else
+            sed -i '' '1s;^;platform :ios, '\''13.0'\''\n;' ios/Podfile
+          fi
 
 
       - name: Build app
